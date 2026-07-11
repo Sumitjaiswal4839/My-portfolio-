@@ -1,0 +1,35 @@
+<div class="page-content achievements-page">
+  <div class="container">
+    <div class="header">
+      <h1 class="section-title">Achievements</h1>
+    </div>
+    <div class="achs-grid">
+      <div class="ach-card" *ngFor="let ach of achievements$ | async">
+        <div class="ach-banner" (click)="ach.imageUrl ? openImage(ach.imageUrl) : null">
+          <img *ngIf="ach.imageUrl" [src]="ach.imageUrl" alt="Achievement image: {{ ach.title }}">
+          <i *ngIf="!ach.imageUrl" class="fas fa-trophy placeholder-icon"></i>
+          
+          <!-- Hover Overlay with Eye Icon -->
+          <div class="ach-overlay" *ngIf="ach.imageUrl">
+            <i class="fas fa-eye"></i>
+            <span>View Document</span>
+          </div>
+        </div>
+        <div class="ach-content">
+          <h3>{{ ach.title }}</h3>
+          <p>{{ ach.description }}</p>
+          <span class="date">{{ ach.date | date }}</span>
+        </div>
+        <div class="ach-actions" *adminOnly>
+          <button (click)="deleteAchievement(ach.id)" class="delete-btn"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full Size Image Modal -->
+  <div class="image-modal" *ngIf="selectedImage" (click)="closeImage()">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" [src]="selectedImage" alt="Full screen achievement document preview" (click)="$event.stopPropagation()">
+  </div>
+</div>

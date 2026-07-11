@@ -1,0 +1,50 @@
+<div class="page-content blogs-page">
+  <div class="container">
+    <div class="header">
+      <h1 class="section-title">Cyber Blog</h1>
+      <button *adminOnly (click)="toggleAddForm()" class="btn btn-primary add-btn">
+        <i class="fas" [class.fa-plus]="!showAddForm" [class.fa-times]="showAddForm"></i>
+        {{ showAddForm ? 'Cancel' : 'New Post' }}
+      </button>
+    </div>
+
+    <!-- Add Form -->
+    <div class="add-form-container" *ngIf="showAddForm">
+      <div class="card form-card">
+        <h3>New Blog Post</h3>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" [(ngModel)]="newBlog.title">
+        </div>
+        <div class="form-group">
+          <label>Content</label>
+          <textarea [(ngModel)]="newBlog.content" rows="6"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Cover Image</label>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*">
+        </div>
+        <button (click)="addBlog()" class="btn btn-primary submit-btn">Publish Post</button>
+      </div>
+    </div>
+
+    <div class="blogs-container">
+      <article class="blog-post" *ngFor="let blog of blogs$ | async">
+        <div class="blog-img" *ngIf="blog.imageUrl">
+          <img [src]="blog.imageUrl">
+        </div>
+        <div class="blog-body">
+          <div class="blog-meta">
+            <span class="date">{{ blog.date | date }}</span>
+            <span class="author">By {{ blog.author }}</span>
+          </div>
+          <h2>{{ blog.title }}</h2>
+          <p>{{ blog.content }}</p>
+        </div>
+        <div class="blog-actions" *adminOnly>
+            <button (click)="deleteBlog(blog.id)" class="delete-btn"><i class="fas fa-trash"></i></button>
+        </div>
+      </article>
+    </div>
+  </div>
+</div>

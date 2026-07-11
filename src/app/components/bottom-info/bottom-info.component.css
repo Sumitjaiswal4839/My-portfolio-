@@ -1,0 +1,257 @@
+/* Dock wrapper to absolutely position at the bottom */
+.dock-wrapper {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none; /* Allows pointer events through to underneath elements unless interacting with the dock */
+  width: auto;
+  max-width: 90vw;
+}
+
+/* Dock Container - Styled as a wide, glassmorphic capsule */
+.dock-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 12px;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 12px 28px;
+  border-radius: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35), 0 0 20px rgba(0, 255, 65, 0.1);
+  pointer-events: auto; /* Re-enable pointer events */
+  transition: all 0.3s ease-in-out;
+}
+
+/* Let's tweak borders for light/dark modes using system colors if possible or using general shadows */
+[data-theme="light"] .dock-container {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 0 15px rgba(37, 99, 235, 0.1);
+}
+
+/* Each Individual Dock Item */
+.dock-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 4px 14px;
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  position: relative;
+  user-select: none;
+}
+
+/* The Background wrapper of the icon to match the image precisely */
+.dock-icon-bg {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  transition: all 0.3s ease;
+  margin-bottom: 4px;
+}
+
+/* Icon style */
+.dock-icon {
+  font-size: 1.45rem;
+  color: var(--text);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Item label underneath the icon */
+.dock-label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--text);
+  opacity: 0.7;
+  text-align: center;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+/* === HOVER & ACTIVE EFFECTS === */
+
+/* Hover */
+.dock-item:hover {
+  transform: translateY(-5px);
+}
+
+.dock-item:hover .dock-icon-bg {
+  background: rgba(0, 255, 65, 0.1);
+}
+
+.dock-item:hover .dock-icon {
+  opacity: 1;
+  color: var(--primary);
+  transform: scale(1.1);
+}
+
+.dock-item:hover .dock-label {
+  opacity: 1;
+  color: var(--primary);
+}
+
+[data-theme="light"] .dock-item:hover .dock-icon-bg {
+  background: rgba(37, 99, 235, 0.1);
+}
+
+[data-theme="light"] .dock-item:hover .dock-icon {
+  color: var(--accent);
+}
+
+[data-theme="light"] .dock-item:hover .dock-label {
+  color: var(--accent);
+}
+
+/* ACTIVE State - matches image perfectly */
+.dock-item.active .dock-icon-bg {
+  background: rgba(0, 255, 65, 0.18);
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.25);
+  animation: popActive 0.3s ease forwards;
+}
+
+.dock-item.active .dock-icon {
+  color: var(--primary);
+  opacity: 1;
+  font-size: 1.55rem;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+}
+
+.dock-item.active .dock-label {
+  color: var(--primary);
+  opacity: 1;
+  font-weight: 700;
+  text-shadow: 0 0 6px rgba(0, 255, 65, 0.3);
+}
+
+/* ACTIVE light mode adjustment */
+[data-theme="light"] .dock-item.active .dock-icon-bg {
+  background: rgba(37, 99, 235, 0.15);
+  box-shadow: 0 0 15px rgba(37, 99, 235, 0.25);
+}
+
+[data-theme="light"] .dock-item.active .dock-icon {
+  color: var(--accent);
+  text-shadow: none;
+}
+
+[data-theme="light"] .dock-item.active .dock-label {
+  color: var(--accent);
+  text-shadow: none;
+}
+
+/* Subtle Active bounce animation */
+@keyframes popActive {
+  0% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* === PHONE & RESPONSIVE DESIGN === */
+
+/* Tablets and small laptops */
+@media (max-width: 768px) {
+  .dock-container {
+    gap: 8px;
+    padding: 10px 18px;
+    border-radius: 30px;
+  }
+  
+  .dock-icon-bg {
+    width: 46px;
+    height: 46px;
+    margin-bottom: 2px;
+  }
+  
+  .dock-icon {
+    font-size: 1.25rem;
+  }
+  
+  .dock-label {
+    font-size: 0.72rem;
+  }
+}
+
+/* Mobile Phones (Portrait) */
+@media (max-width: 500px) {
+  .dock-wrapper {
+    bottom: 12px;
+    width: calc(100% - 24px);
+    max-width: none;
+  }
+
+  .dock-container {
+    width: 100%;
+    gap: 4px;
+    padding: 8px 12px;
+    border-radius: 24px;
+    justify-content: space-between;
+  }
+
+  .dock-item {
+    padding: 4px 6px;
+    flex: 1;
+    min-width: 0; /* Ensures even distribution */
+  }
+
+  .dock-icon-bg {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 2px;
+  }
+
+  .dock-icon {
+    font-size: 1.15rem;
+  }
+
+  .dock-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+  }
+}
+
+/* Ultra small screens */
+@media (max-width: 360px) {
+  .dock-container {
+    padding: 6px 8px;
+  }
+
+  .dock-icon-bg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .dock-icon {
+    font-size: 1rem;
+  }
+
+  .dock-label {
+    font-size: 0.6rem;
+  }
+}
+
+
+

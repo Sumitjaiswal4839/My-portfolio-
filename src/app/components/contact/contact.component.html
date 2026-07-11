@@ -1,0 +1,89 @@
+<section class="contact-section page-content" id="contact">
+  <div class="contact-header">
+    <h2 class="section-title">Get In Touch</h2>
+    <p class="subtitle">Let's discuss how we can work together on your next project.</p>
+  </div>
+
+  <div class="contact-grid">
+    <!-- Admin Upload Section (Owner Only) -->
+    <div class="admin-upload-card" *adminOnly>
+      <h3><i class="fas fa-crown"></i> Owner Controls</h3>
+      <div class="upload-section">
+        <p class="upload-label">Upload your resume for visitors:</p>
+        <button type="button" class="btn btn-admin" (click)="uploadResume()">
+          <i class="fas fa-file-upload"></i> Upload Resume
+        </button>
+        <div class="upload-success" *ngIf="uploadSuccess()">
+          <i class="fas fa-check-circle"></i> Resume uploaded successfully!
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-form-card">
+      <h3><i class="fas fa-envelope-open-text"></i> Send Me a Message</h3>
+
+      <div class="success-msg" *ngIf="submitted()">
+        <i class="fab fa-whatsapp" style="color: #25d366;"></i>
+        <p>Opening WhatsApp! Your message is ready to send. 🚀</p>
+        <button class="btn btn-secondary" (click)="resetForm()">Send Another</button>
+      </div>
+
+      <div *ngIf="!submitted()">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" placeholder="Enter your full name" [(ngModel)]="formData.name" name="name">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="Enter your email address" [(ngModel)]="formData.email" name="email">
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea rows="5" placeholder="Enter your message" [(ngModel)]="formData.message" name="message">
+          </textarea>
+        </div>
+        <button type="button" class="btn btn-primary submit-btn whatsapp-btn" (click)="onSubmit()" [disabled]="submitting()">
+          <i [class]="submitting() ? 'fas fa-spinner fa-spin' : 'fab fa-whatsapp'"></i>
+          {{ submitting() ? 'Opening WhatsApp...' : 'Send via WhatsApp' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Contact Info -->
+    <div class="contact-info-wrapper">
+      <h3>Contact Information</h3>
+      <div class="info-grid">
+        <div class="info-card" *ngFor="let card of infoCards">
+          <i [class]="card.icon"></i>
+          <h4>{{ card.title }}</h4>
+          <p>{{ card.value }}</p>
+        </div>
+      </div>
+
+      <div class="status-card">
+        <div class="status-indicator">
+          <span class="status-dot"></span>
+          Currently Available
+        </div>
+        <p>I'm actively looking for new opportunities and exciting projects.</p>
+      </div>
+
+      <div class="social-section">
+        <h4>Find Me Online</h4>
+        <div class="social-buttons">
+          <a href="https://github.com/Sumitjaiswal4839" target="_blank" class="social-btn github">
+            <i class="fab fa-github"></i> GitHub
+          </a>
+          <a href="https://www.linkedin.com/in/sumit-jaiswal-9403a9299"
+            target="_blank" class="social-btn linkedin">
+            <i class="fab fa-linkedin"></i> LinkedIn
+          </a>
+          <a href="https://wa.me/917827584476" target="_blank" class="social-btn whatsapp">
+            <i class="fab fa-whatsapp"></i> WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

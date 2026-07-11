@@ -1,0 +1,318 @@
+/* Fixed Right Sidebar */
+.fixed-right-sidebar {
+    position: fixed;
+    right: 0;
+    top: 70px;
+    height: calc(100vh - 70px);
+    width: 280px;
+    background: rgba(10, 15, 25, 0.95);
+    border-left: 2px solid var(--primary);
+    backdrop-filter: blur(10px);
+    z-index: 999;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow-y: auto;
+}
+
+.fixed-right-sidebar.expanded {
+    transform: translateX(0);
+    box-shadow: -5px 0 25px rgba(0, 255, 65, 0.2);
+}
+
+.sidebar-toggle {
+    position: absolute;
+    left: -45px;
+    top: 20px;
+    background: rgba(10, 15, 25, 0.95);
+    border: 2px solid var(--primary);
+    border-right: none;
+    padding: 10px 8px;
+    border-radius: 15px 0 0 15px;
+    color: var(--accent);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+    font-size: 0.75rem;
+    box-shadow: -5px 0 15px rgba(0, 212, 255, 0.2);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.sidebar-toggle:hover {
+    background: var(--primary);
+    color: #000;
+    box-shadow: -5px 0 20px rgba(0, 212, 255, 0.4);
+}
+
+.sidebar-toggle i {
+    transition: transform 0.3s ease;
+    font-size: 1.2rem;
+}
+
+.sidebar-toggle i.rotated {
+    transform: rotate(180deg);
+}
+
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 15px;
+    height: 100%;
+}
+
+.sidebar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.sidebar-item:hover {
+    transform: translateX(-5px);
+    border-color: var(--primary);
+    box-shadow: 0 5px 15px rgba(0, 255, 65, 0.2);
+}
+
+.sidebar-item i {
+    font-size: 1.8rem;
+    color: var(--primary);
+}
+
+.sidebar-item span {
+    font-size: 0.85rem;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.btn-sm {
+    padding: 5px 12px;
+    font-size: 0.75rem;
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn-sm:hover {
+    background: var(--primary);
+    color: #000;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: var(--dark);
+    border-color: var(--primary);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
+}
+
+/* Scrollbar for sidebar */
+.fixed-right-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.fixed-right-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.fixed-right-sidebar::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 65, 0.3);
+    border-radius: 3px;
+}
+
+.fixed-right-sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+/* === MODAL STYLES === */
+.custom-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 5, 10, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.custom-modal-content {
+    background: var(--card-bg);
+    border: 2px solid var(--primary);
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    max-height: 70vh;
+    overflow-y: auto;
+    box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
+    position: relative;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.custom-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.custom-close:hover {
+    color: var(--primary);
+    transform: scale(1.2);
+}
+
+.custom-modal-content h3 {
+    color: var(--primary);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5rem;
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+
+.modal-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modal-list li {
+    padding: 10px;
+    background: rgba(0, 212, 255, 0.05);
+    border-left: 3px solid var(--primary);
+    border-radius: 5px;
+    color: var(--text);
+    transition: all 0.3s ease;
+}
+
+.modal-list li:hover {
+    background: rgba(0, 212, 255, 0.15);
+    transform: translateX(5px);
+}
+
+.modal-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.modal-link:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .fixed-right-sidebar {
+        width: 250px;
+    }
+}
+
+@media (max-width: 768px) {
+    .fixed-right-sidebar {
+        width: 220px;
+        top: 60px;
+        height: calc(100vh - 60px);
+    }
+
+    .sidebar-toggle {
+        font-size: 0.65rem;
+        padding: 8px 5px;
+    }
+
+    .custom-modal-content {
+        max-width: 90%;
+        margin: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .fixed-right-sidebar {
+        width: 100%;
+        right: 0;
+        top: 60px;
+        border-left: none;
+        border-top: 2px solid var(--primary);
+        height: auto;
+        max-height: 250px;
+        transform: translateY(100%);
+        border-radius: 12px 12px 0 0;
+    }
+
+    .fixed-right-sidebar.expanded {
+        transform: translateY(0);
+        box-shadow: 0 -5px 25px rgba(0, 255, 65, 0.2);
+    }
+
+    .sidebar-toggle {
+        position: static;
+        width: 100%;
+        left: 0;
+        border: none;
+        border-bottom: 2px solid var(--primary);
+        border-radius: 0;
+        flex-direction: row;
+        justify-content: center;
+        padding: 12px;
+    }
+
+    .sidebar-content {
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .sidebar-item {
+        flex: 0 1 calc(50% - 8px);
+        min-width: 100px;
+    }
+}

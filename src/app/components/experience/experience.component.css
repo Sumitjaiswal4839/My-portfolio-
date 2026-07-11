@@ -1,0 +1,108 @@
+.experience-page {
+  padding: 130px 2rem 50px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 30px;
+  margin-top: 40px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 5px;
+  width: 2px;
+  height: 100%;
+  background: var(--primary);
+  opacity: 0.3;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -30px;
+  top: 5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary);
+}
+
+.timeline-content {
+  background: var(--card-bg);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid var(--accent);
+  position: relative;
+  transition: all 0.3s;
+}
+
+.card-glow:hover {
+  transform: translateX(10px);
+  border-color: var(--primary);
+  box-shadow: 0 10px 25px var(--box-glow);
+}
+
+.exp-header {
+  display: flex;
+  align-items: baseline;
+  gap: 15px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.exp-header h2 {
+  color: var(--primary);
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.company {
+  color: var(--text);
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+.duration {
+  display: inline-block;
+  color: var(--accent);
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  background: var(--bg-primary);
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--accent);
+}
+
+.details {
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.9;
+}
+
+@media (max-width: 600px) {
+  .timeline {
+    padding-left: 20px;
+  }
+  .timeline-dot {
+    left: -20px;
+  }
+  .exp-header {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

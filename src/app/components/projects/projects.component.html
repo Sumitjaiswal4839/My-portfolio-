@@ -1,0 +1,97 @@
+<section class="page-content" id="projects-page">
+  <div class="projects-header">
+    <h2 class="section-title">My Projects</h2>
+    <p class="section-subtitle">A collection of cyber security research and developmental software engineering projects</p>
+  </div>
+
+  <div class="projects-controls">
+    <div class="filter-tabs">
+      <button class="tab-btn" [class.active]="activeTab === 'all'" (click)="filterProjects('all')">All Projects</button>
+      <button class="tab-btn" [class.active]="activeTab === 'cyber'" (click)="filterProjects('cyber')">Cyber Security</button>
+      <button class="tab-btn" [class.active]="activeTab === 'normal'" (click)="filterProjects('normal')">Normal</button>
+    </div>
+    <!-- Add Project Button (Owner/Admin Only) -->
+    <button class="btn btn-primary add-btn" *adminOnly (click)="toggleAddForm()">
+      <i class="fas fa-plus"></i> Add Project
+    </button>
+  </div>
+
+  <div class="form-overlay" *ngIf="showAddForm" (click)="toggleAddForm()">
+    <div class="form-container" (click)="$event.stopPropagation()">
+      <div class="form-header">
+        <h3>{{ isEditing ? 'Edit Project' : 'Add New Project' }}</h3>
+        <button class="close-btn" (click)="toggleAddForm()"><i class="fas fa-times"></i></button>
+      </div>
+      <form (ngSubmit)="onSubmit()" #projectForm="ngForm">
+        <div class="form-group">
+          <label for="title">Project Title</label>
+          <input type="text" id="title" name="title" [(ngModel)]="newProject.title" required placeholder="e.g. Network Sniffer">
+        </div>
+
+        <div class="form-group">
+          <label for="type">Project Type</label>
+          <select id="type" name="type" [(ngModel)]="newProject.type" required>
+            <option value="cyber">Cyber Security</option>
+            <option value="normal">Normal Project</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="liveLink">Live Project Link (Optional)</label>
+          <input type="url" id="liveLink" name="liveLink" [(ngModel)]="newProject.liveLink" placeholder="https://...">
+        </div>
+
+        <div class="form-group">
+          <label for="githubLink">GitHub Link</label>
+          <input type="url" id="githubLink" name="githubLink" [(ngModel)]="newProject.githubLink" placeholder="https://github.com/...">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" [(ngModel)]="newProject.description" required rows="4" placeholder="Describe the project..."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="toggleAddForm()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!projectForm.form.valid || isSaving">
+            {{ isSaving ? 'Saving...' : (isEditing ? 'Update Project' : 'Save Project') }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="projects-grid">
+    <div class="project-card" *ngFor="let project of filteredProjects">
+      <div class="card-glow"></div>
+      <div class="card-content">
+        <div class="project-badges-container" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
+          <div class="project-type-badge" [ngClass]="project.type === 'cyber' ? 'badge-cyber' : 'badge-normal'" style="margin-bottom: 0;">
+            {{ project.type === 'cyber' ? 'Security' : 'Software' }}
+          </div>
+          <div *ngIf="project.isGitHubRepo" class="project-type-badge" style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); color: var(--accent); margin-bottom: 0; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
+            <i class="fab fa-github"></i> GitHub
+          </div>
+        </div>
+        <h3>{{ project.title }}</h3>
+        <p class="description">{{ project.description }}</p>
+        <div class="project-links">
+          <a *ngIf="project.githubLink" [href]="project.githubLink" target="_blank" class="link-icon">
+            <i class="fab fa-github"></i> Source
+          </a>
+          <a *ngIf="project.liveLink" [href]="project.liveLink" target="_blank" class="link-icon live-link">
+            <i class="fas fa-external-link-alt"></i> Live View
+          </a>
+        </div>
+        <div class="project-admin-actions" *adminOnly>
+          <button class="btn-icon edit-btn" (click)="editProject(project)" title="Edit project">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn-icon delete-btn" (click)="deleteProject(project.id)" title="Delete project">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+<div class="page-content experience-page">
+  <div class="container">
+    <h1 class="section-title">💼 Experience</h1>
+
+    <div class="timeline">
+      <div class="timeline-item" *ngFor="let exp of experiences">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content card-glow">
+          <div class="exp-header">
+            <h2>{{ exp.role }}</h2>
+            <span class="company">&#64; {{ exp.company }}</span>
+          </div>
+          <span class="duration"><i class="far fa-calendar-alt"></i> {{ exp.duration }}</span>
+          <p class="details">{{ exp.details }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

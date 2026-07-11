@@ -1,0 +1,51 @@
+<!-- Top Navbar -->
+<nav class="navbar">
+  <div class="logo">
+    <div class="logo-icon-wrap">
+      <i class="fas fa-user-secret logo-icon"></i>
+    </div>
+    <div class="logo-text-wrap">
+      <span class="logo-name">Sumit Jaiswal</span>
+      <span class="logo-sub">// Portfolio</span>
+    </div>
+  </div>
+
+  <div class="nav-right">
+    <ul class="nav-links" [class.mobile-active]="mobileMenuOpen()">
+      <li><a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}"
+          (click)="closeMenu()">Home</a></li>
+      <li><a routerLink="/skills" routerLinkActive="active-link" (click)="closeMenu()">Skills</a></li>
+      <li><a routerLink="/contact" routerLinkActive="active-link" (click)="closeMenu()">Contact</a></li>
+      <li><a routerLink="/links" routerLinkActive="active-link" (click)="closeMenu()">Links</a></li>
+    </ul>
+
+    <app-commit-button></app-commit-button>
+
+    <button class="theme-toggle" (click)="toggleTheme()">
+      <i [class]="themeService.isDark() ? 'fas fa-moon' : 'fas fa-sun'"></i>
+    </button>
+
+    <div class="menu-toggle" (click)="toggleMenu()">
+      <i [class]="mobileMenuOpen() ? 'fas fa-times' : 'fas fa-bars'"></i>
+    </div>
+  </div>
+</nav>
+
+<!-- Sub Navbar -->
+<div class="sub-navbar">
+  <a routerLink="/certifications" routerLinkActive="active-sub"><i class="fas fa-certificate"></i> Certifications</a>
+  <a routerLink="/tools" routerLinkActive="active-sub"><i class="fas fa-tools"></i> Tools</a>
+  <a routerLink="/blog" routerLinkActive="active-sub"><i class="fas fa-blog"></i> Blog</a>
+  <a routerLink="/achievements" routerLinkActive="active-sub"><i class="fas fa-trophy"></i> Achievements</a>
+</div>
+
+<!-- Social Links Right Side -->
+<div class="social-links-right">
+  <a href="https://github.com/Sumitjaiswal4839" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+  <a href="https://www.linkedin.com/in/sumit-jaiswal-9403a9299" target="_blank" title="LinkedIn"><i
+      class="fab fa-linkedin"></i></a>
+  <a href="javascript:void(0)" title="Twitter (Coming Soon)"><i class="fab fa-twitter"></i></a>
+  <a href="mailto:sj0269950@gmail.com" title="Email: sj0269950@gmail.com"><i class="fas fa-envelope"></i></a>
+  <a href="https://discord.com" target="_blank" title="Discord"><i class="fab fa-discord"></i></a>
+  <a href="https://wa.me/917827584476" target="_blank" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+</div>

@@ -1,0 +1,273 @@
+.about-page {
+  padding: 130px 2rem 50px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.about-filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.about-filters button {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.about-filters button:hover {
+  background: rgba(0, 255, 65, 0.1);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+}
+
+.about-filters button.active {
+  background: var(--primary);
+  color: #000;
+  border-color: var(--primary);
+  box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
+}
+
+.about-content-card {
+  background: var(--card-bg);
+  border-radius: 15px;
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  padding: 40px;
+  min-height: 400px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animations */
+.animated-fade {
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Bio Section */
+.bio-section {
+  margin-bottom: 35px;
+}
+
+.bio-section h3 {
+  color: var(--primary);
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.objective-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #e0e0e0;
+  letter-spacing: 0.5px;
+  text-align: justify;
+}
+
+/* Bio Grid (Soft Skills + Languages) */
+.bio-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 35px;
+}
+
+.bio-column h3 {
+  color: var(--primary);
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.skills-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.skills-list li {
+  padding: 8px 0;
+  font-size: 1rem;
+  color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.skills-list i {
+  color: var(--primary);
+}
+
+.lang-tags {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.lang-tag {
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  color: var(--accent);
+  padding: 6px 15px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.interests-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.interests-list li {
+  padding: 10px 0;
+  font-size: 1rem;
+  color: #e0e0e0;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.interests-list i {
+  color: var(--primary);
+  margin-top: 4px;
+}
+
+/* Education View */
+.edu-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.edu-card {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  background: rgba(0, 20, 5, 0.4);
+  border: 1px solid rgba(0, 255, 65, 0.2);
+  padding: 25px;
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+
+.edu-card:hover {
+  transform: translateX(10px);
+  border-color: var(--primary);
+  box-shadow: 0 5px 15px rgba(0, 255, 65, 0.15);
+}
+
+.edu-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(0, 255, 65, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.edu-details h3 {
+  color: #fff;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.edu-subtitle {
+  margin: 8px 0 0 0;
+  color: var(--accent);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Other Work History View */
+.exp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.exp-card-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(0, 5, 15, 0.5);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  padding: 20px;
+  border-radius: 12px;
+  transition: all 0.3s;
+}
+
+.exp-card-item:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent);
+  box-shadow: 0 5px 15px rgba(0, 212, 255, 0.15);
+}
+
+.exp-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 212, 255, 0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.exp-details h3 {
+  color: #fff;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.exp-company {
+  margin: 5px 0 0 0;
+  color: var(--primary);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 768px) {
+  .about-content-card {
+    padding: 20px;
+  }
+  .bio-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .edu-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  .exp-grid {
+    grid-template-columns: 1fr;
+  }
+}

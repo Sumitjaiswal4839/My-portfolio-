@@ -1,0 +1,87 @@
+<div class="page-content about-page">
+  <div class="container">
+    <h1 class="section-title">👤 About Me</h1>
+
+    <!-- Filter/Tabs -->
+    <div class="about-filters">
+      <button [class.active]="activeFilter === 'bio'" (click)="setFilter('bio')">
+        <i class="fas fa-user"></i> Bio & Skills
+      </button>
+      <button [class.active]="activeFilter === 'education'" (click)="setFilter('education')">
+        <i class="fas fa-graduation-cap"></i> Education
+      </button>
+      <button [class.active]="activeFilter === 'experience'" (click)="setFilter('experience')">
+        <i class="fas fa-history"></i> Other Work History
+      </button>
+    </div>
+
+    <!-- Content Area -->
+    <div class="about-content-card">
+      
+      <!-- Bio View -->
+      <div *ngIf="activeFilter === 'bio'" class="bio-view animated-fade">
+        <div class="bio-section">
+          <h3>My Journey & Passion</h3>
+          <p class="objective-text">{{ careerObjective }}</p>
+        </div>
+
+        <div class="bio-grid">
+          <!-- Soft Skills -->
+          <div class="bio-column">
+            <h3><i class="fas fa-brain"></i> Soft Skills</h3>
+            <ul class="skills-list">
+              <li *ngFor="let skill of softSkills">
+                <i class="fas fa-check-circle"></i> {{ skill }}
+              </li>
+            </ul>
+          </div>
+
+          <!-- Languages -->
+          <div class="bio-column">
+            <h3><i class="fas fa-language"></i> Languages</h3>
+            <div class="lang-tags">
+              <span class="lang-tag" *ngFor="let lang of languages">{{ lang }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Extracurriculars -->
+        <div class="bio-section extracurriculars">
+          <h3><i class="fas fa-award"></i> Extracurriculars & Interests</h3>
+          <ul class="interests-list">
+            <li *ngFor="let interest of interests">
+              <i class="fas fa-lightbulb"></i> {{ interest }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Education View -->
+      <div *ngIf="activeFilter === 'education'" class="education-view animated-fade">
+        <div class="edu-grid">
+          <div class="edu-card" *ngFor="let edu of educationList">
+            <div class="edu-icon"><i [class]="edu.icon"></i></div>
+            <div class="edu-details">
+              <h3>{{ edu.title }}</h3>
+              <p class="edu-subtitle">{{ edu.subtitle }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Other Experience View -->
+      <div *ngIf="activeFilter === 'experience'" class="experience-view animated-fade">
+        <div class="exp-grid">
+          <div class="exp-card-item" *ngFor="let exp of otherExperiences">
+            <div class="exp-icon"><i [class]="exp.icon"></i></div>
+            <div class="exp-details">
+              <h3>{{ exp.role }}</h3>
+              <p class="exp-company">{{ exp.company }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

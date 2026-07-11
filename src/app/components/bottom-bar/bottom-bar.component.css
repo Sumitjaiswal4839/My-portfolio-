@@ -1,0 +1,332 @@
+/* Fixed Left Bar */
+.fixed-left-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 320px;
+    background: var(--bg-secondary);
+    border-right: 2px solid var(--primary);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+}
+
+.fixed-left-bar.expanded {
+    transform: translateX(0);
+}
+
+.bar-toggle {
+    position: absolute;
+    top: 50%;
+    right: -55px; /* Stick out to the right */
+    transform: translateY(-50%);
+    background: var(--bg-secondary);
+    border: 2px solid var(--primary);
+    border-left: none;
+    padding: 20px 10px;
+    border-radius: 0 15px 15px 0;
+    color: var(--accent);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    font-weight: bold;
+    box-shadow: 5px 0 15px rgba(0, 212, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.bar-toggle span {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    white-space: nowrap;
+}
+
+.bar-toggle:hover {
+    background: var(--primary);
+    color: #000;
+    box-shadow: 5px 0 20px rgba(0, 212, 255, 0.4);
+    right: -60px;
+}
+
+.bar-toggle i {
+    transition: transform 0.3s ease;
+}
+
+.bar-toggle i.rotated {
+    transform: rotate(180deg);
+}
+
+.bar-content {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+    gap: 15px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Custom Scrollbar for Bar Content */
+.bar-content::-webkit-scrollbar {
+    width: 6px;
+}
+.bar-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+.bar-content::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+.bar-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.bar-item:hover {
+    transform: translateX(5px);
+    border-color: var(--primary);
+    box-shadow: 0 5px 15px rgba(0, 255, 65, 0.2);
+}
+
+.bar-item i {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.bar-item span {
+    font-size: 0.9rem;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.btn-sm {
+    padding: 5px 15px;
+    font-size: 0.8rem;
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn-sm:hover {
+    background: var(--primary);
+    color: #000;
+}
+
+@media (max-width: 480px) {
+    .fixed-left-bar {
+        width: 80vw;
+        max-width: 300px;
+    }
+
+    .bar-toggle {
+        right: -45px;
+        padding: 15px 8px;
+        font-size: 0.85rem;
+    }
+
+    .bar-toggle:hover {
+        right: -50px;
+    }
+
+    .bar-content {
+        padding: 15px;
+        gap: 12px;
+    }
+}
+
+/* === MODAL STYLES === */
+.custom-modal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-modal-content {
+  background: var(--card-bg, #0a1118);
+  border: 1px solid var(--primary, #00ff41);
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  color: var(--text, #e0e0e0);
+}
+
+.custom-modal-content h3 {
+  color: var(--primary, #00ff41);
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.custom-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 1.8rem;
+  color: var(--accent, #00d4ff);
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.custom-close:hover {
+  color: #ff4444;
+}
+
+.modal-list {
+  list-style: none;
+  padding: 0;
+}
+
+.modal-list li {
+  margin-bottom: 15px;
+  padding-left: 20px;
+  position: relative;
+}
+
+.modal-list li::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  color: var(--primary, #00ff41);
+  font-weight: bold;
+}
+
+.modal-body-text p {
+  margin-bottom: 20px;
+}
+
+.modal-link-btn, .modal-link {
+  display: inline-block;
+  color: #000;
+  background: var(--primary, #00ff41);
+  padding: 8px 15px;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-right: 10px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.modal-link-btn:hover, .modal-link:hover {
+  background: var(--accent, #00d4ff);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+}
+
+/* Featured Achievement Style */
+.wide-modal {
+  max-width: 800px !important;
+}
+
+.featured-achievement {
+  display: flex;
+  gap: 20px;
+  background: rgba(0, 255, 65, 0.05);
+  border: 1px dashed var(--primary);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+}
+
+.achievement-text {
+  flex: 1.5;
+}
+
+.event-tag {
+  font-size: 0.7rem;
+  background: var(--accent);
+  color: #000;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.tagline {
+  color: var(--accent);
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+}
+
+.achievement-gallery {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gallery-img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.gallery-img:hover {
+  transform: scale(1.05);
+  border-color: var(--primary);
+}
+
+.coming-soon {
+  padding: 40px;
+  text-align: center;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: var(--text-secondary);
+}
+
+.coming-soon i {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  opacity: 0.3;
+}
+
+.status-badge {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 4px 12px;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: bold;
+  border-radius: 20px;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 600px) {
+  .featured-achievement {
+    flex-direction: column;
+  }
+}

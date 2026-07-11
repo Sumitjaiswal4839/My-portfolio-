@@ -1,0 +1,160 @@
+.skills-section {
+  padding: 4rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Tab Buttons */
+.skills-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  padding: 0.8rem 2rem;
+  background: var(--card-bg);
+  border: 2px solid var(--primary);
+  color: var(--text);
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tab-btn:hover,
+.tab-btn.active {
+  background: var(--primary);
+  color: var(--dark);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 20px rgba(0, 255, 65, 0.3);
+}
+
+/* Tab Content */
+.tab-content {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Skill Category */
+.skill-category {
+  margin-bottom: 3rem;
+}
+
+.category-title {
+  font-size: 1.4rem;
+  color: var(--accent);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.5rem;
+}
+
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* Skill Badge */
+.skill-badge {
+  background: var(--card-bg);
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+  padding: 1.2rem 1.5rem;
+  min-width: 160px;
+  text-align: center;
+  transition: all 0.3s;
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.5s ease forwards;
+}
+
+@keyframes slideUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.skill-badge:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 255, 65, 0.2);
+  border-color: var(--accent);
+}
+
+.skill-badge i {
+  font-size: 1.8rem;
+  color: var(--primary);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.skill-badge span {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+/* Soft Skill Badge */
+.skill-badge.soft-skill {
+  border-color: var(--accent);
+  background: rgba(0, 212, 255, 0.05);
+}
+
+.skill-badge.soft-skill i {
+  color: var(--accent);
+}
+
+/* Cyber Badge */
+.skill-badge.cyber {
+  border-color: #ff4444;
+  background: rgba(255, 68, 68, 0.05);
+}
+
+.skill-badge.cyber i {
+  color: #ff6666;
+}
+
+/* Progress Bar */
+.skill-progress {
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  height: 6px;
+  overflow: hidden;
+  margin-top: 0.5rem;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 10px;
+  transition: width 1s ease;
+}
+
+.progress-bar.cyber-bar {
+  background: linear-gradient(90deg, #ff4444, #ff8888);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .skills-container {
+    justify-content: center;
+  }
+
+  .skill-badge {
+    min-width: 130px;
+  }
+}

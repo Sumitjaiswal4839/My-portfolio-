@@ -1,0 +1,234 @@
+/* ============================
+   GLOBAL STYLES - CyberSec Portfolio
+   ============================ */
+
+/* @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;600;700&display=swap'); */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #00ff41;
+  --secondary: #0a0e27;
+  --dark: #050714;
+  --text: #e2e8f0;        /* Softer slate gray */
+  --accent: #00d4ff;
+  --bg-primary: #050714;
+  --bg-secondary: #0a0e27;
+  --card-bg: rgba(10, 14, 39, 0.6);
+  --title-glow: 0 0 15px rgba(0, 255, 65, 0.5);
+  --box-glow: 0 10px 25px rgba(0, 255, 65, 0.4);
+}
+
+[data-theme="light"] {
+  --primary: #0d47a1;     /* Sleek Deep Blue */
+  --secondary: #cfd8dc;   /* Soft Cool Gray */
+  --dark: #ffffff;
+  --text: #1e293b;        /* Dark Slate Gray */
+  --accent: #2563eb;      /* Bright Blue Accent */
+  --bg-primary: #f1f5f9;  /* Premium Light Background */
+  --bg-secondary: #ffffff;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --title-glow: 0 2px 5px rgba(0,0,0,0.1); 
+  --box-glow: 0 10px 20px rgba(37, 99, 235, 0.3); 
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text);
+  overflow-x: hidden;
+  transition: all 0.3s ease;
+  scroll-behavior: smooth;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* Buttons */
+.btn {
+  padding: 0.8rem 2rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 2px solid;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: var(--dark);
+  border-color: var(--primary);
+  box-shadow: 0 4px 15px rgba(0, 255, 65, 0.2);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 255, 65, 0.5), 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.btn-secondary {
+  background: rgba(10, 14, 39, 0.4);
+  color: var(--accent);
+  border-color: rgba(0, 212, 255, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.btn-secondary:hover {
+  background: var(--accent);
+  color: #050714;
+  border-color: var(--accent);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0, 212, 255, 0.4);
+}
+
+.btn-secondary:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+/* Section Title with Zoom/Fade Pulse Animation */
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 3rem;
+  text-shadow: var(--title-glow);
+  animation: titlePulseZoom 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes titlePulseZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Page Content Wrapper */
+.page-content {
+  padding-top: 130px;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* App Layout Optimization */
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+main.main-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 120px;
+  padding-bottom: 160px;
+  padding-right: 0;
+  margin-right: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Scrollbar styling for main content */
+main.main-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+main.main-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+main.main-content::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+main.main-content::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* Desktop view - sidebar on the right */
+@media (min-width: 1025px) {
+  main.main-content {
+    margin-right: 0;
+    padding-right: 20px;
+    padding-bottom: 120px;
+  }
+}
+
+/* Tablet view - sidebar partially visible */
+@media (max-width: 1024px) {
+  main.main-content {
+    padding-right: 0;
+    padding-bottom: 120px;
+  }
+}
+
+/* Mobile view - sidebar as drawer */
+@media (max-width: 768px) {
+  main.main-content {
+    padding-top: 70px;
+    padding-bottom: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  main.main-content {
+    padding-top: 60px;
+    padding-bottom: 120px;
+  }
+}
+
+/* Disable scroll on homepage ONLY on desktop */
+@media (min-width: 1025px) {
+  body.no-scroll-home {
+    overflow: hidden !important;
+  }
+
+  body.no-scroll-home main.main-content {
+    overflow: hidden !important;
+    height: 100vh !important;
+    padding-top: 120px !important;
+    padding-bottom: 0 !important;
+    box-sizing: border-box;
+  }
+
+  body.no-scroll-home .hero-section {
+    height: 100% !important;
+    min-height: auto !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+}

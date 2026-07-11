@@ -1,0 +1,71 @@
+<div class="page-content tools-page">
+  <div class="container">
+    <div class="header">
+      <h1 class="section-title">Security Tools</h1>
+      <button *adminOnly (click)="toggleAddForm()" class="btn btn-primary add-btn">
+        <i class="fas" [class.fa-plus]="!showAddForm" [class.fa-times]="showAddForm"></i>
+        {{ showAddForm ? 'Cancel' : 'Add Tool' }}
+      </button>
+    </div>
+
+    <!-- Add Form -->
+    <div class="add-form-container" *ngIf="showAddForm">
+      <div class="card form-card">
+        <h3>New Tool</h3>
+        <div class="form-group">
+          <label>Tool Name</label>
+          <input type="text" [(ngModel)]="newTool.name">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="newTool.description"></textarea>
+        </div>
+        <div class="form-group">
+            <label>FontAwesome Icon Class</label>
+            <input type="text" [(ngModel)]="newTool.icon" placeholder="e.g., fas fa-shield-alt">
+        </div>
+        <div class="form-group-inline">
+          <label><input type="checkbox" [(ngModel)]="newTool.isSelfMade"> Self Made Tool?</label>
+        </div>
+        
+        <div *ngIf="newTool.isSelfMade">
+            <div class="form-group">
+                <label>Preview Link / GitHub Link</label>
+                <input type="text" [(ngModel)]="newTool.previewLink">
+            </div>
+            <div class="form-group">
+                <label>Folder Path / Source Reference</label>
+                <input type="text" [(ngModel)]="newTool.folderPath">
+            </div>
+        </div>
+
+        <button (click)="addTool()" class="btn btn-primary submit-btn">Save Tool</button>
+      </div>
+    </div>
+
+    <div class="tools-grid">
+      <div class="tool-card" *ngFor="let tool of tools$ | async" [class.self-made]="tool.isSelfMade">
+        <div class="tool-header">
+            <i [class]="tool.icon || 'fas fa-tools'"></i>
+            <span class="badge" *ngIf="tool.isSelfMade">Self Made</span>
+        </div>
+        <div class="tool-info">
+          <h3>{{ tool.name }}</h3>
+          <p>{{ tool.description }}</p>
+          
+          <div class="tool-meta" *ngIf="tool.isSelfMade">
+              <a *ngIf="tool.previewLink" [href]="tool.previewLink" target="_blank" class="meta-link">
+                  <i class="fas fa-external-link-alt"></i> Preview
+              </a>
+              <span *ngIf="tool.folderPath" class="meta-path">
+                  <i class="fas fa-folder"></i> {{ tool.folderPath }}
+              </span>
+          </div>
+        </div>
+        <div class="tool-actions" *adminOnly>
+          <button (click)="deleteTool(tool.id)" class="delete-btn"><i class="fas fa-trash"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

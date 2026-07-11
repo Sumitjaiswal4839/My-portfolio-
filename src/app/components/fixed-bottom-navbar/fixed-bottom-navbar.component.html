@@ -1,0 +1,51 @@
+<!-- Fixed Bottom Navbar - Always Visible -->
+<nav class="fixed-bottom-navbar">
+    <div class="navbar-container">
+        <!-- Bio Section -->
+        <div class="nav-section bio-section">
+            <div class="section-label">
+                <i class="fas fa-user"></i>
+                <span class="label-text">Bio</span>
+            </div>
+            <p class="section-content">{{ profileData.bio }}</p>
+        </div>
+
+        <!-- Experience Section -->
+        <div class="nav-section experience-section">
+            <div class="section-label">
+                <i class="fas fa-briefcase"></i>
+                <span class="label-text">Experience</span>
+            </div>
+            <p class="section-content">{{ profileData.experience }}</p>
+        </div>
+
+        <!-- Location Section -->
+        <div class="nav-section location-section">
+            <div class="section-label">
+                <i class="fas fa-map-marker-alt"></i>
+                <span class="label-text">Location</span>
+            </div>
+            <p class="section-content">{{ profileData.location }}</p>
+        </div>
+
+        <!-- Email Section -->
+        <div class="nav-section email-section">
+            <div class="section-label">
+                <i class="fas fa-envelope"></i>
+                <span class="label-text">Email</span>
+            </div>
+            <a [href]="'mailto:' + profileData.email" class="section-content email-link">
+                {{ profileData.email }}
+            </a>
+        </div>
+
+        <!-- Specialization Section -->
+        <div class="nav-section specialization-section">
+            <div class="section-label">
+                <i class="fas fa-star"></i>
+                <span class="label-text">Focus</span>
+            </div>
+            <p class="section-content">{{ profileData.specialization }}</p>
+        </div>
+    </div>
+</nav>

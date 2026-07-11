@@ -1,0 +1,110 @@
+<!-- Fixed Left Sidebar -->
+<div class="fixed-left-bar" [class.expanded]="isBarExpanded()">
+    <div class="bar-toggle" (click)="toggleBar()">
+        <i class="fas fa-chevron-right" [class.rotated]="isBarExpanded()"></i>
+        <span>More Information</span>
+    </div>
+
+    <div class="bar-content">
+        <!-- 1st: Other Certifications and Document -->
+        <div class="bar-item">
+            <i class="fas fa-certificate"></i>
+            <span>Certifications & Documents</span>
+            <button class="btn btn-sm btn-primary" (click)="openModal('certModal')">View</button>
+        </div>
+
+        <!-- 2nd: Awards & Achievements -->
+        <div class="bar-item">
+            <i class="fas fa-award"></i>
+            <span>Awards & Achievements</span>
+            <button class="btn btn-sm btn-primary" (click)="openModal('awardModal')">View</button>
+        </div>
+
+        <!-- 3rd: Publications & Blogs -->
+        <div class="bar-item">
+            <i class="fas fa-book-open"></i>
+            <span>Publications & Blogs</span>
+            <button class="btn btn-sm btn-primary" (click)="openModal('blogModal')">Read</button>
+        </div>
+
+        <!-- 4th: Community Contributions -->
+        <div class="bar-item">
+            <i class="fas fa-globe"></i>
+            <span>Community Contributions</span>
+            <button class="btn btn-sm btn-primary" (click)="openModal('communityModal')">Explore</button>
+        </div>
+    </div>
+</div>
+
+<!-- === MODALS IMPLEMENTATION === -->
+
+<!-- Certifications Modal -->
+<div class="custom-modal" *ngIf="activeModal() === 'certModal'">
+  <div class="custom-modal-content">
+    <span class="custom-close" (click)="closeModal()">&times;</span>
+    <h3><i class="fas fa-certificate"></i> Certifications & Documents</h3>
+    <ul class="modal-list">
+      <li><strong>CEH (Certified Ethical Hacker)</strong> - Pursuing</li>
+      <li><strong>OSCP</strong> - Pursuing</li>
+      <li><strong>Google Cybersecurity Certificate</strong> - Completed</li>
+      <li><a href="/resume.pdf" download class="modal-link"><i class="fas fa-file-pdf"></i> Download Official Resume</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- Awards Modal -->
+<div class="custom-modal" *ngIf="activeModal() === 'awardModal'">
+  <div class="custom-modal-content wide-modal">
+    <span class="custom-close" (click)="closeModal()">&times;</span>
+    <h3><i class="fas fa-award"></i> Awards & Achievements</h3>
+    
+    <div class="featured-achievement">
+      <div class="achievement-text">
+        <span class="event-tag">New</span>
+        <h4>Hack Defence Summit 2026 (Delhi)</h4>
+        <p class="tagline"><i>"Beginner friendly, but security heavy."</i></p>
+        <p>Attended the massive cybersecurity summit in Delhi (15th Feb 2026). Explored advanced methodologies in ethical hacking and defense protocols.</p>
+      </div>
+      <div class="achievement-gallery">
+        <img src="assets/events/summit_cert.png" alt="Hack Defence Summit Certificate" class="gallery-img" (click)="openImage('assets/events/summit_cert.png')">
+        <img src="assets/events/summit_photo.png" alt="Sumit at Summit" class="gallery-img" (click)="openImage('assets/events/summit_photo.png')">
+      </div>
+    </div>
+
+    <ul class="modal-list">
+      <li><strong>CTF Participant</strong> - Active participant in TryHackMe & HackTheBox challenges</li>
+      <li><strong>Bug Bounty</strong> - Acknowledged for finding vulnerabilities in testing environments</li>
+      <li><strong>Hackathon Winner</strong> - Secured 1st position in local Cybersecurity Hackathon</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Blogs Modal -->
+<div class="custom-modal" *ngIf="activeModal() === 'blogModal'">
+  <div class="custom-modal-content">
+    <span class="custom-close" (click)="closeModal()">&times;</span>
+    <h3><i class="fas fa-book-open"></i> Publications & Blogs</h3>
+    <div class="modal-body-text">
+      <div class="coming-soon">
+        <i class="fas fa-tools"></i>
+        <p>Expertise is building up! Stay tuned for my upcoming security research papers and write-ups.</p>
+        <span class="status-badge">COMING SOON</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Community Modal -->
+<div class="custom-modal" *ngIf="activeModal() === 'communityModal'">
+  <div class="custom-modal-content">
+    <span class="custom-close" (click)="closeModal()">&times;</span>
+    <h3><i class="fas fa-globe"></i> Community Contributions</h3>
+    <div class="modal-body-text">
+       <div class="coming-soon">
+        <i class="fas fa-terminal"></i>
+        <p>Currently scouting for open-source initiatives. Check back soon for my community work.</p>
+        <span class="status-badge">COMING SOON</span>
+      </div>
+    </div>
+  </div>
+</div>

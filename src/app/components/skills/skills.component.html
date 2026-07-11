@@ -1,0 +1,46 @@
+<section class="skills-section page-content" id="skills">
+  <h2 class="section-title">My Skills &amp; Expertise</h2>
+
+  <!-- Tab Navigation -->
+  <div class="skills-tabs">
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'core'"
+      (click)="setTab('core')">
+      <i class="fas fa-code"></i> Core Skills
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'cybersecurity'"
+      (click)="setTab('cybersecurity')">
+      <i class="fas fa-shield-alt"></i> Cybersecurity
+    </button>
+  </div>
+
+  <!-- Skill Categories -->
+  <div class="tab-content active">
+    <div class="skill-category" *ngFor="let category of activeCategories">
+      <h3 class="category-title">
+        <i [class]="category.icon"></i> {{ category.title }}
+      </h3>
+      <div class="skills-container">
+        <div
+          #skillBadge
+          class="skill-badge"
+          [class.soft-skill]="skill.isSoft"
+          [class.cyber]="skill.isCyber"
+          *ngFor="let skill of category.skills">
+          <i [class]="skill.icon"></i>
+          <span>{{ skill.name }}</span>
+          <div class="skill-progress" *ngIf="skill.level">
+            <div
+              class="progress-bar"
+              [class.cyber-bar]="skill.isCyber"
+              [style.width.%]="skill.level">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
