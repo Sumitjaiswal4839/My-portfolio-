@@ -111,4 +111,3 @@ Edit CSS variables in `src/styles.css`:
 | `index6.html`   | `ContactComponent` + SPA router|
 | `skill.html`    | `SkillsComponent`             |
 | `Contact.html`  | `ContactComponent`            |
-# My-portfolio-
