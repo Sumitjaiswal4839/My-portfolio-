@@ -44,11 +44,6 @@ Thumbs.db
 # Local Netlify folder
 .netlify
 
-# Ignore everything else by default, but keep README and this gitignore tracked
-*
-!.gitignore
-!README.md
-
-# Ignore all Markdown files except README.md
+# Keep the main project files trackable, but ignore Markdown files other than README.md
 *.md
 !README.md
