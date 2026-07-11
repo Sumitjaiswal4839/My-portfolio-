@@ -1,66 +1,4 @@
 
-
-## 🛡️ What's Protected?
-
-All buttons with `*adminOnly` directive are hidden from regular users:
-- Upload Resume button
-- Add Projects button
-- Edit Content button
-- Any future admin features
-
-```html
-<!-- Use this in templates for protected buttons -->
-<button *adminOnly (click)="uploadResume()">Upload Resume</button>
-```
-
-## 🔧 Implementation for New Buttons
-
-When adding new admin buttons in **future components**, follow this pattern:
-
-### In your component TypeScript:
-```typescript
-import { AdminService } from './services/admin.service';
-import { AdminOnlyDirective } from './directives/admin-only.directive';
-
-@Component({
-  imports: [AdminOnlyDirective, ...],
-  // ...
-})
-export class YourComponent {
-  constructor(public adminService: AdminService) {}
-}
-```
-
-### In your component template:
-```html
-<!-- Button only visible when admin is authenticated -->
-<button *adminOnly (click)="yourAction()">
-  🔓 Admin Action
-</button>
-
-<!-- Optional: Show admin-only content -->
-<div *adminOnly class="admin-panel">
-  <!-- admin-only content -->
-</div>
-```
-
-## 📋 How It Works
-
-| Feature | Detail |
-|---------|--------|
-| **Trigger** | Press backtick (`) three times: ` ` ` |
-| **Password** | `REDACTED` |
-| **Session** | Persists until tab is closed |
-| **Visibility** | Elements completely removed from DOM (not just hidden) |
-| **Status** | Admin indicator shows when logged in |
-
-## 📝 Checklist for Future Updates
-
-- ✅ Import `AdminOnlyDirective` in component
-- ✅ Inject `AdminService` in constructor
-- ✅ Wrap buttons with `*adminOnly` directive
-- ✅ Test by pressing ` ` ` and typing `REDACTED`
-
 ---
 
 # 🛡️ CyberSec Portfolio — Angular Project
@@ -173,5 +111,4 @@ Edit CSS variables in `src/styles.css`:
 | `index6.html`   | `ContactComponent` + SPA router|
 | `skill.html`    | `SkillsComponent`             |
 | `Contact.html`  | `ContactComponent`            |
-# My-portfolio-
 # My-portfolio-
