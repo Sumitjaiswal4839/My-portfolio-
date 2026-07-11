@@ -1,18 +1,4 @@
-# 🔐 SECURITY: Owner-Only Admin Access
 
-This portfolio uses a **secret terminal authentication system** to protect admin features (upload resume, add content, etc.).
-
-## 🔓 How to Unlock Owner Features
-
-**For Owner Only:**
-1. Press the **backtick key (`)** **three times rapidly** — ` ` `
-2. A hidden terminal will appear
-3. Type: `REDACTED` and press **Enter**
-4. You'll see: **"✓ Authentication Successful — Admin Mode Activated"**
-5. Admin badge appears bottom-right: **👑 OWNER MODE**
-
-**How to Logout:**
-- Click the **"Logout"** button on the admin badge
 
 ## 🛡️ What's Protected?
 
