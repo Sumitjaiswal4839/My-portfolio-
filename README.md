@@ -99,15 +99,3 @@ Edit CSS variables in `src/styles.css`:
 
 ---
 
-## 📦 Source Files Converted
-
-| Original File   | Angular Component              |
-|-----------------|-------------------------------|
-| `index1.html`   | `HeroComponent` (base layout) |
-| `index2.html`   | `HeroComponent` (skills grid) |
-| `index3.html`   | Structure reference           |
-| `index4.html`   | `NavbarComponent` (sub-nav)   |
-| `index5.html`   | `SkillsComponent` (tabs/badges)|
-| `index6.html`   | `ContactComponent` + SPA router|
-| `skill.html`    | `SkillsComponent`             |
-| `Contact.html`  | `ContactComponent`            |
