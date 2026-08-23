@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAdmin() {
+      return request.auth != null &&
+        (request.auth.token.email == "YOUR_ADMIN_EMAIL@gmail.com" || request.auth.token.admin == true);
+    }
+
+    match /projects/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /certifications/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /blogs/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /tools/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /achievements/{document} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // FIXED: actual path is settings/resume (a document), not a "resume" collection
+    match /settings/resume {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

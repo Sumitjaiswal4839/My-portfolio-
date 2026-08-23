@@ -8,6 +8,8 @@ import { BottomInfoComponent } from './components/bottom-info/bottom-info.compon
 import { SecretTerminalComponent } from './components/secret-terminal/secret-terminal.component';
 import { ThemeService } from './services/theme.service';
 
+import { DataService } from './services/data.service';
+
 /**
  * AppComponent - Root component
  * 
@@ -31,6 +33,9 @@ import { ThemeService } from './services/theme.service';
     CommonModule
   ],
   template: `
+    <div *ngIf="dataService.loadError$ | async as errorMessage" style="background-color:#ef4444; color:white; text-align:center; padding:8px 16px; font-size:14px; position: relative; z-index: 1000;">
+      {{ errorMessage }}
+    </div>
     <app-matrix-bg></app-matrix-bg>
     <app-navbar></app-navbar>
     
@@ -52,7 +57,7 @@ import { ThemeService } from './services/theme.service';
   `]
 })
 export class AppComponent implements OnInit {
-  constructor(private themeService: ThemeService) {}
+  constructor(private themeService: ThemeService, public dataService: DataService) {}
 
   ngOnInit(): void {
     this.themeService.initTheme();

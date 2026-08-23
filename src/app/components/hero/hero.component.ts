@@ -191,14 +191,16 @@ export class HeroComponent implements OnInit, AfterViewChecked, OnDestroy {
     }
   }
 
-  previewResume() {
-    if (this.resumeUrl) {
-      this.dropdownOpen = false;
-      const pdfWindow = window.open("");
-      if (pdfWindow) {
-        pdfWindow.document.write(`<iframe width='100%' height='100%' style='border:none;' src='${this.resumeUrl}'></iframe>`);
-      }
+  previewResume(): void {
+    if (!this.resumeUrl) return;
+    try {
+      const parsed = new URL(this.resumeUrl, window.location.origin);
+      if (!['https:', 'http:'].includes(parsed.protocol)) return;
+    } catch {
+      return;
     }
+    this.dropdownOpen = false;
+    window.open(this.resumeUrl, '_blank', 'noopener,noreferrer');
   }
 
   async deleteResume() {

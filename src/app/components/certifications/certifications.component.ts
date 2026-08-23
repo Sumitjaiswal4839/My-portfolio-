@@ -93,17 +93,21 @@ export class CertificationsComponent implements OnInit {
     };
   }
 
-  viewFile(cert: Certification) {
-    if (cert.fileType === 'pdf') {
-      const win = window.open();
-      if (win) {
-        win.document.write(`<iframe src="${cert.fileUrl}" style="width:100%; height:100%; border:none;"></iframe>`);
-      }
-    } else {
-        const win = window.open();
-        if (win) {
-          win.document.write(`<img src="${cert.fileUrl}" style="max-width:100%;">`);
-        }
+  viewFile(cert: Certification): void {
+    if (!cert?.fileUrl) return;
+    const safeUrl = this.validateUrl(cert.fileUrl);
+    if (!safeUrl) {
+      console.error('Invalid or unsafe URL scheme detected.');
+      return;
     }
+    window.open(safeUrl, '_blank', 'noopener,noreferrer');
+  }
+
+  private validateUrl(url: string): string | null {
+    try {
+      const parsed = new URL(url, window.location.origin);
+      if (['https:', 'http:'].includes(parsed.protocol)) return url;
+    } catch {}
+    return null;
   }
 }

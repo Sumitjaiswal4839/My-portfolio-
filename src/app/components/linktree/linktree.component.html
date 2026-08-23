@@ -41,7 +41,7 @@
     </div>
 
     <div class="links-section">
-      <a *ngFor="let link of links" [href]="link.url" target="_blank" class="link-item"
+      <a *ngFor="let link of links" [href]="link.url" target="_blank" rel="noopener noreferrer" class="link-item"
         [style.--hover-color]="link.color">
         <div class="link-icon" [style.color]="link.color">
           <i [class]="link.icon"></i>

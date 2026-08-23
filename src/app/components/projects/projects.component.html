@@ -62,7 +62,10 @@
   </div>
 
   <div class="projects-grid">
-    <div class="project-card" *ngFor="let project of filteredProjects">
+    <div *ngIf="(filteredProjects$ | async)?.length === 0" class="empty-state">
+      <p>Coming soon...</p>
+    </div>
+    <div class="project-card" *ngFor="let project of filteredProjects$ | async">
       <div class="card-glow"></div>
       <div class="card-content">
         <div class="project-badges-container" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
@@ -76,18 +79,18 @@
         <h3>{{ project.title }}</h3>
         <p class="description">{{ project.description }}</p>
         <div class="project-links">
-          <a *ngIf="project.githubLink" [href]="project.githubLink" target="_blank" class="link-icon">
+          <a *ngIf="project.githubLink" [href]="project.githubLink" target="_blank" rel="noopener noreferrer" class="link-icon">
             <i class="fab fa-github"></i> Source
           </a>
-          <a *ngIf="project.liveLink" [href]="project.liveLink" target="_blank" class="link-icon live-link">
+          <a *ngIf="project.liveLink" [href]="project.liveLink" target="_blank" rel="noopener noreferrer" class="link-icon live-link">
             <i class="fas fa-external-link-alt"></i> Live View
           </a>
         </div>
         <div class="project-admin-actions" *adminOnly>
-          <button class="btn-icon edit-btn" (click)="editProject(project)" title="Edit project">
+          <button class="btn-icon edit-btn" (click)="editProject(project)" title="Edit project" aria-label="Edit project">
             <i class="fas fa-edit"></i>
           </button>
-          <button class="btn-icon delete-btn" (click)="deleteProject(project.id)" title="Delete project">
+          <button class="btn-icon delete-btn" (click)="deleteProject(project.id)" title="Delete project" aria-label="Delete project">
             <i class="fas fa-trash"></i>
           </button>
         </div>

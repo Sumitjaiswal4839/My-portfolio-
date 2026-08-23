@@ -4,6 +4,9 @@
       <h1 class="section-title">Achievements</h1>
     </div>
     <div class="achs-grid">
+      <div *ngIf="(achievements$ | async)?.length === 0" class="empty-state">
+        <p>Coming soon...</p>
+      </div>
       <div class="ach-card" *ngFor="let ach of achievements$ | async">
         <div class="ach-banner" (click)="ach.imageUrl ? openImage(ach.imageUrl) : null">
           <img *ngIf="ach.imageUrl" [src]="ach.imageUrl" alt="Achievement image: {{ ach.title }}">
@@ -21,7 +24,7 @@
           <span class="date">{{ ach.date | date }}</span>
         </div>
         <div class="ach-actions" *adminOnly>
-          <button (click)="deleteAchievement(ach.id)" class="delete-btn"><i class="fas fa-trash"></i></button>
+          <button (click)="deleteAchievement(ach.id)" class="delete-btn" aria-label="Delete achievement"><i class="fas fa-trash"></i></button>
         </div>
       </div>
     </div>

@@ -1,28 +1,17 @@
 import { Routes } from '@angular/router';
-import { HeroComponent } from './components/hero/hero.component';
-import { SkillsComponent } from './components/skills/skills.component';
-import { ContactComponent } from './components/contact/contact.component';
-import { LinktreeComponent } from './components/linktree/linktree.component';
-import { ProjectsComponent } from './components/projects/projects.component';
-import { CertificationsComponent } from './components/certifications/certifications.component';
-import { BlogsComponent } from './components/blogs/blogs.component';
-import { AchievementsComponent } from './components/achievements/achievements.component';
-import { ToolsComponent } from './components/tools/tools.component';
-import { AboutComponent } from './components/about/about.component';
-import { ExperienceComponent } from './components/experience/experience.component';
 
 export const routes: Routes = [
-  { path: '', component: HeroComponent },
-  { path: 'home', component: HeroComponent },
-  { path: 'about', component: AboutComponent },
-  { path: 'experience', component: ExperienceComponent },
-  { path: 'skills', component: SkillsComponent },
-  { path: 'contact', component: ContactComponent },
-  { path: 'links', component: LinktreeComponent },
-  { path: 'projects', component: ProjectsComponent },
-  { path: 'certifications', component: CertificationsComponent },
-  { path: 'blog', component: BlogsComponent },
-  { path: 'achievements', component: AchievementsComponent },
-  { path: 'tools', component: ToolsComponent },
+  { path: '', loadComponent: () => import('./components/hero/hero.component').then(m => m.HeroComponent) },
+  { path: 'home', loadComponent: () => import('./components/hero/hero.component').then(m => m.HeroComponent) },
+  { path: 'about', loadComponent: () => import('./components/about/about.component').then(m => m.AboutComponent) },
+  { path: 'experience', loadComponent: () => import('./components/experience/experience.component').then(m => m.ExperienceComponent) },
+  { path: 'skills', loadComponent: () => import('./components/skills/skills.component').then(m => m.SkillsComponent) },
+  { path: 'contact', loadComponent: () => import('./components/contact/contact.component').then(m => m.ContactComponent) },
+  { path: 'links', loadComponent: () => import('./components/linktree/linktree.component').then(m => m.LinktreeComponent) },
+  { path: 'projects', loadComponent: () => import('./components/projects/projects.component').then(m => m.ProjectsComponent) },
+  { path: 'certifications', loadComponent: () => import('./components/certifications/certifications.component').then(m => m.CertificationsComponent) },
+  { path: 'blog', loadComponent: () => import('./components/blogs/blogs.component').then(m => m.BlogsComponent) },
+  { path: 'achievements', loadComponent: () => import('./components/achievements/achievements.component').then(m => m.AchievementsComponent) },
+  { path: 'tools', loadComponent: () => import('./components/tools/tools.component').then(m => m.ToolsComponent) },
   { path: '**', redirectTo: '' }
 ];

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { initializeApp } from "firebase/app";
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 import { getAnalytics, isSupported } from "firebase/analytics";
 import { 
   getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, setDoc 
@@ -67,6 +68,9 @@ export class DataService {
   private projectsSubject = new BehaviorSubject<Project[]>([]);
   private resumeSubject = new BehaviorSubject<string | null>(null);
 
+  private _loadError = new BehaviorSubject<string | null>(null);
+  public loadError$ = this._loadError.asObservable();
+
   certs$ = this.certsSubject.asObservable();
   blogs$ = this.blogsSubject.asObservable();
   achs$ = this.achsSubject.asObservable();
@@ -77,6 +81,10 @@ export class DataService {
   constructor() {
     try {
       this.app = initializeApp(environment.firebase);
+      const appCheck = initializeAppCheck(this.app, {
+        provider: new ReCaptchaV3Provider('YOUR_RECAPTCHA_SITE_KEY_HERE'),
+        isTokenAutoRefreshEnabled: true
+      });
       this.db = getFirestore(this.app);
       
       // Initialize Analytics
@@ -87,6 +95,8 @@ export class DataService {
       this.initRealtimeListeners();
     } catch (error) {
       console.warn("Firebase not configured properly. Make sure you pasted your keys in src/environments/environment.ts!", error);
+      console.error('Failed to load portfolio data:', error);
+      this._loadError.next('Unable to connect to database. Some content might not display.');
       // Fallback for demo before Firebase is configured
       this.resumeSubject.next(localStorage.getItem('user_resume'));
     }

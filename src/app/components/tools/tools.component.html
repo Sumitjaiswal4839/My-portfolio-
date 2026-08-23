@@ -44,6 +44,9 @@
     </div>
 
     <div class="tools-grid">
+      <div *ngIf="(tools$ | async)?.length === 0" class="empty-state">
+        <p>Coming soon...</p>
+      </div>
       <div class="tool-card" *ngFor="let tool of tools$ | async" [class.self-made]="tool.isSelfMade">
         <div class="tool-header">
             <i [class]="tool.icon || 'fas fa-tools'"></i>
@@ -54,7 +57,7 @@
           <p>{{ tool.description }}</p>
           
           <div class="tool-meta" *ngIf="tool.isSelfMade">
-              <a *ngIf="tool.previewLink" [href]="tool.previewLink" target="_blank" class="meta-link">
+              <a *ngIf="tool.previewLink" [href]="tool.previewLink" target="_blank" rel="noopener noreferrer" class="meta-link">
                   <i class="fas fa-external-link-alt"></i> Preview
               </a>
               <span *ngIf="tool.folderPath" class="meta-path">

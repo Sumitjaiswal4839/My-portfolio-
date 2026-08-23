@@ -46,6 +46,9 @@
 
     <!-- Grid -->
     <div class="certs-grid">
+      <div *ngIf="(certifications$ | async)?.length === 0" class="empty-state">
+        <p>Coming soon...</p>
+      </div>
       <div class="cert-card" *ngFor="let cert of certifications$ | async">
         <div class="cert-preview" (click)="viewFile(cert)">
           <i *ngIf="cert.fileType === 'pdf'" class="fas fa-file-pdf"></i>
@@ -58,10 +61,10 @@
           <span class="date">{{ cert.date | date }}</span>
         </div>
         <div class="cert-actions" *adminOnly>
-          <button (click)="editCertification(cert)" class="edit-btn" title="Edit">
+          <button (click)="editCertification(cert)" class="edit-btn" title="Edit" aria-label="Edit certification">
             <i class="fas fa-edit"></i>
           </button>
-          <button (click)="deleteCertification(cert.id)" class="delete-btn" title="Delete">
+          <button (click)="deleteCertification(cert.id)" class="delete-btn" title="Delete" aria-label="Delete certification">
             <i class="fas fa-trash"></i>
           </button>
         </div>

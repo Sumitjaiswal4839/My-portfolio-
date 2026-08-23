@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ProjectService, Project } from '../../services/project.service';
 import { AdminOnlyDirective } from '../../directives/admin-only.directive';
 import { AdminService } from '../../services/admin.service';
+import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
 @Component({
   selector: 'app-projects',
@@ -14,8 +15,16 @@ import { AdminService } from '../../services/admin.service';
 })
 export class ProjectsComponent implements OnInit {
   projects$ = this.projectService.projects$;
-  projects: Project[] = [];
-  filteredProjects: Project[] = [];
+  activeTabSubject = new BehaviorSubject<'cyber' | 'normal' | 'all'>('all');
+  activeTab$ = this.activeTabSubject.asObservable();
+  
+  filteredProjects$ = combineLatest([this.projects$, this.activeTab$]).pipe(
+    map(([projects, tab]) => {
+      if (tab === 'all') return projects;
+      return projects.filter(p => p.type === tab);
+    })
+  );
+
   activeTab: 'cyber' | 'normal' | 'all' = 'all';
   showAddForm = false;
   isEditing = false;
@@ -33,29 +42,19 @@ export class ProjectsComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     public adminService: AdminService
-  ) {
-    this.projects$.subscribe(projects => {
-      this.projects = projects;
-      this.filterProjects(this.activeTab);
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.loadProjects();
   }
 
   loadProjects() {
-    this.projects = this.projectService.getProjects();
-    this.filterProjects(this.activeTab);
+    this.projectService.getProjects(); // If it fetches, let it fetch
   }
 
   filterProjects(type: 'cyber' | 'normal' | 'all') {
     this.activeTab = type;
-    if (type === 'all') {
-      this.filteredProjects = this.projects;
-    } else {
-      this.filteredProjects = this.projects.filter(p => p.type === type);
-    }
+    this.activeTabSubject.next(type);
   }
 
   toggleAddForm() {

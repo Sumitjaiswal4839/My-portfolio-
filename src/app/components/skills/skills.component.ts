@@ -1,5 +1,6 @@
-import { Component, signal, ElementRef, QueryList, ViewChildren, AfterViewInit } from '@angular/core';
+import { Component, signal, ElementRef, QueryList, ViewChildren, AfterViewInit, DestroyRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export interface SkillBadge {
   icon: string;
@@ -23,6 +24,7 @@ export interface SkillCategory {
   styleUrls: ['./skills.component.css']
 })
 export class SkillsComponent implements AfterViewInit {
+  private destroyRef = inject(DestroyRef);
   activeTab = signal<'core' | 'cybersecurity'>('core');
 
   @ViewChildren('skillBadge') skillBadges!: QueryList<ElementRef>;
@@ -132,7 +134,7 @@ export class SkillsComponent implements AfterViewInit {
       });
     }, { threshold: 0.1 });
 
-    this.skillBadges.changes.subscribe(() => {
+    this.skillBadges.changes.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.skillBadges.forEach(badge => {
         observer.observe(badge.nativeElement);
       });

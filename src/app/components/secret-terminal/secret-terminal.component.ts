@@ -35,10 +35,9 @@ export class SecretTerminalComponent implements OnInit, OnDestroy {
   private keySequence: string[] = [];
   private sequenceTimeout: any;
 
-  constructor(private adminService: AdminService) {}
+  constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
-    this.adminService.checkSession();
     this.isAuthenticated = this.adminService.isAdmin;
     this.adminService.isAdmin$.subscribe(val => this.isAuthenticated = val);
   }
@@ -93,34 +92,36 @@ export class SecretTerminalComponent implements OnInit, OnDestroy {
     this.lines = [];
   }
 
-  onEnter(): void {
+  async onEnter(): Promise<void> {
     const cmd = this.inputValue.trim();
     this.lines.push({ text: `> ${cmd}`, type: 'input' });
     this.inputValue = '';
 
     if (!this.isAuthenticated) {
-      if (cmd === 'REDACTED') {
-        this.adminService.activate();
-        this.lines.push({ text: '', type: 'output' });
-        this.lines.push({ text: '✔  Access granted. Welcome back, Owner.', type: 'success' });
-        this.lines.push({ text: '   Admin controls are now visible.', type: 'success' });
-        this.lines.push({ text: '', type: 'output' });
-        this.lines.push({ text: 'Type "exit" to close terminal.', type: 'output' });
-      } else if (cmd === 'exit' || cmd === 'quit') {
+      if (cmd === 'exit' || cmd === 'quit') {
         this.closeTerminal();
       } else if (cmd === 'help') {
-        this.lines.push({ text: 'Enter REDACTED to authenticate as owner.', type: 'output' });
+        this.lines.push({ text: 'Enter password to authenticate as owner.', type: 'output' });
       } else {
-        this.lines.push({ text: `✘  Access denied. Invalid path.`, type: 'error' });
+        const success = await this.adminService.login("sj0269950@gmail.com", cmd);
+        if (success) {
+          this.lines.push({ text: '', type: 'output' });
+          this.lines.push({ text: '✔  Access granted. Welcome back, Owner.', type: 'success' });
+          this.lines.push({ text: '   Admin controls are now visible.', type: 'success' });
+          this.lines.push({ text: '', type: 'output' });
+          this.lines.push({ text: 'Type "exit" to close terminal.', type: 'output' });
+        } else {
+          this.lines.push({ text: `✘  Access denied. Invalid password.`, type: 'error' });
+        }
       }
     } else {
       if (cmd === 'exit' || cmd === 'quit') {
         this.closeTerminal();
       } else if (cmd === 'logout') {
-        this.adminService.deactivate();
+        await this.adminService.logout();
         this.lines.push({ text: '✔  Logged out. Admin controls hidden.', type: 'success' });
       } else if (cmd === 'status') {
-        this.lines.push({ text: '● Status: AUTHENTICATED as REDACTED', type: 'success' });
+        this.lines.push({ text: '● Status: AUTHENTICATED', type: 'success' });
       } else if (cmd === 'help') {
         this.lines.push({ text: 'Commands: logout | status | exit', type: 'output' });
       } else {

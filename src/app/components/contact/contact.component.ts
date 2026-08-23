@@ -51,12 +51,8 @@ export class ContactComponent {
   }
 
   uploadResume(): void {
-    // Simulate file upload
-    console.log('Resume upload initiated...');
-    this.uploadSuccess.set(true);
-    setTimeout(() => {
-      this.uploadSuccess.set(false);
-    }, 3000);
+    console.warn('Resume upload feature is pending backend integration.');
+    alert('Resume upload is not configured yet. Please use the contact form or email directly.');
   }
 
   infoCards = [
