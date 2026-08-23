@@ -9,6 +9,7 @@ export const routes: Routes = [
   { path: 'contact', loadComponent: () => import('./components/contact/contact.component').then(m => m.ContactComponent) },
   { path: 'links', loadComponent: () => import('./components/linktree/linktree.component').then(m => m.LinktreeComponent) },
   { path: 'projects', loadComponent: () => import('./components/projects/projects.component').then(m => m.ProjectsComponent) },
+  { path: 'project/:id', loadComponent: () => import('./components/project-detail/project-detail.component').then(m => m.ProjectDetailComponent) },
   { path: 'certifications', loadComponent: () => import('./components/certifications/certifications.component').then(m => m.CertificationsComponent) },
   { path: 'blog', loadComponent: () => import('./components/blogs/blogs.component').then(m => m.BlogsComponent) },
   { path: 'achievements', loadComponent: () => import('./components/achievements/achievements.component').then(m => m.AchievementsComponent) },

@@ -98,6 +98,12 @@ export class ProjectService {
     return projects;
   }
 
+  getProjectById(id: string): Observable<Project | undefined> {
+    return this.projects$.pipe(
+      map(projects => projects.find(p => p.id === id))
+    );
+  }
+
   addProject(project: Omit<Project, 'id'>) {
     this.dataService.addProject(project);
   }

@@ -79,6 +79,9 @@
         <h3>{{ project.title }}</h3>
         <p class="description">{{ project.description }}</p>
         <div class="project-links">
+          <a [routerLink]="['/project', project.id]" class="link-icon" style="color: var(--primary-color);">
+            <i class="fas fa-info-circle"></i> Read More
+          </a>
           <a *ngIf="project.githubLink" [href]="project.githubLink" target="_blank" rel="noopener noreferrer" class="link-icon">
             <i class="fab fa-github"></i> Source
           </a>

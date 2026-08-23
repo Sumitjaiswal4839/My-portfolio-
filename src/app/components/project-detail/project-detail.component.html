@@ -1,0 +1,50 @@
+<section class="page-content" id="project-detail-page">
+  <div class="back-link">
+    <a routerLink="/projects" class="btn btn-secondary">
+      <i class="fas fa-arrow-left"></i> Back to Projects
+    </a>
+  </div>
+
+  <div *ngIf="project$ | async as project; else loadingOrNotFound" class="project-detail-container">
+    <div class="project-header">
+      <div class="project-badges">
+        <div class="project-type-badge" [ngClass]="project.type === 'cyber' ? 'badge-cyber' : 'badge-normal'">
+          {{ project.type === 'cyber' ? 'Cyber Security' : 'Software Engineering' }}
+        </div>
+        <div *ngIf="project.isGitHubRepo" class="project-type-badge github-badge">
+          <i class="fab fa-github"></i> GitHub Repository
+        </div>
+      </div>
+      <h1 class="project-title">{{ project.title }}</h1>
+    </div>
+
+    <div class="project-body">
+      <div class="project-description-card">
+        <h3>About This Project</h3>
+        <p class="description-text">{{ project.description }}</p>
+      </div>
+
+      <div class="project-links-card">
+        <h3>Links & Resources</h3>
+        <div class="links-container">
+          <a *ngIf="project.githubLink" [href]="project.githubLink" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+            <i class="fab fa-github"></i> View Source Code
+          </a>
+          <a *ngIf="project.liveLink" [href]="project.liveLink" target="_blank" rel="noopener noreferrer" class="btn btn-primary live-demo-btn">
+            <i class="fas fa-external-link-alt"></i> Live Demo
+          </a>
+          <p *ngIf="!project.githubLink && !project.liveLink" class="no-links-msg">
+            No public links available for this project.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingOrNotFound>
+    <div class="empty-state">
+      <i class="fas fa-circle-notch fa-spin"></i>
+      <p>Loading project details...</p>
+    </div>
+  </ng-template>
+</section>

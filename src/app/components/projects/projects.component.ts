@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { ProjectService, Project } from '../../services/project.service';
 import { AdminOnlyDirective } from '../../directives/admin-only.directive';
 import { AdminService } from '../../services/admin.service';
@@ -9,7 +10,7 @@ import { BehaviorSubject, combineLatest, map } from 'rxjs';
 @Component({
   selector: 'app-projects',
   standalone: true,
-  imports: [CommonModule, FormsModule, AdminOnlyDirective],
+  imports: [CommonModule, FormsModule, RouterModule, AdminOnlyDirective],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.css'
 })

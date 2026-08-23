@@ -1,0 +1,205 @@
+#project-detail-page {
+  padding-top: 40px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.back-link {
+  margin-bottom: 30px;
+}
+
+.back-link .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.back-link .btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  transform: translateX(-4px);
+}
+
+.project-detail-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.project-header {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.project-badges {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.project-type-badge {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.badge-cyber {
+  background: rgba(255, 62, 62, 0.1);
+  color: #ff3e3e;
+  border: 1px solid rgba(255, 62, 62, 0.3);
+  box-shadow: 0 0 10px rgba(255, 62, 62, 0.2);
+}
+
+.badge-normal {
+  background: rgba(138, 43, 226, 0.1);
+  color: #c988ff;
+  border: 1px solid rgba(138, 43, 226, 0.3);
+  box-shadow: 0 0 10px rgba(138, 43, 226, 0.2);
+}
+
+.github-badge {
+  background: rgba(0, 212, 255, 0.1);
+  color: var(--accent);
+  border: 1px solid rgba(0, 212, 255, 0.3);
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.project-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin: 0;
+  background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+
+.project-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+}
+
+@media (max-width: 900px) {
+  .project-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+.project-description-card, .project-links-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.project-description-card h3, .project-links-card h3 {
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  margin-top: 0;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.project-description-card h3::after, .project-links-card h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 2px;
+}
+
+.description-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  white-space: pre-wrap; /* Preserves line breaks if any */
+}
+
+.links-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.links-container .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  color: var(--text-primary);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-secondary);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.live-demo-btn {
+  box-shadow: 0 0 15px rgba(var(--primary-color-rgb), 0.4);
+}
+
+.live-demo-btn:hover {
+  box-shadow: 0 0 25px rgba(var(--primary-color-rgb), 0.6);
+  transform: translateY(-2px);
+}
+
+.no-links-msg {
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  color: var(--text-muted);
+  gap: 15px;
+}
+
+.empty-state i {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
