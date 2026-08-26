@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { ProjectService, Project } from '../../services/project.service';
 import { AdminOnlyDirective } from '../../directives/admin-only.directive';
 import { AdminService } from '../../services/admin.service';
+import { AuthService } from '../../services/auth.service';
 import { BehaviorSubject, combineLatest, map } from 'rxjs';
 
 @Component({

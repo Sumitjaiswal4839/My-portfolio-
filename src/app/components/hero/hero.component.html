@@ -130,8 +130,8 @@
             <div class="btn-split-main" (click)="downloadResume()">
               <i class="fas fa-download"></i> Download Resume
             </div>
-            <div class="btn-split-divider"></div>
-            <div class="btn-split-icon" (click)="toggleDropdown()" title="Resume Options">
+            <div class="btn-split-divider" *ngIf="authService.isAdmin$ | async"></div>
+            <div class="btn-split-icon" (click)="toggleDropdown()" title="Resume Options" *ngIf="authService.isAdmin$ | async">
               <i class="fas fa-ellipsis-v"></i>
             </div>
           </div>
