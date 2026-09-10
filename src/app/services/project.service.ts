@@ -6,12 +6,19 @@ import { map, catchError, switchMap, shareReplay } from 'rxjs/operators';
 
 export { Project };
 
+/**
+ * Project Service [SECURITY 3.10]
+ * Curated GitHub repository integration (filtered by topic / allow-list)
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
   projects$: Observable<Project[]>;
-  private githubUsername = 'sj026';
+  private githubUsername = 'Sumitjaiswal4839'; // Username updated to active portfolio owner
+
+  // Topics required for GitHub repos to be curated and surfaced in portfolio [SECURITY 3.10]
+  private allowedTopics = ['portfolio', 'featured', 'cybersecurity', 'sde', 'project', 'showcase', 'security'];
 
   constructor(private dataService: DataService, private http: HttpClient) {
     this.projects$ = this.dataService.projects$.pipe(
@@ -47,25 +54,30 @@ export class ProjectService {
     return this.http.get<any[]>(url).pipe(
       map(repos => {
         return repos
-          .filter(repo => !repo.fork)
+          .filter(repo => {
+            if (repo.fork) return false;
+            const topics: string[] = (repo.topics || []).map((t: string) => t.toLowerCase());
+            // Filter strictly by curated topics [SECURITY 3.10]
+            const hasAllowedTopic = topics.some(t => this.allowedTopics.includes(t));
+            return hasAllowedTopic;
+          })
           .map(repo => {
-            const description = repo.description || 'No description provided.';
+            const description = repo.description || 'Curated project repository.';
             const name = repo.name;
-            const topics = repo.topics || [];
+            const topics: string[] = (repo.topics || []).map((t: string) => t.toLowerCase());
             
             const cyberKeywords = [
               'cyber', 'security', 'pentest', 'exploit', 'malware', 'ctf', 'cve', 
-              'hacker', 'defence', 'defense', 'sniffer', 'decrypt', 'encrypt', 
-              'keylogger', 'reverse', 'vuln', 'auth', 'firewall', 'ids', 'ips', 
-              'mitm', 'spoofer', 'recon', 'nmap', 'wireshark', 'hash', 'crypt'
+              'defence', 'defense', 'sniffer', 'decrypt', 'encrypt', 
+              'keylogger', 'reverse', 'vuln', 'auth', 'firewall', 'ids', 'ips'
             ];
 
             const isCyber = cyberKeywords.some(keyword => {
               const lowerName = name.toLowerCase();
-              const lowerDesc = description.toLowerCase();
+              const lowerDesc = (description || '').toLowerCase();
               return lowerName.includes(keyword) || 
                      lowerDesc.includes(keyword) || 
-                     topics.some((t: string) => t.toLowerCase().includes(keyword));
+                     topics.some((t: string) => t.includes(keyword));
             });
 
             return {
@@ -80,22 +92,19 @@ export class ProjectService {
           });
       }),
       catchError(err => {
-        console.error('Failed to fetch projects from GitHub API', err);
+        console.warn('Could not fetch projects from GitHub API:', err);
         return of([]);
       })
     );
   }
 
-  getProjects(type?: 'cyber' | 'normal'): Project[] {
-    let projects: Project[] = [];
-    this.projects$.subscribe(p => {
-      projects = p;
-    }).unsubscribe();
-    
+  getProjects(type?: 'cyber' | 'normal'): Observable<Project[]> {
     if (type) {
-      return projects.filter(p => p.type === type);
+      return this.projects$.pipe(
+        map(projects => projects.filter(p => p.type === type))
+      );
     }
-    return projects;
+    return this.projects$;
   }
 
   getProjectById(id: string): Observable<Project | undefined> {

@@ -1,51 +1,90 @@
 <!-- Top Navbar -->
 <nav class="navbar">
-  <div class="logo">
+  <div class="logo" (click)="openLandingChoice()" title="Click to change portfolio path">
     <div class="logo-icon-wrap">
-      <i class="fas fa-user-secret logo-icon"></i>
+      <i [class]="modeService.currentMode() === 'sde' ? 'fas fa-code logo-icon' : 'fas fa-user-secret logo-icon'"></i>
     </div>
     <div class="logo-text-wrap">
       <span class="logo-name">Sumit Jaiswal</span>
-      <span class="logo-sub">// Portfolio</span>
+      <span class="logo-sub">{{ modeService.currentMode() === 'sde' ? '// Software Development' : '// Cybersecurity'
+        }}</span>
     </div>
+  </div>
+
+  <!-- Mode Switcher Pill in Navbar -->
+  <div class="mode-pill-container">
+    <button class="mode-pill-btn" [class.active-pill]="modeService.currentMode() === 'security'"
+      (click)="switchMode('security')" title="Switch to Cybersecurity Path">
+      <i class="fas fa-shield-alt"></i> Cyber
+    </button>
+    <button class="mode-pill-btn" [class.active-pill]="modeService.currentMode() === 'sde'" (click)="switchMode('sde')"
+      title="Switch to SDE Path">
+      <i class="fas fa-laptop-code"></i> SDE
+    </button>
   </div>
 
   <div class="nav-right">
     <ul class="nav-links" [class.mobile-active]="mobileMenuOpen()">
-      <li><a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}"
-          (click)="closeMenu()">Home</a></li>
-      <li><a routerLink="/skills" routerLinkActive="active-link" (click)="closeMenu()">Skills</a></li>
+      <!-- SDE Mode Links -->
+      <ng-container *ngIf="modeService.currentMode() === 'sde'">
+        <li><a routerLink="/sde" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}"
+            (click)="closeMenu()">Home</a></li>
+      </ng-container>
+
+      <!-- Cybersecurity Mode Links -->
+      <ng-container *ngIf="modeService.currentMode() !== 'sde'">
+        <li><a routerLink="/security" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}"
+            (click)="closeMenu()">Home</a></li>
+
+      </ng-container>
+
+      <!-- Shared across both modes -->
       <li><a routerLink="/contact" routerLinkActive="active-link" (click)="closeMenu()">Contact</a></li>
       <li><a routerLink="/links" routerLinkActive="active-link" (click)="closeMenu()">Links</a></li>
     </ul>
 
     <app-commit-button></app-commit-button>
 
-    <button class="theme-toggle" (click)="toggleTheme()">
+    <button class="theme-toggle" (click)="toggleTheme()" aria-label="Toggle dark/light theme" title="Toggle theme">
       <i [class]="themeService.isDark() ? 'fas fa-moon' : 'fas fa-sun'"></i>
     </button>
 
-    <div class="menu-toggle" (click)="toggleMenu()">
+    <div class="menu-toggle" (click)="toggleMenu()" aria-label="Toggle mobile navigation menu">
       <i [class]="mobileMenuOpen() ? 'fas fa-times' : 'fas fa-bars'"></i>
     </div>
   </div>
 </nav>
 
-<!-- Sub Navbar -->
+<!-- Sub Navbar for specific secondary sections -->
 <div class="sub-navbar">
-  <a routerLink="/certifications" routerLinkActive="active-sub"><i class="fas fa-certificate"></i> Certifications</a>
-  <a routerLink="/tools" routerLinkActive="active-sub"><i class="fas fa-tools"></i> Tools</a>
-  <a routerLink="/blog" routerLinkActive="active-sub"><i class="fas fa-blog"></i> Blog</a>
-  <a routerLink="/achievements" routerLinkActive="active-sub"><i class="fas fa-trophy"></i> Achievements</a>
+  <ng-container *ngIf="modeService.currentMode() === 'sde'">
+    <a routerLink="/sde/projects" routerLinkActive="active-sub"><i class="fas fa-layer-group"></i> All Projects</a>
+    <a routerLink="/sde/skills" routerLinkActive="active-sub"><i class="fas fa-code"></i> Tech Stack</a>
+    <a routerLink="/sde/experience" routerLinkActive="active-sub"><i class="fas fa-briefcase"></i> Experience</a>
+    <a routerLink="/sde/blog" routerLinkActive="active-sub"><i class="fas fa-blog"></i> Tech Blog</a>
+    <a routerLink="/sde/achievements" routerLinkActive="active-sub"><i class="fas fa-trophy"></i> Achievements</a>
+  </ng-container>
+
+  <ng-container *ngIf="modeService.currentMode() !== 'sde'">
+    <a routerLink="/security/certifications" routerLinkActive="active-sub"><i class="fas fa-certificate"></i>
+      Certifications</a>
+    <a routerLink="/security/projects" routerLinkActive="active-sub"><i class="fas fa-bug"></i> Writeups & Projects</a>
+    <a routerLink="/security/experience" routerLinkActive="active-sub"><i class="fas fa-briefcase"></i> Experience</a>
+    <a routerLink="/security/tools" routerLinkActive="active-sub"><i class="fas fa-tools"></i> Security Tools</a>
+    <a routerLink="/security/blog" routerLinkActive="active-sub"><i class="fas fa-blog"></i> Security Blog</a>
+    <a routerLink="/security/achievements" routerLinkActive="active-sub"><i class="fas fa-trophy"></i> Achievements</a>
+  </ng-container>
 </div>
 
-<!-- Social Links Right Side -->
+<!-- Social Links Right Side with rel="noopener noreferrer" [SECURITY 3.6] -->
 <div class="social-links-right">
-  <a href="https://github.com/Sumitjaiswal4839" target="_blank" rel="noopener noreferrer" title="GitHub"><i class="fab fa-github"></i></a>
-  <a href="https://www.linkedin.com/in/sumit-jaiswal-9403a9299" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i
-      class="fab fa-linkedin"></i></a>
-  <a href="javascript:void(0)" title="Twitter (Coming Soon)"><i class="fab fa-twitter"></i></a>
+  <a href="https://github.com/Sumitjaiswal4839" target="_blank" rel="noopener noreferrer" title="GitHub"><i
+      class="fab fa-github"></i></a>
+  <a href="https://www.linkedin.com/in/sumit-jaiswal-9403a9299" target="_blank" rel="noopener noreferrer"
+    title="LinkedIn"><i class="fab fa-linkedin"></i></a>
   <a href="mailto:sj0269950@gmail.com" title="Email: sj0269950@gmail.com"><i class="fas fa-envelope"></i></a>
-  <a href="https://discord.com" target="_blank" rel="noopener noreferrer" title="Discord"><i class="fab fa-discord"></i></a>
-  <a href="https://wa.me/917827584476" target="_blank" rel="noopener noreferrer" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+  <a href="https://discord.com" target="_blank" rel="noopener noreferrer" title="Discord"><i
+      class="fab fa-discord"></i></a>
+  <a href="https://wa.me/917827584476" target="_blank" rel="noopener noreferrer" title="WhatsApp"><i
+      class="fab fa-whatsapp"></i></a>
 </div>

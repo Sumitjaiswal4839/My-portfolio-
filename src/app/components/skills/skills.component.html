@@ -1,23 +1,17 @@
 <section class="skills-section page-content" id="skills">
-  <h2 class="section-title">My Skills &amp; Expertise</h2>
-
-  <!-- Tab Navigation -->
-  <div class="skills-tabs">
-    <button
-      class="tab-btn"
-      [class.active]="activeTab() === 'core'"
-      (click)="setTab('core')">
-      <i class="fas fa-code"></i> Core Skills
-    </button>
-    <button
-      class="tab-btn"
-      [class.active]="activeTab() === 'cybersecurity'"
-      (click)="setTab('cybersecurity')">
-      <i class="fas fa-shield-alt"></i> Cybersecurity
-    </button>
+  <div class="skills-header-block">
+    <h2 class="section-title">
+      {{ isSdeMode() ? 'Tech Stack & Engineering Skills' : 'Cybersecurity Competencies' }}
+    </h2>
+    <p class="section-subtitle">
+      {{ isSdeMode() 
+          ? '' 
+          : 'Offensive security, penetration testing, malware triage, network defense, and vulnerability auditing expertise.' 
+      }}
+    </p>
   </div>
 
-  <!-- Skill Categories -->
+  <!-- Skill Categories (No cross-mixing between SDE and Cyber) -->
   <div class="tab-content active">
     <div class="skill-category" *ngFor="let category of activeCategories">
       <h3 class="category-title">

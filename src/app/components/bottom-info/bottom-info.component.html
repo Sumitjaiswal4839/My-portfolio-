@@ -1,7 +1,7 @@
 <div class="dock-wrapper">
   <div class="dock-container">
     <!-- Home -->
-    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="dock-item">
+    <a [routerLink]="getHomeLink()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="dock-item">
       <div class="dock-icon-bg">
         <div class="dock-icon"><i class="fas fa-home"></i></div>
       </div>
@@ -17,7 +17,7 @@
     </a>
 
     <!-- Experience -->
-    <a routerLink="/experience" routerLinkActive="active" class="dock-item">
+    <a [routerLink]="getExperienceLink()" routerLinkActive="active" class="dock-item">
       <div class="dock-icon-bg">
         <div class="dock-icon"><i class="fas fa-briefcase"></i></div>
       </div>

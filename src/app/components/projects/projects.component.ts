@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ProjectService, Project } from '../../services/project.service';
 import { AdminOnlyDirective } from '../../directives/admin-only.directive';
 import { AdminService } from '../../services/admin.service';
-import { AuthService } from '../../services/auth.service';
-import { BehaviorSubject, combineLatest, map } from 'rxjs';
+import { ModeService } from '../../core/services/mode.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-projects',
@@ -16,18 +16,27 @@ import { BehaviorSubject, combineLatest, map } from 'rxjs';
   styleUrl: './projects.component.css'
 })
 export class ProjectsComponent implements OnInit {
+  private projectService = inject(ProjectService);
+  private modeService = inject(ModeService);
+  private router = inject(Router);
+  public adminService = inject(AdminService);
+
+  public isSdeMode = true;
+
+  // Filter projects strictly based on current mode [SDE vs Cybersecurity segregation]
   projects$ = this.projectService.projects$;
-  activeTabSubject = new BehaviorSubject<'cyber' | 'normal' | 'all'>('all');
-  activeTab$ = this.activeTabSubject.asObservable();
-  
-  filteredProjects$ = combineLatest([this.projects$, this.activeTab$]).pipe(
-    map(([projects, tab]) => {
-      if (tab === 'all') return projects;
-      return projects.filter(p => p.type === tab);
+  filteredProjects$ = this.projects$.pipe(
+    map(projects => {
+      if (this.isSdeMode) {
+        // Only SDE / normal software engineering projects
+        return projects.filter(p => p.type === 'normal');
+      } else {
+        // Only Cybersecurity projects
+        return projects.filter(p => p.type === 'cyber');
+      }
     })
   );
 
-  activeTab: 'cyber' | 'normal' | 'all' = 'all';
   showAddForm = false;
   isEditing = false;
   editingId = '';
@@ -35,28 +44,21 @@ export class ProjectsComponent implements OnInit {
 
   newProject: Omit<Project, 'id'> = {
     title: '',
-    type: 'cyber',
+    type: 'normal',
     liveLink: '',
     githubLink: '',
     description: ''
   };
 
-  constructor(
-    private projectService: ProjectService,
-    public adminService: AdminService
-  ) {}
-
   ngOnInit(): void {
-    this.loadProjects();
-  }
+    const url = this.router.url;
+    if (url.includes('/security')) {
+      this.isSdeMode = false;
+    } else {
+      this.isSdeMode = this.modeService.currentMode() !== 'security';
+    }
 
-  loadProjects() {
-    this.projectService.getProjects(); // If it fetches, let it fetch
-  }
-
-  filterProjects(type: 'cyber' | 'normal' | 'all') {
-    this.activeTab = type;
-    this.activeTabSubject.next(type);
+    this.newProject.type = this.isSdeMode ? 'normal' : 'cyber';
   }
 
   toggleAddForm() {
@@ -69,6 +71,7 @@ export class ProjectsComponent implements OnInit {
   onSubmit() {
     if (this.newProject.title && this.newProject.description) {
       this.isSaving = true;
+      this.newProject.type = this.isSdeMode ? 'normal' : 'cyber';
       
       if (this.isEditing) {
         this.projectService.updateProject(this.editingId, this.newProject);
@@ -78,7 +81,6 @@ export class ProjectsComponent implements OnInit {
       
       setTimeout(() => {
         this.isSaving = false;
-        this.loadProjects();
         this.toggleAddForm();
       }, 500);
     }
@@ -94,7 +96,6 @@ export class ProjectsComponent implements OnInit {
   deleteProject(id: string) {
     if (confirm('Are you sure you want to delete this project?')) {
       this.projectService.deleteProject(id);
-      this.loadProjects();
     }
   }
 
@@ -103,7 +104,7 @@ export class ProjectsComponent implements OnInit {
     this.editingId = '';
     this.newProject = {
       title: '',
-      type: 'cyber',
+      type: this.isSdeMode ? 'normal' : 'cyber',
       liveLink: '',
       githubLink: '',
       description: ''

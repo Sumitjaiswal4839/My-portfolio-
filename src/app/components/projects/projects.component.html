@@ -1,39 +1,41 @@
 <section class="page-content" id="projects-page">
   <div class="projects-header">
-    <h2 class="section-title">My Projects</h2>
-    <p class="section-subtitle">A collection of cyber security research and developmental software engineering projects</p>
+    <h2 class="section-title">
+      {{ isSdeMode ? 'Software Engineering Projects' : 'Cybersecurity Projects & Writeups' }}
+    </h2>
+    <p class="section-subtitle">
+      {{ isSdeMode 
+          ? 'Full-stack applications, scalable backend systems, database designs, and open-source contributions.' 
+          : 'Penetration testing writeups, security tooling, vulnerability assessments, and threat analysis reports.' 
+      }}
+    </p>
   </div>
 
   <div class="projects-controls">
-    <div class="filter-tabs">
-      <button class="tab-btn" [class.active]="activeTab === 'all'" (click)="filterProjects('all')">All Projects</button>
-      <button class="tab-btn" [class.active]="activeTab === 'cyber'" (click)="filterProjects('cyber')">Cyber Security</button>
-      <button class="tab-btn" [class.active]="activeTab === 'normal'" (click)="filterProjects('normal')">Normal</button>
+    <div class="mode-tag-display">
+      <span class="active-mode-badge" [ngClass]="isSdeMode ? 'badge-sde' : 'badge-cyber'">
+        <i [class]="isSdeMode ? 'fas fa-code' : 'fas fa-shield-alt'"></i>
+        {{ isSdeMode ? 'Software Development View' : 'Cybersecurity View' }}
+      </span>
     </div>
+    
     <!-- Add Project Button (Owner/Admin Only) -->
     <button class="btn btn-primary add-btn" *adminOnly (click)="toggleAddForm()">
-      <i class="fas fa-plus"></i> Add Project
+      <i class="fas fa-plus"></i> {{ isSdeMode ? 'Add SDE Project' : 'Add Security Project' }}
     </button>
   </div>
 
+  <!-- Add / Edit Project Modal Form -->
   <div class="form-overlay" *ngIf="showAddForm" (click)="toggleAddForm()">
     <div class="form-container" (click)="$event.stopPropagation()">
       <div class="form-header">
-        <h3>{{ isEditing ? 'Edit Project' : 'Add New Project' }}</h3>
+        <h3>{{ isEditing ? 'Edit Project' : (isSdeMode ? 'Add SDE Project' : 'Add Security Project') }}</h3>
         <button class="close-btn" (click)="toggleAddForm()"><i class="fas fa-times"></i></button>
       </div>
       <form (ngSubmit)="onSubmit()" #projectForm="ngForm">
         <div class="form-group">
           <label for="title">Project Title</label>
-          <input type="text" id="title" name="title" [(ngModel)]="newProject.title" required placeholder="e.g. Network Sniffer">
-        </div>
-
-        <div class="form-group">
-          <label for="type">Project Type</label>
-          <select id="type" name="type" [(ngModel)]="newProject.type" required>
-            <option value="cyber">Cyber Security</option>
-            <option value="normal">Normal Project</option>
-          </select>
+          <input type="text" id="title" name="title" [(ngModel)]="newProject.title" required placeholder="e.g. Distributed Task Queue">
         </div>
 
         <div class="form-group">
@@ -48,7 +50,7 @@
 
         <div class="form-group">
           <label for="description">Description</label>
-          <textarea id="description" name="description" [(ngModel)]="newProject.description" required rows="4" placeholder="Describe the project..."></textarea>
+          <textarea id="description" name="description" [(ngModel)]="newProject.description" required rows="4" placeholder="Describe the system architecture, stack, and features..."></textarea>
         </div>
 
         <div class="form-actions">
@@ -61,16 +63,19 @@
     </div>
   </div>
 
+  <!-- Projects Grid (Strictly segregated by mode) -->
   <div class="projects-grid">
     <div *ngIf="(filteredProjects$ | async)?.length === 0" class="empty-state">
-      <p>Coming soon...</p>
+      <i [class]="isSdeMode ? 'fas fa-laptop-code' : 'fas fa-shield-alt'" style="font-size: 2.5rem; opacity: 0.5; margin-bottom: 1rem;"></i>
+      <p>{{ isSdeMode ? 'No software engineering projects added yet. Check back soon!' : 'No security projects or writeups added yet. Check back soon!' }}</p>
     </div>
+    
     <div class="project-card" *ngFor="let project of filteredProjects$ | async">
       <div class="card-glow"></div>
       <div class="card-content">
         <div class="project-badges-container" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
           <div class="project-type-badge" [ngClass]="project.type === 'cyber' ? 'badge-cyber' : 'badge-normal'" style="margin-bottom: 0;">
-            {{ project.type === 'cyber' ? 'Security' : 'Software' }}
+            {{ project.type === 'cyber' ? 'Security' : 'Software Engineering' }}
           </div>
           <div *ngIf="project.isGitHubRepo" class="project-type-badge" style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); color: var(--accent); margin-bottom: 0; font-size: 0.75rem; padding: 3px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 4px;">
             <i class="fab fa-github"></i> GitHub
@@ -80,13 +85,13 @@
         <p class="description">{{ project.description }}</p>
         <div class="project-links">
           <a [routerLink]="['/project', project.id]" class="link-icon" style="color: var(--primary-color);">
-            <i class="fas fa-info-circle"></i> Read More
+            <i class="fas fa-info-circle"></i> Details
           </a>
           <a *ngIf="project.githubLink" [href]="project.githubLink" target="_blank" rel="noopener noreferrer" class="link-icon">
             <i class="fab fa-github"></i> Source
           </a>
           <a *ngIf="project.liveLink" [href]="project.liveLink" target="_blank" rel="noopener noreferrer" class="link-icon live-link">
-            <i class="fas fa-external-link-alt"></i> Live View
+            <i class="fas fa-external-link-alt"></i> Live Demo
           </a>
         </div>
         <div class="project-admin-actions" *adminOnly>

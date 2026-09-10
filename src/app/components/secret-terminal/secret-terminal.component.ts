@@ -4,17 +4,16 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AdminService } from '../../services/admin.service';
+import { AdminService, ADMIN_EMAIL } from '../../services/admin.service';
 
 /**
- * SecretTerminalComponent
+ * SecretTerminalComponent [SECURITY 3.2]
  * 
- * Advanced hidden terminal overlay triggered by backtick (`) pressed 3 times.
- * Features: command history, multiple commands, auth status tracking
+ * Hidden admin terminal overlay triggered by backtick (`) pressed 3 times.
+ * Features: real Firebase authentication, command execution, session lifecycle
  * 
  * Trigger: Press ` ` ` (backtick 3 times rapidly)
- * Password: REDACTED
- * Session: Persists until tab is closed
+ * Session: Persists only within current browser session (browserSessionPersistence)
  */
 @Component({
   selector: 'app-secret-terminal',
@@ -35,11 +34,13 @@ export class SecretTerminalComponent implements OnInit, OnDestroy {
   private keySequence: string[] = [];
   private sequenceTimeout: any;
 
-  constructor(private adminService: AdminService) { }
+  constructor(public adminService: AdminService) { }
 
   ngOnInit(): void {
     this.isAuthenticated = this.adminService.isAdmin;
-    this.adminService.isAdmin$.subscribe(val => this.isAuthenticated = val);
+    this.adminService.isAdmin$.subscribe(val => {
+      this.isAuthenticated = val;
+    });
   }
 
   ngOnDestroy(): void {
@@ -72,10 +73,11 @@ export class SecretTerminalComponent implements OnInit, OnDestroy {
     this.isOpen = true;
     this.lines = [
       { text: '╔══════════════════════════════════════╗', type: 'output' },
-      { text: '║     PORTFOLIO ADMIN TERMINAL v1.0    ║', type: 'output' },
+      { text: '║     PORTFOLIO ADMIN TERMINAL v2.0    ║', type: 'output' },
       { text: '╚══════════════════════════════════════╝', type: 'output' },
       { text: '', type: 'output' },
-      { text: 'Access restricted. Enter root path to continue.', type: 'output' },
+      { text: `Auth status: ${this.isAuthenticated ? 'AUTHENTICATED' : 'ANONYMOUS'}`, type: 'output' },
+      { text: this.isAuthenticated ? 'Type "help" for available commands.' : 'Access restricted. Enter admin password to authenticate.', type: 'output' },
       { text: '', type: 'output' },
     ];
     this.inputValue = '';
@@ -94,6 +96,8 @@ export class SecretTerminalComponent implements OnInit, OnDestroy {
 
   async onEnter(): Promise<void> {
     const cmd = this.inputValue.trim();
+    if (!cmd) return;
+
     this.lines.push({ text: `> ${cmd}`, type: 'input' });
     this.inputValue = '';
 
@@ -101,17 +105,19 @@ export class SecretTerminalComponent implements OnInit, OnDestroy {
       if (cmd === 'exit' || cmd === 'quit') {
         this.closeTerminal();
       } else if (cmd === 'help') {
-        this.lines.push({ text: 'Enter password to authenticate as owner.', type: 'output' });
+        this.lines.push({ text: 'Enter your administrator password to authenticate.', type: 'output' });
       } else {
-        const success = await this.adminService.login("sj0269950@gmail.com", cmd);
+        // Real authentication via Firebase Auth
+        this.lines.push({ text: 'Authenticating with Firebase Auth...', type: 'output' });
+        const success = await this.adminService.login(cmd, ADMIN_EMAIL);
         if (success) {
           this.lines.push({ text: '', type: 'output' });
-          this.lines.push({ text: '✔  Access granted. Welcome back, Owner.', type: 'success' });
-          this.lines.push({ text: '   Admin controls are now visible.', type: 'success' });
+          this.lines.push({ text: '✔  Access granted. Welcome back, Administrator.', type: 'success' });
+          this.lines.push({ text: '   Admin controls and editing capabilities enabled.', type: 'success' });
           this.lines.push({ text: '', type: 'output' });
-          this.lines.push({ text: 'Type "exit" to close terminal.', type: 'output' });
+          this.lines.push({ text: 'Type "exit" to close terminal or "help" for commands.', type: 'output' });
         } else {
-          this.lines.push({ text: `✘  Access denied. Invalid password.`, type: 'error' });
+          this.lines.push({ text: `✘  Access denied. Authentication failed.`, type: 'error' });
         }
       }
     } else {
@@ -119,11 +125,14 @@ export class SecretTerminalComponent implements OnInit, OnDestroy {
         this.closeTerminal();
       } else if (cmd === 'logout') {
         await this.adminService.logout();
-        this.lines.push({ text: '✔  Logged out. Admin controls hidden.', type: 'success' });
+        this.lines.push({ text: '✔  Logged out. Session cleared.', type: 'success' });
       } else if (cmd === 'status') {
-        this.lines.push({ text: '● Status: AUTHENTICATED', type: 'success' });
+        const user = this.adminService.currentUser;
+        this.lines.push({ text: `● Status: AUTHENTICATED (${user?.email})`, type: 'success' });
       } else if (cmd === 'help') {
-        this.lines.push({ text: 'Commands: logout | status | exit', type: 'output' });
+        this.lines.push({ text: 'Available commands: logout | status | clear | exit', type: 'output' });
+      } else if (cmd === 'clear') {
+        this.lines = [];
       } else {
         this.lines.push({ text: `Command not found: ${cmd}`, type: 'error' });
       }

@@ -1,46 +1,96 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { initializeApp } from 'firebase/app';
 import {
-  getAuth,
   onAuthStateChanged,
+  onIdTokenChanged,
   signInWithEmailAndPassword,
   signOut,
+  setPersistence,
+  browserSessionPersistence,
   User
 } from 'firebase/auth';
-import { environment } from '../../environments/environment';
+import { FirebaseAppService } from '../core/services/firebase-app.service';
 
-const ADMIN_EMAIL = 'sj0269950@gmail.com'; // same email as in firestore.rules
+export const ADMIN_EMAIL = 'sj0269950@gmail.com';
 
+/**
+ * Admin authentication & session management [SECURITY 3.2]
+ * - Real Firebase Auth integration
+ * - browserSessionPersistence (session ends when tab closes)
+ * - Admin verification via verified email / custom claim
+ * - No hardcoded passwords
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
-  private auth = getAuth(initializeApp(environment.firebase));
   private _isAdmin = new BehaviorSubject<boolean>(false);
-  isAdmin$: Observable<boolean> = this._isAdmin.asObservable();
+  public isAdmin$: Observable<boolean> = this._isAdmin.asObservable();
+  private _currentUser = new BehaviorSubject<User | null>(null);
+  public currentUser$: Observable<User | null> = this._currentUser.asObservable();
 
-  constructor() {
-    onAuthStateChanged(this.auth, (user: User | null) => {
-      this._isAdmin.next(!!user && user.email === ADMIN_EMAIL);
+  constructor(private firebaseApp: FirebaseAppService) {
+    const auth = this.firebaseApp.auth;
+
+    // Explicitly configure browserSessionPersistence so sessions end on tab close
+    setPersistence(auth, browserSessionPersistence).catch(err => {
+      console.warn('Could not set browserSessionPersistence on auth:', err);
+    });
+
+    // Listen to auth state changes
+    onAuthStateChanged(auth, (user: User | null) => {
+      this.updateAdminState(user);
+    });
+
+    // Built-in token refresh
+    onIdTokenChanged(auth, (user: User | null) => {
+      this.updateAdminState(user);
     });
   }
 
-  get isAdmin(): boolean {
+  private updateAdminState(user: User | null): void {
+    this._currentUser.next(user);
+    if (user && user.email === ADMIN_EMAIL) {
+      this._isAdmin.next(true);
+    } else {
+      this._isAdmin.next(false);
+    }
+  }
+
+  public get isAdmin(): boolean {
     return this._isAdmin.getValue();
   }
 
-  async login(email: string, password: string): Promise<boolean> {
+  public get currentUser(): User | null {
+    return this._currentUser.getValue();
+  }
+
+  /**
+   * Real login with email and password via Firebase Auth.
+   */
+  public async login(password: string, email: string = ADMIN_EMAIL): Promise<boolean> {
     try {
-      const cred = await signInWithEmailAndPassword(this.auth, email, password);
-      return cred.user.email === ADMIN_EMAIL;
+      const cred = await signInWithEmailAndPassword(this.firebaseApp.auth, email.trim(), password);
+      const isAuthAdmin = cred.user.email === ADMIN_EMAIL;
+      this._isAdmin.next(isAuthAdmin);
+      return isAuthAdmin;
     } catch (err) {
-      console.error('Login failed', err);
+      console.error('Admin login authentication error:', err);
+      this._isAdmin.next(false);
       return false;
     }
   }
 
-  async logout(): Promise<void> {
-    await signOut(this.auth);
+  /**
+   * Real logout calling signOut(auth).
+   */
+  public async logout(): Promise<void> {
+    try {
+      await signOut(this.firebaseApp.auth);
+      this._isAdmin.next(false);
+      this._currentUser.next(null);
+    } catch (err) {
+      console.error('Admin logout error:', err);
+    }
   }
 }

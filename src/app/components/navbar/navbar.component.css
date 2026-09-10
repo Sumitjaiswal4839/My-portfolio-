@@ -79,7 +79,42 @@
 .nav-right {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
+}
+
+/* Mode Switcher Pill */
+.mode-pill-container {
+  display: flex;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-color, #27272a);
+  border-radius: 9999px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.mode-pill-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 0.35rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.mode-pill-btn:hover {
+  color: #fff;
+}
+
+.mode-pill-btn.active-pill {
+  background: var(--primary, #00ff41);
+  color: #000;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
 }
 
 /* Threat Level Indicator */
@@ -259,20 +294,43 @@
 
 @media (max-width: 768px) {
   .navbar {
-    padding: 0 1rem;
+    padding: 0 0.75rem;
+    height: 60px;
   }
 
-  .logo span {
-    font-size: 1.2rem;
+  .logo {
+    gap: 0.4rem;
   }
 
-  .threat-level {
-    padding: 0.4rem 0.6rem;
+  .logo-icon-wrap {
+    width: 34px;
+    height: 34px;
   }
 
-  .threat-text {
-    font-size: 0.7rem;
-    display: none; /* Optionally hide text on very small screens, or keep it */
+  .logo-icon {
+    font-size: 0.95rem;
+  }
+
+  .logo-name {
+    font-size: 0.9rem;
+  }
+
+  .logo-sub {
+    font-size: 0.62rem;
+  }
+
+  .mode-pill-container {
+    padding: 2px;
+    gap: 2px;
+  }
+
+  .mode-pill-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.72rem;
+  }
+
+  .nav-right {
+    gap: 0.6rem;
   }
 
   .nav-links {
@@ -280,15 +338,15 @@
     flex-direction: column;
     justify-content: center;
     position: absolute;
-    top: 70px;
+    top: 60px;
     left: -100%;
-    height: calc(100vh - 70px);
+    height: calc(100vh - 60px);
     background: var(--card-bg);
     backdrop-filter: blur(15px);
     width: 100%;
     padding: 2rem;
     transition: left 0.4s ease-in-out;
-    z-index: 1001; /* Show above sub-navbar */
+    z-index: 1001;
     border-top: 1px solid rgba(0, 255, 65, 0.2);
   }
 
@@ -303,25 +361,32 @@
   }
 
   .nav-links a {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     display: block;
     padding: 0.5rem;
   }
 
   .menu-toggle {
     display: block;
-    z-index: 1002; /* Show above the sliding menu */
+    font-size: 1.25rem;
+    z-index: 1002;
+  }
+
+  .theme-toggle {
+    padding: 0.35rem 0.75rem;
+    font-size: 1rem;
   }
 
   .sub-navbar {
-    top: 70px;
-    padding: 0 1rem;
+    top: 60px;
+    height: 44px;
+    padding: 0 0.5rem;
     justify-content: flex-start;
     flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    z-index: 990; /* Keep below full nav-links menu */
+    z-index: 990;
   }
 
   .sub-navbar::-webkit-scrollbar {
@@ -330,18 +395,26 @@
 
   .sub-navbar a {
     white-space: nowrap;
-    padding: 0.4rem 0.8rem;
-    font-size: 0.9rem;
+    padding: 0.3rem 0.65rem;
+    font-size: 0.82rem;
     flex-shrink: 0;
   }
 
   .social-links-right {
-    display: none; /* Hidden on mobile to prevent overlapping other content, user can find links in the Links section or hamburger menu */
+    display: none;
   }
 }
 
 @media (max-width: 480px) {
+  .logo-sub {
+    display: none;
+  }
+
+  .mode-pill-btn span {
+    display: none;
+  }
+
   .threat-level {
-    display: none; /* Hide threat level on very small phones so menu fits */
+    display: none;
   }
 }

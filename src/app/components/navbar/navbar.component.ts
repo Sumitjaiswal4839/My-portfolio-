@@ -1,7 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { ThemeService } from '../../services/theme.service';
+import { ModeService, PortfolioMode } from '../../core/services/mode.service';
 import { CommitButtonComponent } from '../commit-button/commit-button.component';
 
 @Component({
@@ -14,7 +15,11 @@ import { CommitButtonComponent } from '../commit-button/commit-button.component'
 export class NavbarComponent {
   mobileMenuOpen = signal(false);
 
-  constructor(public themeService: ThemeService) {}
+  constructor(
+    public themeService: ThemeService,
+    public modeService: ModeService,
+    private router: Router
+  ) {}
 
   toggleMenu(): void {
     this.mobileMenuOpen.update(v => !v);
@@ -28,9 +33,14 @@ export class NavbarComponent {
     this.themeService.toggleTheme();
   }
 
-  scrollTo(sectionId: string): void {
-    const el = document.getElementById(sectionId);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  switchMode(newMode: 'sde' | 'security'): void {
+    this.modeService.setMode(newMode);
     this.closeMenu();
+    this.router.navigate([`/${newMode}`]);
+  }
+
+  openLandingChoice(): void {
+    this.closeMenu();
+    this.router.navigate(['/landing']);
   }
 }

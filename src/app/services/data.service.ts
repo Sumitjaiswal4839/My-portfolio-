@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { initializeApp } from "firebase/app";
-import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
-import { getAnalytics, isSupported } from "firebase/analytics";
 import { 
-  getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, setDoc 
+  Firestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, setDoc 
 } from "firebase/firestore";
-import { environment } from '../../environments/environment';
+import { FirebaseAppService } from '../core/services/firebase-app.service';
 
 export interface Certification {
   id: string;
@@ -21,6 +18,7 @@ export interface Blog {
   id: string;
   title: string;
   content: string;
+  category?: 'security' | 'sde' | 'general';
   imageUrl?: string;
   date: string;
   author: string;
@@ -30,6 +28,7 @@ export interface Achievement {
   id: string;
   title: string;
   description: string;
+  category?: 'security' | 'sde' | 'general';
   imageUrl?: string;
   date: string;
 }
@@ -58,8 +57,7 @@ export interface Project {
   providedIn: 'root'
 })
 export class DataService {
-  private app: any;
-  private db: any;
+  private db: Firestore;
 
   private certsSubject = new BehaviorSubject<Certification[]>([]);
   private blogsSubject = new BehaviorSubject<Blog[]>([]);
@@ -78,146 +76,165 @@ export class DataService {
   projects$ = this.projectsSubject.asObservable();
   resume$ = this.resumeSubject.asObservable();
 
-  constructor() {
-    try {
-      this.app = initializeApp(environment.firebase);
-      const appCheck = initializeAppCheck(this.app, {
-        provider: new ReCaptchaV3Provider('YOUR_RECAPTCHA_SITE_KEY_HERE'),
-        isTokenAutoRefreshEnabled: true
-      });
-      this.db = getFirestore(this.app);
-      
-      // Initialize Analytics
-      isSupported().then(yes => {
-        if(yes) getAnalytics(this.app);
-      });
-
-      this.initRealtimeListeners();
-    } catch (error) {
-      console.warn("Firebase not configured properly. Make sure you pasted your keys in src/environments/environment.ts!", error);
-      console.error('Failed to load portfolio data:', error);
-      this._loadError.next('Unable to connect to database. Some content might not display.');
-      // Fallback for demo before Firebase is configured
-      this.resumeSubject.next(localStorage.getItem('user_resume'));
-    }
+  constructor(private firebaseAppService: FirebaseAppService) {
+    this.db = this.firebaseAppService.db;
+    this.initRealtimeListeners();
   }
 
   private initRealtimeListeners() {
-    onSnapshot(collection(this.db, "certifications"), (snap) => {
-      this.certsSubject.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Certification)));
-    });
-    onSnapshot(collection(this.db, "blogs"), (snap) => {
-      this.blogsSubject.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Blog)));
-    });
-    onSnapshot(collection(this.db, "achievements"), (snap) => {
-      this.achsSubject.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Achievement)));
-    });
-    onSnapshot(collection(this.db, "tools"), (snap) => {
-      this.toolsSubject.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Tool)));
-    });
-    onSnapshot(collection(this.db, "projects"), (snap) => {
-      this.projectsSubject.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Project)));
-    });
-    
-    // Listen for Resume
-    onSnapshot(doc(this.db, "settings", "resume"), (d) => {
-      if (d.exists()) {
-        this.resumeSubject.next(d.data()['fileUrl'] || null);
-      } else {
-        this.resumeSubject.next(null);
-      }
-    });
+    try {
+      onSnapshot(collection(this.db, "certifications"), 
+        (snap) => {
+          this.certsSubject.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Certification)));
+        },
+        (error) => {
+          console.warn("Firestore certifications load error:", error);
+          this._loadError.next('Unable to load certifications from database.');
+        }
+      );
+
+      onSnapshot(collection(this.db, "blogs"), 
+        (snap) => {
+          this.blogsSubject.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Blog)));
+        },
+        (error) => {
+          console.warn("Firestore blogs load error:", error);
+          this._loadError.next('Unable to load blogs from database.');
+        }
+      );
+
+      onSnapshot(collection(this.db, "achievements"), 
+        (snap) => {
+          this.achsSubject.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Achievement)));
+        },
+        (error) => {
+          console.warn("Firestore achievements load error:", error);
+          this._loadError.next('Unable to load achievements from database.');
+        }
+      );
+
+      onSnapshot(collection(this.db, "tools"), 
+        (snap) => {
+          this.toolsSubject.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Tool)));
+        },
+        (error) => {
+          console.warn("Firestore tools load error:", error);
+          this._loadError.next('Unable to load tools from database.');
+        }
+      );
+
+      onSnapshot(collection(this.db, "projects"), 
+        (snap) => {
+          this.projectsSubject.next(snap.docs.map(d => ({ id: d.id, ...d.data() } as Project)));
+        },
+        (error) => {
+          console.warn("Firestore projects load error:", error);
+          this._loadError.next('Unable to load projects from database.');
+        }
+      );
+      
+      // Listen for Resume under settings/resume [SECURITY 3.3]
+      onSnapshot(doc(this.db, "settings", "resume"), 
+        (d) => {
+          if (d.exists()) {
+            this.resumeSubject.next(d.data()['fileUrl'] || null);
+          } else {
+            this.resumeSubject.next(null);
+          }
+        },
+        (error) => {
+          console.warn("Firestore resume settings load error:", error);
+        }
+      );
+    } catch (error) {
+      console.error('Failed to initialize Firestore listeners:', error);
+      this._loadError.next('Unable to connect to database. Some content might not display.');
+    }
   }
 
   // Certifications
   async addCert(cert: Omit<Certification, 'id'>) {
-    if(!this.db) return;
+    if (!this.db) return;
     await addDoc(collection(this.db, "certifications"), cert);
   }
 
   async deleteCert(id: string) {
-    if(!this.db) return;
+    if (!this.db) return;
     await deleteDoc(doc(this.db, "certifications", id));
   }
 
   async updateCert(id: string, cert: Partial<Certification>) {
-    if(!this.db) return;
+    if (!this.db) return;
     await updateDoc(doc(this.db, "certifications", id), cert as any);
   }
 
   // Blogs
   async addBlog(blog: Omit<Blog, 'id'>) {
-    if(!this.db) return;
+    if (!this.db) return;
     await addDoc(collection(this.db, "blogs"), blog);
   }
 
   async deleteBlog(id: string) {
-    if(!this.db) return;
+    if (!this.db) return;
     await deleteDoc(doc(this.db, "blogs", id));
   }
 
   async updateBlog(id: string, blog: Partial<Blog>) {
-    if(!this.db) return;
+    if (!this.db) return;
     await updateDoc(doc(this.db, "blogs", id), blog as any);
   }
 
   // Achievements
   async addAchievement(ach: Omit<Achievement, 'id'>) {
-    if(!this.db) return;
+    if (!this.db) return;
     await addDoc(collection(this.db, "achievements"), ach);
   }
 
   async deleteAchievement(id: string) {
-    if(!this.db) return;
+    if (!this.db) return;
     await deleteDoc(doc(this.db, "achievements", id));
   }
 
   async updateAchievement(id: string, ach: Partial<Achievement>) {
-    if(!this.db) return;
+    if (!this.db) return;
     await updateDoc(doc(this.db, "achievements", id), ach as any);
   }
 
   // Tools
   async addTool(tool: Omit<Tool, 'id'>) {
-    if(!this.db) return;
+    if (!this.db) return;
     await addDoc(collection(this.db, "tools"), tool);
   }
 
   async deleteTool(id: string) {
-    if(!this.db) return;
+    if (!this.db) return;
     await deleteDoc(doc(this.db, "tools", id));
   }
 
   async updateTool(id: string, tool: Partial<Tool>) {
-    if(!this.db) return;
+    if (!this.db) return;
     await updateDoc(doc(this.db, "tools", id), tool as any);
   }
 
   // Projects
   async addProject(project: Omit<Project, 'id'>) {
-    if(!this.db) return;
+    if (!this.db) return;
     await addDoc(collection(this.db, "projects"), project);
   }
 
   async deleteProject(id: string) {
-    if(!this.db) return;
+    if (!this.db) return;
     await deleteDoc(doc(this.db, "projects", id));
   }
 
   async updateProject(id: string, project: Partial<Project>) {
-    if(!this.db) return;
+    if (!this.db) return;
     await updateDoc(doc(this.db, "projects", id), project as any);
   }
 
-  // Resume
+  // Resume (Document path settings/resume matched with firestore.rules)
   async updateResume(fileUrl: string | null) {
-    if(!this.db) {
-       // local fallback temporarily
-       if(fileUrl) localStorage.setItem('user_resume', fileUrl);
-       else localStorage.removeItem('user_resume');
-       this.resumeSubject.next(fileUrl);
-       return;
-    }
+    if (!this.db) return;
     if (fileUrl) {
       await setDoc(doc(this.db, "settings", "resume"), { fileUrl });
     } else {
