@@ -17,8 +17,6 @@ coverage/
 # ==============================
 # Environment / Secrets
 # ==============================
-.env
-.env.*
 !.env.example
 
 # Firebase / credentials
@@ -39,13 +37,9 @@ service-account*.json
 .netlify/
 
 # ==============================
+temp_auto_push.bat
 # IDE
 # ==============================
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 
 .idea/
 *.iml
@@ -84,4 +78,6 @@ desktop.ini
 # Playwright test artifacts
 /playwright-report/
 /test-results/
-.net-port/
+.net-port/.gitignore
+branch_structure.json
+config.bat
