@@ -25,9 +25,9 @@ export const ADMIN_EMAIL = 'sj0269950@gmail.com';
 })
 export class AdminService {
   private _isAdmin = new BehaviorSubject<boolean>(false);
-  public isAdmin$: Observable<boolean> = this._isAdmin.asObservable();
+  public isAdmin$: Observable<boolean> = this._isAdmin as any;
   private _currentUser = new BehaviorSubject<User | null>(null);
-  public currentUser$: Observable<User | null> = this._currentUser.asObservable();
+  public currentUser$: Observable<User | null> = this._currentUser as any;
 
   constructor(private firebaseApp: FirebaseAppService) {
     const auth = this.firebaseApp.auth;
