@@ -48,10 +48,26 @@ export class AdminService {
     });
   }
 
-  private updateAdminState(user: User | null): void {
+  private async updateAdminState(user: User | null): Promise<void> {
     this._currentUser.next(user);
-    if (user && user.email === ADMIN_EMAIL) {
-      this._isAdmin.next(true);
+    if (user) {
+      if (!user.emailVerified) {
+        console.warn('Admin login blocked: Email not verified.');
+        this._isAdmin.next(false);
+        return;
+      }
+      try {
+        const tokenResult = await user.getIdTokenResult(true);
+        if (tokenResult.claims['admin'] === true) {
+          this._isAdmin.next(true);
+        } else {
+          console.warn('User authenticated, but lacks admin custom claim.');
+          this._isAdmin.next(false);
+        }
+      } catch (err) {
+        console.error('Failed to fetch token claims:', err);
+        this._isAdmin.next(false);
+      }
     } else {
       this._isAdmin.next(false);
     }
@@ -71,7 +87,17 @@ export class AdminService {
   public async login(password: string, email: string = ADMIN_EMAIL): Promise<boolean> {
     try {
       const cred = await signInWithEmailAndPassword(this.firebaseApp.auth, email.trim(), password);
-      const isAuthAdmin = cred.user.email === ADMIN_EMAIL;
+      const user = cred.user;
+
+      if (!user.emailVerified) {
+        throw new Error('Please verify your email address before logging into the admin panel.');
+      }
+
+      // updateAdminState will handle the true logic asynchronously.
+      // But we can optimistically wait for token result here to return true/false correctly
+      const tokenResult = await user.getIdTokenResult(true);
+      const isAuthAdmin = tokenResult.claims['admin'] === true;
+      
       this._isAdmin.next(isAuthAdmin);
       return isAuthAdmin;
     } catch (err) {
