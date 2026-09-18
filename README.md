@@ -1,10 +1,10 @@
 # 🛡️ CyberSec Portfolio — Full-Stack Angular Application
 
-**Sumit Jaiswal | Cybersecurity Specialist & Ethical Hacker**
+**Sumit Jaiswal | Cybersecurity  & Ethical Hacker | Software Engineer **
 
 ---
 
-## 📖 12. Clear Explanation: Problem → Solution → Implementation → Result
+## 📖 1. Clear Explanation: Problem → Solution → Implementation → Result
 
 * **Problem**: Traditional cybersecurity portfolios are often static pages that fail to demonstrate actual technical competency, secure coding practices, or dynamic data handling. Furthermore, managing project entries manually requires codebase edits.
 * **Solution**: A dynamic, full-stack cybersecurity portfolio application that features role-based access control (Admin/Owner mode), real-time database management, and a secure backend infrastructure to highlight both offensive security knowledge and defensive software engineering.
@@ -13,7 +13,7 @@
 
 ---
 
-## 🏗️ 9. Architecture Diagram
+## 🏗️ 2. Architecture Diagram
 
 ```text
                          INTERNET
@@ -59,27 +59,27 @@ GitHub
 
 ---
 
-## 💻 10. Tech Stack
+## 💻 3. Tech Stack
 
-### 4. Frontend
+### i. Frontend
 - **Framework**: Angular 17 (Standalone Components)
 - **State Management**: Angular Signals & RxJS BehaviorSubjects
 - **Styling**: Pure CSS3 with dynamic CSS Variables for theming
 - **Animations**: HTML5 Canvas (Matrix rain), CSS Keyframes
 
-### 1. Authentication & 2. Database & 3. API
+### ii. Authentication & 2. Database & 3. API
 - **Auth**: Firebase Authentication (Role-based access via custom logic/terminal auth)
 - **Database**: Cloud Firestore (Real-time NoSQL document database)
 - **API**: Firebase Client SDKs (acts as BaaS backend API layer)
 
-### 5. Deployment
+### iii. Deployment
 - **Hosting**: Netlify
 - **CI/CD**: Netlify continuous deployment from GitHub main branch
 - **Routing**: Client-side routing with Netlify `_redirects` fallback
 
 ---
 
-## 🛡️ Security Engineering & Architecture
+## 4. 🛡️ Security Engineering & Architecture
 
 This portfolio is engineered with a **Security-First** mindset, moving beyond standard frontend templates by incorporating robust cloud-security controls, automated static analysis, and zero-trust data handling:
 
@@ -94,14 +94,14 @@ This portfolio is engineered with a **Security-First** mindset, moving beyond st
 
 ---
 
-## ⚠️ 6. Error Handling & 7. Tests
+## ⚠️ 5. Error Handling & 7. Tests
 
 - **Error Handling**: Implemented globally. Failed API calls (e.g., unauthorized Firestore writes) are caught and displayed via UI toast notifications/error states rather than console crashes.
 - **Tests**: The project structure is configured for Jasmine/Karma unit testing (Angular defaults). *Note: Comprehensive e2e testing (Cypress) and backend mocking are planned for the next iteration.*
 
 ---
 
-## 🚀 13. Documentation & Setup
+## 🚀 6. Documentation & Setup
 
 ### Local Development
 
