@@ -1,56 +1,63 @@
 rules_version = '2';
+
 service cloud.firestore {
+
   match /databases/{database}/documents {
 
-    // Helper to verify admin identity [SECURITY 3.3]
-    function isAdmin() {
-      return request.auth != null && 
-             request.auth.token.email_verified == true && 
-             request.auth.token.admin == true;
+    function isSignedIn() {
+      return request.auth != null;
     }
 
-    // Projects collection
+    function isAdmin() {
+      return isSignedIn()
+        && request.auth.token.email_verified == true
+        && request.auth.token.admin == true;
+    }
+
+    // =========================
+    // Public portfolio data
+    // =========================
+
     match /projects/{document} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // Certifications collection
     match /certifications/{document} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // Blogs collection
     match /blogs/{document} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // Tools collection
     match /tools/{document} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // Achievements collection
     match /achievements/{document} {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // Specific document for resume configuration settings
+    // =========================
+    // Resume
+    // =========================
+
     match /settings/resume {
       allow read: if true;
       allow write: if isAdmin();
     }
 
-    // Default-deny everything else
+    // =========================
+    // Deny everything else
+    // =========================
+
     match /{document=**} {
       allow read, write: if false;
     }
   }
 }
-
-
-

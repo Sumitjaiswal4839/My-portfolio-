@@ -25,17 +25,7 @@ export class ProjectsComponent implements OnInit {
 
   // Filter projects strictly based on current mode [SDE vs Cybersecurity segregation]
   projects$ = this.projectService.projects$;
-  filteredProjects$ = this.projects$.pipe(
-    map(projects => {
-      if (this.isSdeMode) {
-        // Only SDE / normal software engineering projects
-        return projects.filter(p => p.type === 'normal');
-      } else {
-        // Only Cybersecurity projects
-        return projects.filter(p => p.type === 'cyber');
-      }
-    })
-  );
+  filteredProjects$ = this.projects$;
 
   showAddForm = false;
   isEditing = false;

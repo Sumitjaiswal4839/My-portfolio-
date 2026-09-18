@@ -90,6 +90,8 @@ export class AdminService {
       const user = cred.user;
 
       if (!user.emailVerified) {
+        // Sign out if email is not verified
+        await signOut(this.firebaseApp.auth);
         throw new Error('Please verify your email address before logging into the admin panel.');
       }
 
