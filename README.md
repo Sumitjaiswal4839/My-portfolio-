@@ -122,9 +122,9 @@ This portfolio is engineered with a **Security-First** mindset, moving beyond st
    Open `http://localhost:4200`
 
 ### Admin (Owner) Access
-To access the "Owner Mode" to add or modify projects:
-1. Press `Alt + C + V` (or your configured secret key combination) anywhere on the page to open the hidden Root Terminal.
-2. Enter the secure root password.
-3. Once authenticated, hidden buttons (like "Add Project", "Delete", "Upload Resume") will automatically mount to the DOM.
+To access the **Protected Admin Surface** to add or modify projects:
+1. Press `Alt + C + V` anywhere on the page to open the hidden admin login terminal.
+2. Authenticate securely using **Firebase Authentication**.
+3. Once authenticated, **Firestore Security Rules** and **Admin Authorization** (via Custom Claims) are verified. The secure admin controls (like "Add Project", "Delete", "Upload Resume") will then automatically mount to the DOM.
 
 ---

@@ -76,10 +76,13 @@ desktop.ini
 
 # ==============================
 # Documentation
-# Keep only the public README
+# Keep only the public README and standard docs
 # ==============================
 *.md
 !README.md
+!LICENSE.md
+!SECURITY.md
+!CONTRIBUTING.md
 
 # Playwright test artifacts
 /playwright-report/
