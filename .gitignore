@@ -40,12 +40,8 @@ service-account*.json
 
 # ==============================
 # IDE
+temp_auto_push.bat
 # ==============================
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 
 .idea/
 *.iml
@@ -87,4 +83,5 @@ desktop.ini
 # Playwright test artifacts
 /playwright-report/
 /test-results/
-.net-port/
+.net-port/.gitignore
+branch_structure.json
