@@ -33,7 +33,7 @@
     "@types/node": "^18.18.0",
     "firebase-admin": "^14.4.0",
     "jasmine-core": "^7.0.2",
-    "netlify-cli": "^24.4.0",
+    "netlify-cli": "^27.6.0",
     "typescript": "~5.2.2"
   }
 }
