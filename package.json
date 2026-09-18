@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "node init && ng serve",
+    "build": "node init && ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "deploy": "ng build && netlify deploy --prod --dir=dist/cybersec-portfolio/browser"
@@ -16,7 +16,7 @@
     "@angular/compiler": "^17.0.0",
     "@angular/core": "^17.0.0",
     "@angular/forms": "^17.0.0",
-    "@angular/platform-browser": "^17.0.0",
+    "@angular/platform-browser": "^22.1.6",
     "@angular/platform-browser-dynamic": "^17.0.0",
     "@angular/router": "^17.0.0",
     "firebase": "^12.10.0",
