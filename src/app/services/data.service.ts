@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { 
   Firestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, setDoc 
 } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL, FirebaseStorage } from 'firebase/storage';
 import { FirebaseAppService } from '../core/services/firebase-app.service';
 
 export interface Certification {
@@ -58,6 +59,7 @@ export interface Project {
 })
 export class DataService {
   private db: Firestore;
+  private storage: FirebaseStorage;
 
   private certsSubject = new BehaviorSubject<Certification[]>([]);
   private blogsSubject = new BehaviorSubject<Blog[]>([]);
@@ -78,6 +80,7 @@ export class DataService {
 
   constructor(private firebaseAppService: FirebaseAppService) {
     this.db = this.firebaseAppService.db;
+    this.storage = this.firebaseAppService.storage;
     this.initRealtimeListeners();
   }
 
@@ -240,5 +243,33 @@ export class DataService {
     } else {
       await deleteDoc(doc(this.db, "settings", "resume"));
     }
+  }
+
+  async uploadAndSaveResume(file: File): Promise<string> {
+    if (!file || file.type !== 'application/pdf') {
+      throw new Error('Invalid file type. Only PDF documents are allowed.');
+    }
+
+    const MAX_SIZE_BYTES = 5 * 1024 * 1024;
+    if (file.size > MAX_SIZE_BYTES) {
+      throw new Error('File size exceeds the 5MB limit.');
+    }
+
+    const filePath = `resumes/portfolio_resume_${Date.now()}.pdf`;
+    const storageRef = ref(this.storage, filePath);
+
+    const snapshot = await uploadBytes(storageRef, file);
+    const downloadUrl = await getDownloadURL(snapshot.ref);
+
+    const resumeDocRef = doc(this.db, 'settings', 'resume');
+    await setDoc(resumeDocRef, {
+      fileUrl: downloadUrl,
+      fileName: file.name,
+      sizeBytes: file.size,
+      contentType: file.type,
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+
+    return downloadUrl;
   }
 }

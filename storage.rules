@@ -1,0 +1,22 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Enterprise admin check helper
+    function isAdmin() {
+      return request.auth != null && 
+             request.auth.token.email_verified == true && 
+             request.auth.token.admin == true;
+    }
+
+    match /resumes/{fileName} {
+      // Public read: Anyone visiting the portfolio can view/download the resume
+      allow read: if true;
+      
+      // Admin-only write with strict content-type and size validation
+      allow write: if isAdmin() 
+                   && request.resource.size < 5 * 1024 * 1024 // Max 5MB limit
+                   && request.resource.contentType == 'application/pdf'; // Strict PDF enforcement
+    }
+  }
+}

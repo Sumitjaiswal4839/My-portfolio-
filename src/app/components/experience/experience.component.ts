@@ -28,6 +28,20 @@ export class ExperienceComponent implements OnInit {
   cyberExperiences: WorkExperience[] = [
     {
       role: "Cybersecurity Intern",
+      company: "Skillset Go EduTech",
+      duration: "15 September 2026 - Present",
+      details: "Selected for a remote internship focused on practical implementation, completing 3 Mini Projects and 2 Major Projects to gain hands-on experience and contribute to the organization's cybersecurity team.",
+      skills: ['Practical Security Assessments', 'Project Implementation', 'Security Analysis']
+    },
+    {
+      role: "Cyber Security Intern",
+      company: "Redynox",
+      duration: "6 August 2026 - 5 September 2026",
+      details: "Successfully completed a one-month internship gaining hands-on experience in network security, vulnerability assessment, penetration testing, and incident response by working closely with professional teams on real-world projects.",
+      skills: ['Network Security', 'Vulnerability Assessment', 'Penetration Testing', 'Incident Response']
+    },
+    {
+      role: "Cybersecurity Intern",
       company: "UptoSkills",
       duration: "April 13, 2026 - July 13, 2026",
       details: "Selected as a Cybersecurity Intern, focusing on practical security assessments, vulnerability analysis, web pentesting, and contributing to the defense mechanisms of real-world environments.",

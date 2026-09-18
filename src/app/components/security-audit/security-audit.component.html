@@ -1,0 +1,193 @@
+<div class="max-w-5xl mx-auto px-4 py-12 font-mono text-gray-200">
+  
+  <!-- Header Banner -->
+  <div class="border border-green-500/30 bg-black/40 p-6 rounded-lg mb-10 shadow-lg shadow-green-950/20">
+    <div class="flex items-center space-x-3 mb-2">
+      <span class="inline-block w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+      <h1 class="text-2xl font-bold text-green-400">SECURITY CENTER & AUDIT REPORT</h1>
+    </div>
+    <p class="text-sm text-gray-400">
+      Self-assessment, threat modeling, and live architectural verification report for this portfolio application.
+    </p>
+  </div>
+
+  <!-- Security Assessment Matrix -->
+  <div class="mb-12">
+    <h2 class="text-xl font-bold text-white mb-4 border-b border-gray-800 pb-2">✓ Verification Matrix</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      
+      <!-- AppSec -->
+      <div class="bg-gray-900/60 border border-gray-800 p-4 rounded-md">
+        <h3 class="text-green-400 font-semibold mb-3 text-sm uppercase tracking-wider">AppSec</h3>
+        <ul class="space-y-2 text-sm text-gray-300">
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Authentication</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Authorization</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Firestore Rules</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> XSS Controls</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Input Validation</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Security Headers</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> HTTPS Enforced</li>
+        </ul>
+      </div>
+
+      <!-- Cloud Security -->
+      <div class="bg-gray-900/60 border border-gray-800 p-4 rounded-md">
+        <h3 class="text-green-400 font-semibold mb-3 text-sm uppercase tracking-wider">Cloud Security</h3>
+        <ul class="space-y-2 text-sm text-gray-300">
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Firebase Auth</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> App Check (v3)</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Storage Rules</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Custom Claims</li>
+        </ul>
+      </div>
+
+      <!-- DevSecOps -->
+      <div class="bg-gray-900/60 border border-gray-800 p-4 rounded-md">
+        <h3 class="text-green-400 font-semibold mb-3 text-sm uppercase tracking-wider">DevSecOps</h3>
+        <ul class="space-y-2 text-sm text-gray-300">
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> GitHub CodeQL</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Dependabot Alerts</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> npm audit checks</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> GitHub Actions CI</li>
+        </ul>
+      </div>
+
+      <!-- Testing -->
+      <div class="bg-gray-900/60 border border-gray-800 p-4 rounded-md">
+        <h3 class="text-green-400 font-semibold mb-3 text-sm uppercase tracking-wider">Testing</h3>
+        <ul class="space-y-2 text-sm text-gray-300">
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> E2E Playwright Tests</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Security Test Cases</li>
+          <li class="flex items-center"><span class="text-green-400 mr-2">✓</span> Manual Burp Testing</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Threat Model & Mitigation Table -->
+  <div>
+    <h2 class="text-xl font-bold text-white mb-4 border-b border-gray-800 pb-2">🛡️ Threat Model & Mitigations</h2>
+    
+    <div class="overflow-x-auto border border-gray-800 rounded-lg">
+      <table class="w-full text-left text-sm text-gray-300">
+        <thead class="bg-gray-900 text-gray-400 uppercase text-xs tracking-wider border-b border-gray-800">
+          <tr>
+            <th class="p-3">Threat Vector</th>
+            <th class="p-3">Risk Level</th>
+            <th class="p-3">Mitigation Implemented</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-800/60">
+          <tr class="hover:bg-gray-900/30">
+            <td class="p-3 font-medium text-white">Cross-Site Scripting (XSS)</td>
+            <td class="p-3 text-yellow-400">High</td>
+            <td class="p-3 text-gray-400">Angular sanitization, SafeUrlPipe checks, and zero unsafe innerHTML/document.write usage.</td>
+          </tr>
+          <tr class="hover:bg-gray-900/30">
+            <td class="p-3 font-medium text-white">Unauthorized Writes / IDOR</td>
+            <td class="p-3 text-red-400">Critical</td>
+            <td class="p-3 text-gray-400">Strict Firestore & Storage Rules verifying Firebase Auth JWT tokens and admin custom claims.</td>
+          </tr>
+          <tr class="hover:bg-gray-900/30">
+            <td class="p-3 font-medium text-white">Credential / State Tampering</td>
+            <td class="p-3 text-yellow-400">Medium</td>
+            <td class="p-3 text-gray-400">Removed client-side boolean storage flags; privileges tied cryptographically to server-side auth.</td>
+          </tr>
+          <tr class="hover:bg-gray-900/30">
+            <td class="p-3 font-medium text-white">Malicious File Uploads</td>
+            <td class="p-3 text-yellow-400">Medium</td>
+            <td class="p-3 text-gray-400">Firebase Storage rules restricting uploads to PDF only (< 5MB) with strict content-type validation.</td>
+          </tr>
+          <tr class="hover:bg-gray-900/30">
+            <td class="p-3 font-medium text-white">Automated Bot / Quota Abuse</td>
+            <td class="p-3 text-gray-400">Low</td>
+            <td class="p-3 text-gray-400">Firebase App Check (reCAPTCHA v3) integration blocking non-genuine clients.</td>
+          </tr>
+          <tr class="hover:bg-gray-900/30">
+            <td class="p-3 font-medium text-white">Supply Chain Vulnerabilities</td>
+            <td class="p-3 text-yellow-400">Medium</td>
+            <td class="p-3 text-gray-400">Automated Dependabot alerts, CodeQL SAST checks, and regular `npm audit` integration.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- OWASP Top 10 Security Coverage Matrix -->
+  <div class="mb-12">
+    <h2 class="text-xl font-bold text-white mb-4 border-b border-gray-800 pb-2">🎯 OWASP Top 10 Coverage & Mitigations</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      
+      <!-- A01: Broken Access Control -->
+      <div class="bg-gray-900/60 border border-gray-800 p-4 rounded-md">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold px-2 py-0.5 bg-red-950 text-red-400 border border-red-800 rounded">A01:2021</span>
+          <span class="text-green-400 text-xs font-semibold">✓ Mitigated</span>
+        </div>
+        <h3 class="text-white font-semibold text-sm mb-1">Broken Access Control</h3>
+        <p class="text-xs text-gray-400">Enforced strict Firestore & Storage Security Rules checking server-side Firebase Auth tokens, email verification, and custom admin claims.</p>
+      </div>
+
+      <!-- A02: Cryptographic Failures -->
+      <div class="bg-gray-900/60 border border-gray-800 p-4 rounded-md">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold px-2 py-0.5 bg-yellow-950 text-yellow-400 border border-yellow-800 rounded">A02:2021</span>
+          <span class="text-green-400 text-xs font-semibold">✓ Mitigated</span>
+        </div>
+        <h3 class="text-white font-semibold text-sm mb-1">Cryptographic Failures</h3>
+        <p class="text-xs text-gray-400">Forced HTTPS-only redirection via Netlify config along with strict HSTS headers (`max-age=31536000`) and secure Firebase Auth session tokens.</p>
+      </div>
+
+      <!-- A03: Injection -->
+      <div class="bg-gray-900/60 border border-gray-800 p-4 rounded-md">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold px-2 py-0.5 bg-red-950 text-red-400 border border-red-800 rounded">A03:2021</span>
+          <span class="text-green-400 text-xs font-semibold">✓ Mitigated</span>
+        </div>
+        <h3 class="text-white font-semibold text-sm mb-1">Injection (DOM XSS / Sinks)</h3>
+        <p class="text-xs text-gray-400">Eliminated raw `document.write` sinks, added strict URL scheme validation (`SafeUrlPipe`), and adopted safe Angular template binding (`<span ngNonBindable>{{ }}</span>`).</p>
+      </div>
+
+      <!-- A05: Security Misconfiguration -->
+      <div class="bg-gray-900/60 border border-gray-800 p-4 rounded-md">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold px-2 py-0.5 bg-blue-950 text-blue-400 border border-blue-800 rounded">A05:2021</span>
+          <span class="text-green-400 text-xs font-semibold">✓ Mitigated</span>
+        </div>
+        <h3 class="text-white font-semibold text-sm mb-1">Security Misconfiguration</h3>
+        <p class="text-xs text-gray-400">Deployed hardened Netlify security headers (CSP, X-Frame-Options, X-Content-Type-Options, Permissions-Policy) and disabled production source maps.</p>
+      </div>
+
+      <!-- A06: Vulnerable and Outdated Components -->
+      <div class="bg-gray-900/60 border border-gray-800 p-4 rounded-md">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold px-2 py-0.5 bg-gray-800 text-gray-300 border border-gray-700 rounded">A06:2021</span>
+          <span class="text-green-400 text-xs font-semibold">✓ Mitigated</span>
+        </div>
+        <h3 class="text-white font-semibold text-sm mb-1">Vulnerable Components</h3>
+        <p class="text-xs text-gray-400">Integrated automated Dependabot weekly scans, GitHub CodeQL semantic analysis, and local `npm audit` gates in GitHub Actions CI.</p>
+      </div>
+
+      <!-- A07: Identification and Authentication Failures -->
+      <div class="bg-gray-900/60 border border-gray-800 p-4 rounded-md">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold px-2 py-0.5 bg-red-950 text-red-400 border border-red-800 rounded">A07:2021</span>
+          <span class="text-green-400 text-xs font-semibold">✓ Mitigated</span>
+        </div>
+        <h3 class="text-white font-semibold text-sm mb-1">Authentication Failures</h3>
+        <p class="text-xs text-gray-400">Removed vulnerable client-side boolean sessionStorage flags; replaced with cryptographically secure Firebase Auth and custom claims verification.</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Manual Testing Note -->
+  <div class="mt-12 bg-gray-900/40 border border-dashed border-gray-700 p-4 rounded-md text-xs text-gray-400 flex items-center justify-between">
+    <span>Tools utilized during manual assessment: Burp Suite Professional, OWASP ZAP, Playwright E2E Runner.</span>
+    <span class="text-green-400 font-semibold">STATUS: SECURE 🟢</span>
+  </div>
+
+</div>

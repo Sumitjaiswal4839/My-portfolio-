@@ -15,22 +15,46 @@
 
 ## 🏗️ 9. Architecture Diagram
 
-```mermaid
-graph TD;
-    Client[Web Browser/User] -->|HTTPS| Netlify[Netlify CDN/Hosting]
-    Netlify -->|Serves| Angular[Angular 17 SPA]
-    Angular -->|JWT Auth| FirebaseAuth[Firebase Authentication]
-    Angular -->|CRUD Operations| Firestore[Cloud Firestore NoSQL DB]
-    
-    subgraph Backend Infrastructure
-        FirebaseAuth
-        Firestore
-        FirestoreRules[Firestore Security Rules]
-    end
-    
-    FirestoreRules -.->|Validates/Restricts| Firestore
-    Angular -->|Role-Based UI| AdminTerminal[Owner Mode Terminal]
-    AdminTerminal -.->|Triggers| FirebaseAuth
+```text
+                         INTERNET
+                            │
+                            ▼
+                    ┌──────────────┐
+                    │   Netlify    │
+                    │ HTTPS + CSP  │
+                    └──────┬───────┘
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │   Angular 17    │
+                  │   TypeScript    │
+                  └───────┬─────────┘
+                          │
+             ┌────────────┼─────────────┐
+             │            │             │
+             ▼            ▼             ▼
+        Firebase       App Check    Security
+          Auth                       Headers
+             │
+             ▼
+       Firestore Rules
+             │
+      ┌──────┴──────┐
+      ▼             ▼
+ Public Data     Admin Data
+
+             │
+             ▼
+      Firebase Storage
+       Resume/Files
+
+GitHub
+  │
+  ├── GitHub Actions
+  ├── CodeQL
+  ├── Dependabot
+  ├── Secret Scanning
+  └── Playwright
 ```
 
 ---
@@ -55,13 +79,18 @@ graph TD;
 
 ---
 
-## 🔒 11. Security Considerations
+## 🛡️ Security Engineering & Architecture
 
-As a cybersecurity portfolio, secure architecture is paramount:
-1. **Database Security (Firestore Rules)**: `firestore.rules` strict validation ensures that only authenticated admins can Write/Update/Delete project entries. Public users have Read-only access to specific collections.
-2. **Hidden Admin Surface**: The admin terminal is intentionally hidden and strictly requires a secret key combination to even render the login overlay, minimizing brute-force surface area.
-3. **Environment Security**: No sensitive API keys with elevated privileges are exposed. Firebase public config is restricted by domain in the Google Cloud Console.
-4. **Input Validation**: Angular's built-in DomSanitizer prevents XSS (Cross-Site Scripting). Add/Edit project forms use Angular Reactive/Template-driven forms for strict input validation before API dispatch.
+This portfolio is engineered with a **Security-First** mindset, moving beyond standard frontend templates by incorporating robust cloud-security controls, automated static analysis, and zero-trust data handling:
+
+* **Static Application Security Testing (SAST):** Automated **GitHub CodeQL** workflows analyze code semantics on every push to detect vulnerabilities early.
+* **Supply Chain Security:** Automated `npm audit` and dependency vetting integrated directly into the CI/CD pipeline.
+* **Zero-Trust Access Control:** Admin verification relies on **Firebase Custom Claims (`admin: true`)** and **Email Verification** enforced strictly at the database level via **Firestore & Storage Security Rules**.
+* **Defense-in-Depth:** 
+  * Strict **Content Security Policy (CSP)** and security headers (`X-Frame-Options`, `HSTS`, `Referrer-Policy`) deployed via Netlify configuration.
+  * XSS mitigation via strict input handling, explicit URL scheme validation (`SafeUrlPipe`), and the complete elimination of raw DOM-injection sinks (`document.write`).
+  * Prevention of Reverse Tabnabbing using enforced `rel="noopener noreferrer"` on dynamic external links.
+* **Bot & Quota Abuse Protection:** Integration-ready with **Firebase App Check** (reCAPTCHA v3) to block automated script scraping.
 
 ---
 

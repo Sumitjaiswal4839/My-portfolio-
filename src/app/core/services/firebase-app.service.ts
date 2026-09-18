@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { initializeApp, FirebaseApp, getApps, getApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
 import { getAuth, Auth } from 'firebase/auth';
+import { getStorage, FirebaseStorage } from 'firebase/storage';
 import { initializeAppCheck, ReCaptchaV3Provider, AppCheck } from 'firebase/app-check';
 import { getAnalytics, Analytics, isSupported } from 'firebase/analytics';
 import { environment } from '../../../environments/environment';
@@ -17,6 +18,7 @@ export class FirebaseAppService {
   public readonly app: FirebaseApp;
   public readonly db: Firestore;
   public readonly auth: Auth;
+  public readonly storage: FirebaseStorage;
   public appCheck?: AppCheck;
   public analytics?: Analytics;
 
@@ -30,10 +32,15 @@ export class FirebaseAppService {
 
     this.db = getFirestore(this.app);
     this.auth = getAuth(this.app);
+    this.storage = getStorage(this.app);
 
     // Initialize App Check (reCAPTCHA v3) if in browser environment
     try {
       if (typeof window !== 'undefined' && (environment as any).recaptchaSiteKey) {
+        if (!environment.production) {
+          // Enable Debug mode for local development
+          (self as any).FIREBASE_APP_CHECK_DEBUG_TOKEN = true;
+        }
         this.appCheck = initializeAppCheck(this.app, {
           provider: new ReCaptchaV3Provider((environment as any).recaptchaSiteKey),
           isTokenAutoRefreshEnabled: true

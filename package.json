@@ -28,8 +28,10 @@
     "@angular-devkit/build-angular": "^17.0.0",
     "@angular/cli": "^17.0.0",
     "@angular/compiler-cli": "^17.0.0",
+    "@playwright/test": "^1.63.0",
     "@types/jasmine": "^6.0.0",
     "@types/node": "^18.18.0",
+    "firebase-admin": "^14.4.0",
     "jasmine-core": "^7.0.2",
     "netlify-cli": "^24.4.0",
     "typescript": "~5.2.2"

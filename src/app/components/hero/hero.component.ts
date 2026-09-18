@@ -156,25 +156,23 @@ export class HeroComponent implements OnInit, AfterViewChecked, OnDestroy {
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (file) {
-      // FIREBASE FIRESTORE LIMIT: Document size is 1MB.
-      // If file is larger than ~750KB (considering base64 overhead), it might fail.
-      if (file.size > 1000000) {
-         alert("File too large! Firestore documents have a 1MB limit. Please upload a smaller PDF (less than 1MB) or use a compressed version.");
+      if (file.type !== 'application/pdf') {
+        alert("Only PDF files are allowed.");
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+         alert("File too large! Please upload a PDF under 5MB.");
          return;
       }
 
-      const reader = new FileReader();
-      reader.onload = async (e: any) => {
-        try {
-          const base64Url = e.target.result;
-          await this.dataService.updateResume(base64Url);
+      this.dataService.uploadAndSaveResume(file)
+        .then(() => {
           alert("🚀 Resume uploaded successfully! Changes are live across all devices.");
-        } catch (err) {
+        })
+        .catch(err => {
           console.error("Upload failed", err);
-          alert("❌ Upload failed. Make sure Firestore is enabled in 'test mode' in your Firebase console and your internet is connected.");
-        }
-      };
-      reader.readAsDataURL(file);
+          alert("❌ Upload failed. Please ensure you are logged in as admin and try again.");
+        });
     }
   }
 

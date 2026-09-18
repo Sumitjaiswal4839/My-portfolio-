@@ -28,7 +28,7 @@ interface SecurityCard {
             Defending <span class="highlight-cyan">Digital Frontiers</span> &amp; Penetration Testing
           </h1>
           <p class="hero-description">
-            Hi, I'm <strong class="text-white">Sumit Jaiswal</strong>. Dedicated to offensive security, defensive system hardening, vulnerability research, secure databases &amp; backend mechanisms, and custom security analysis tooling.
+            Hi, I'm <strong class="text-white">Sumit Jaiswal</strong>. SOC Analyst, Cyber Security Analyst, and Cyber Security Intern at Redynox and Skill Set Go Edutech. Dedicated to offensive security, defensive system hardening, vulnerability research, secure databases &amp; backend mechanisms, and custom security analysis tooling.
           </p>
           <div class="hero-actions">
             <a routerLink="/security/certifications" class="btn btn-cyber-primary">
@@ -85,33 +85,6 @@ interface SecurityCard {
           </div>
         </div>
 
-        <div class="hero-terminal-wrap">
-          <div class="terminal-card">
-            <div class="terminal-top">
-              <div class="term-dots">
-                <span class="dot d-red"></span>
-                <span class="dot d-yellow"></span>
-                <span class="dot d-green"></span>
-              </div>
-              <span class="term-title">sec-shell&#64;kali: ~</span>
-            </div>
-            <div class="terminal-content" #terminalBody (click)="focusInput()">
-              <div *ngFor="let line of terminalHistory" class="term-line" [innerHTML]="line"></div>
-              <div class="term-input-row">
-                <span class="prompt-symbol">root&#64;portfolio:~#</span>
-                <input 
-                  #terminalInput
-                  type="text" 
-                  [(ngModel)]="currentInput" 
-                  (keydown)="handleInput($event)" 
-                  class="term-input" 
-                  autocomplete="off" 
-                  spellcheck="false"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Security Specializations -->
@@ -140,10 +113,12 @@ interface SecurityCard {
     }
     .hero-grid {
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
+      grid-template-columns: 1fr;
+      max-width: 900px;
+      margin: 0 auto 3.5rem;
       gap: 2.5rem;
       align-items: center;
-      margin-bottom: 3.5rem;
+      text-align: left;
     }
     @media (max-width: 900px) {
       .hero-grid {

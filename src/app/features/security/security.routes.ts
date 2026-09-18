@@ -6,6 +6,10 @@ export const SECURITY_ROUTES: Routes = [
     loadComponent: () => import('./hero/hero.component').then(m => m.SecurityHeroComponent)
   },
   {
+    path: 'audit',
+    loadComponent: () => import('../../components/security-audit/security-audit.component').then(m => m.SecurityAuditComponent)
+  },
+  {
     path: 'certifications',
     loadComponent: () => import('../../components/certifications/certifications.component').then(m => m.CertificationsComponent)
   },
