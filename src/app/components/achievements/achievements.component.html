@@ -2,7 +2,48 @@
   <div class="container">
     <div class="header">
       <h1 class="section-title">Achievements</h1>
+      <button *adminOnly (click)="toggleAddForm()" class="btn btn-primary add-btn">
+        <i class="fas" [class.fa-plus]="!showAddForm" [class.fa-times]="showAddForm"></i>
+        {{ showAddForm ? 'Cancel' : 'Add Achievement' }}
+      </button>
     </div>
+
+    <div class="add-form-container" *ngIf="showAddForm">
+      <div class="card form-card">
+        <h3>{{ isEditing ? 'Edit Achievement' : 'New Achievement' }}</h3>
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" [(ngModel)]="newAch.title" placeholder="e.g., Hackathon Winner">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea [(ngModel)]="newAch.description" placeholder="A brief description..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" [(ngModel)]="newAch.date">
+        </div>
+        <div class="form-group">
+          <label>Image (JPEG, PNG)</label>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*">
+        </div>
+
+        <div class="preview-area" *ngIf="newAch.imageUrl">
+          <p>Preview:</p>
+          <div class="preview-box">
+            <img [src]="newAch.imageUrl" class="img-preview" alt="Achievement preview">
+          </div>
+        </div>
+
+        <button
+          (click)="saveAchievement()"
+          class="btn btn-primary submit-btn"
+          [disabled]="!newAch.title">
+          {{ isEditing ? 'Update Achievement' : 'Save Achievement' }}
+        </button>
+      </div>
+    </div>
+
     <div class="achs-grid">
       <div *ngIf="(achievements$ | async)?.length === 0" class="empty-state">
         <p>Coming soon...</p>
@@ -24,7 +65,12 @@
           <span class="date">{{ ach.date | date }}</span>
         </div>
         <div class="ach-actions" *adminOnly>
-          <button (click)="deleteAchievement(ach.id)" class="delete-btn" aria-label="Delete achievement"><i class="fas fa-trash"></i></button>
+          <button (click)="editAchievement(ach)" class="edit-btn" title="Edit" aria-label="Edit achievement">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button (click)="deleteAchievement(ach.id)" class="delete-btn" title="Delete" aria-label="Delete achievement">
+            <i class="fas fa-trash"></i>
+          </button>
         </div>
       </div>
     </div>

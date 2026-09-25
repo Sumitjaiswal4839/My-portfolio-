@@ -29,6 +29,18 @@ export class SecretTerminalComponent implements OnInit, OnDestroy {
   inputValue = '';
   lines: { text: string; type: 'output' | 'error' | 'success' | 'input' }[] = [];
   isAuthenticated = false;
+  showPassword = false;
+
+  get passwordInputType(): string {
+    if (this.isAuthenticated || this.showPassword) {
+      return 'text';
+    }
+    return 'password';
+  }
+
+  togglePasswordVisibility(): void {
+    this.showPassword = !this.showPassword;
+  }
 
   // Key sequence tracker: backtick pressed 3 times rapidly
   private keySequence: string[] = [];
@@ -81,6 +93,7 @@ export class SecretTerminalComponent implements OnInit, OnDestroy {
       { text: '', type: 'output' },
     ];
     this.inputValue = '';
+    this.showPassword = false;
     setTimeout(() => {
       if (this.terminalInput?.nativeElement) {
         this.terminalInput.nativeElement.focus();
@@ -91,6 +104,7 @@ export class SecretTerminalComponent implements OnInit, OnDestroy {
   closeTerminal(): void {
     this.isOpen = false;
     this.inputValue = '';
+    this.showPassword = false;
     this.lines = [];
   }
 
@@ -98,7 +112,10 @@ export class SecretTerminalComponent implements OnInit, OnDestroy {
     const cmd = this.inputValue.trim();
     if (!cmd) return;
 
-    this.lines.push({ text: `> ${cmd}`, type: 'input' });
+    const echoText = !this.isAuthenticated && cmd !== 'exit' && cmd !== 'quit' && cmd !== 'help'
+      ? `> ${'*'.repeat(cmd.length)}`
+      : `> ${cmd}`;
+    this.lines.push({ text: echoText, type: 'input' });
     this.inputValue = '';
 
     if (!this.isAuthenticated) {

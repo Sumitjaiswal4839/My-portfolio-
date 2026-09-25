@@ -25,7 +25,7 @@ interface EngineeringHighlight {
             <i class="fas fa-terminal"></i> SOFTWARE DEVELOPMENT ENGINEER
           </div>
           <h1 class="hero-title">
-            Architecting <span class="highlight">Scalable Systems</span> &amp; Modern Applications
+            Building <span class="highlight">Websites &amp; Apps</span> That People Can Use
           </h1>
           <p class="hero-description">
             Hi, I'm <strong class="text-white">Sumit Jaiswal</strong>. A passionate Full-Stack Developer specializing in high-performance web applications, distributed systems, clean architectures, modern UI/UX engineering, and secure database &amp; backend systems.

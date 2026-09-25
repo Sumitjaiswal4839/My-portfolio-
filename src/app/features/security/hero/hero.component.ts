@@ -25,7 +25,7 @@ interface SecurityCard {
             <i class="fas fa-shield-alt"></i> CYBERSECURITY RESEARCHER &amp; ANALYST
           </div>
           <h1 class="hero-title">
-            Defending <span class="highlight-cyan">Digital Frontiers</span> &amp; Penetration Testing
+            Keeping <span class="highlight-cyan">Websites &amp; Data</span> Safe, One Bug at a Time
           </h1>
           <p class="hero-description">
             Hi, I'm <strong class="text-white">Sumit Jaiswal</strong>. SOC Analyst, Cyber Security Analyst, and Cyber Security Intern at Redynox and Skill Set Go Edutech. Dedicated to offensive security, defensive system hardening, vulnerability research, secure databases &amp; backend mechanisms, and custom security analysis tooling.
