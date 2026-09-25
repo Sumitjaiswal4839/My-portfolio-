@@ -14,6 +14,8 @@ import { AdminOnlyDirective } from '../../directives/admin-only.directive';
 })
 export class AchievementsComponent implements OnInit {
   showAddForm = false;
+  isEditing = false;
+  editingId = '';
   newAch: Omit<Achievement, 'id'> = {
     title: '',
     description: '',
@@ -43,6 +45,9 @@ export class AchievementsComponent implements OnInit {
 
   toggleAddForm() {
     this.showAddForm = !this.showAddForm;
+    if (!this.showAddForm) {
+      this.resetForm();
+    }
   }
 
   onFileSelected(event: any) {
@@ -56,12 +61,28 @@ export class AchievementsComponent implements OnInit {
     }
   }
 
-  addAchievement() {
-    if (this.newAch.title) {
+  saveAchievement() {
+    if (!this.newAch.title) return;
+
+    if (this.isEditing) {
+      this.dataService.updateAchievement(this.editingId, this.newAch);
+    } else {
       this.dataService.addAchievement(this.newAch);
-      this.resetForm();
-      this.showAddForm = false;
     }
+    this.resetForm();
+    this.showAddForm = false;
+  }
+
+  editAchievement(ach: Achievement) {
+    this.isEditing = true;
+    this.editingId = ach.id;
+    this.newAch = {
+      title: ach.title,
+      description: ach.description,
+      imageUrl: ach.imageUrl || '',
+      date: ach.date
+    };
+    this.showAddForm = true;
   }
 
   deleteAchievement(id: string) {
@@ -71,6 +92,8 @@ export class AchievementsComponent implements OnInit {
   }
 
   resetForm() {
+    this.isEditing = false;
+    this.editingId = '';
     this.newAch = {
       title: '',
       description: '',
