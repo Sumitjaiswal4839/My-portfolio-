@@ -110,6 +110,7 @@ interface SecurityCard {
       padding: 1.5rem 1rem 4rem;
       color: #00ff66;
       font-family: 'Courier New', Courier, monospace;
+      background: radial-gradient(ellipse at top, rgba(0, 255, 102, 0.05) 0%, transparent 50%);
     }
     .hero-grid {
       display: grid;
@@ -119,6 +120,7 @@ interface SecurityCard {
       gap: 2.5rem;
       align-items: center;
       text-align: left;
+      animation: fadeInUp 0.8s ease-out;
     }
     @media (max-width: 900px) {
       .hero-grid {
@@ -138,6 +140,7 @@ interface SecurityCard {
       font-size: 0.75rem;
       letter-spacing: 0.1em;
       margin-bottom: 1rem;
+      animation: cyberGlow 2s ease-in-out infinite;
     }
     .hero-title {
       font-size: clamp(1.6rem, 5vw, 2.6rem);
@@ -147,10 +150,12 @@ interface SecurityCard {
       margin-bottom: 1rem;
       font-family: system-ui, sans-serif;
       word-break: break-word;
+      text-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
     }
     .highlight-cyan {
       color: #00f0ff;
-      text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+      text-shadow: 0 0 20px rgba(0, 240, 255, 0.6), 0 0 40px rgba(0, 240, 255, 0.3);
+      animation: cyanGlow 3s ease-in-out infinite;
     }
     .hero-description {
       font-size: 0.98rem;
@@ -177,25 +182,43 @@ interface SecurityCard {
       font-weight: 600;
       cursor: pointer;
       text-decoration: none;
-      transition: all 0.2s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       font-family: system-ui, sans-serif;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.5s;
+    }
+    .btn:hover::before {
+      left: 100%;
     }
     .btn-cyber-primary {
-      background: #00ff66;
+      background: linear-gradient(135deg, #00ff66 0%, #00cc52 100%);
       color: #050505;
-      box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+      box-shadow: 0 0 15px rgba(0, 255, 102, 0.4), 0 0 30px rgba(0, 255, 102, 0.2);
     }
     .btn-cyber-primary:hover {
-      background: #00cc52;
-      box-shadow: 0 0 20px rgba(0, 255, 102, 0.6);
+      background: linear-gradient(135deg, #00cc52 0%, #00a842 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 0 25px rgba(0, 255, 102, 0.6), 0 0 40px rgba(0, 255, 102, 0.3);
     }
     .btn-cyber-secondary {
-      background: #0f172a;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       color: #00f0ff;
       border: 1px solid rgba(0, 240, 255, 0.4);
     }
     .btn-cyber-secondary:hover {
-      background: rgba(0, 240, 255, 0.1);
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
     }
     .btn-cyber-outline {
       background: transparent;
@@ -203,7 +226,9 @@ interface SecurityCard {
       border: 1px solid rgba(0, 255, 102, 0.3);
     }
     .btn-cyber-outline:hover {
-      background: rgba(0, 255, 102, 0.1);
+      background: rgba(0, 255, 102, 0.15);
+      border-color: rgba(0, 255, 102, 0.5);
+      box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
     }
 
     /* Resume Split Button & Dropdown */
@@ -243,13 +268,15 @@ interface SecurityCard {
       position: absolute;
       top: calc(100% + 8px);
       left: 0;
-      background: #030712;
+      background: rgba(3, 7, 18, 0.95);
+      backdrop-filter: blur(10px);
       border: 1px solid #1e293b;
       border-radius: 6px;
-      box-shadow: 0 10px 25px rgba(0, 255, 102, 0.15);
+      box-shadow: 0 10px 25px rgba(0, 255, 102, 0.15), 0 0 20px rgba(0, 255, 102, 0.1);
       z-index: 100;
       min-width: 150px;
       overflow: hidden;
+      animation: slideDown 0.2s ease-out;
     }
     .resume-dropdown button {
       width: 100%;
@@ -264,14 +291,16 @@ interface SecurityCard {
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      transition: background 0.2s;
+      transition: all 0.2s;
     }
     .resume-dropdown button:hover {
-      background: #111827;
+      background: rgba(0, 255, 102, 0.1);
       color: #00ff66;
+      padding-left: 1.2rem;
     }
     .resume-dropdown button.delete-btn:hover {
       color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
     }
     .resume-dropdown button.disabled {
       opacity: 0.4;
@@ -370,6 +399,7 @@ interface SecurityCard {
       margin-top: 3rem;
       border-top: 1px solid #1f2937;
       padding-top: 3rem;
+      animation: fadeInUp 0.8s ease-out 0.2s backwards;
     }
     .section-heading {
       font-size: 1.5rem;
@@ -386,22 +416,39 @@ interface SecurityCard {
       gap: 1.5rem;
     }
     .spec-card {
-      background: #0b1120;
+      background: linear-gradient(135deg, rgba(11, 17, 32, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%);
       border: 1px solid #1e293b;
       padding: 1.75rem;
       border-radius: 8px;
       font-family: system-ui, sans-serif;
-      transition: all 0.2s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .spec-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00ff66, transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
     }
     .spec-card:hover {
       border-color: #00ff66;
-      transform: translateY(-3px);
-      box-shadow: 0 4px 20px rgba(0, 255, 102, 0.15);
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 255, 102, 0.2), 0 0 30px rgba(0, 255, 102, 0.1);
+    }
+    .spec-card:hover::before {
+      opacity: 1;
     }
     .spec-icon {
       font-size: 1.75rem;
       color: #00ff66;
       margin-bottom: 1rem;
+      text-shadow: 0 0 20px rgba(0, 255, 102, 0.5);
     }
     .spec-card h3 {
       font-size: 1.15rem;
@@ -426,6 +473,51 @@ interface SecurityCard {
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
       border: 1px solid rgba(0, 255, 102, 0.2);
+      transition: all 0.2s;
+    }
+    .tag:hover {
+      background: rgba(0, 255, 102, 0.2);
+      border-color: rgba(0, 255, 102, 0.4);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes cyberGlow {
+      0%, 100% {
+        box-shadow: 0 0 5px rgba(0, 255, 102, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 15px rgba(0, 255, 102, 0.5);
+      }
+    }
+
+    @keyframes cyanGlow {
+      0%, 100% {
+        text-shadow: 0 0 20px rgba(0, 240, 255, 0.6), 0 0 40px rgba(0, 240, 255, 0.3);
+      }
+      50% {
+        text-shadow: 0 0 30px rgba(0, 240, 255, 0.8), 0 0 50px rgba(0, 240, 255, 0.4);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   `]
 })

@@ -1,6 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+interface Certification {
+  name: string;
+  issuer: string;
+  year: string;
+  icon: string;
+  comingSoon?: boolean;
+}
+
 @Component({
   selector: 'app-about',
   standalone: true,
@@ -9,7 +17,7 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./about.component.css']
 })
 export class AboutComponent {
-  activeFilter: 'bio' | 'education' | 'experience' = 'bio';
+  activeFilter: 'bio' | 'education' | ' Other experience' | 'skills' = 'bio';
 
   careerObjective = "My passion for cybersecurity started back in 10th grade. Every time I watched a hacking movie, I felt an intense curiosity and itch to figure out how it all actually worked behind the scenes. That curiosity drove me to start digging for details—researching where to study cybersecurity, how to learn the concepts, what skills to build, and mapping out the exact steps needed to get into this field. Since then, I've been constantly learning and building my path in securing digital systems.";
 
@@ -45,7 +53,44 @@ export class AboutComponent {
     "Deep interest in AI, Machine learning and legal-tech innovations."
   ];
 
-  setFilter(filter: 'bio' | 'education' | 'experience') {
+  // New structured skills
+  technicalSkills = {
+    cybersecurity: [
+      "Penetration Testing",
+      "Network Security",
+      "Vulnerability Assessment",
+      "Burp Suite",
+      "Nmap",
+      "Wireshark",
+      "Metasploit"
+    ],
+    development: [
+      "TypeScript",
+      "Angular",
+      "Node.js",
+      "Python",
+      "Java",
+      "REST APIs",
+      "Docker"
+    ],
+    databases: [
+      "PostgreSQL",
+      "MongoDB",
+      "MySQL"
+    ],
+    tools: [
+      "Git",
+      "CI/CD",
+      "Linux",
+      "VS Code"
+    ]
+  };
+
+  certifications: Certification[] = [
+    { name: "Comming Soon", issuer: "Comming Soon", year: "Comming Soon", icon: "fas fa-hourglass", comingSoon: true }
+  ];
+
+  setFilter(filter: 'bio' | 'education' | 'experience' | 'skills') {
     this.activeFilter = filter;
   }
 }

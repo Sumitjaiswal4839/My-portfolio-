@@ -25,7 +25,7 @@ export class ProjectsComponent implements OnInit {
 
   // Filter projects strictly based on current mode [SDE vs Cybersecurity segregation]
   projects$ = this.projectService.projects$;
-  filteredProjects$ = this.projects$;
+  filteredProjects$ = this.projectService.getProjects(this.isSdeMode ? 'normal' : 'cyber');
 
   showAddForm = false;
   isEditing = false;
@@ -37,7 +37,8 @@ export class ProjectsComponent implements OnInit {
     type: 'normal',
     liveLink: '',
     githubLink: '',
-    description: ''
+    description: '',
+    pinned: false
   };
 
   ngOnInit(): void {
@@ -49,6 +50,7 @@ export class ProjectsComponent implements OnInit {
     }
 
     this.newProject.type = this.isSdeMode ? 'normal' : 'cyber';
+    this.filteredProjects$ = this.projectService.getProjects(this.isSdeMode ? 'normal' : 'cyber');
   }
 
   toggleAddForm() {
@@ -89,6 +91,10 @@ export class ProjectsComponent implements OnInit {
     }
   }
 
+  togglePin(project: Project) {
+    this.projectService.togglePin(project);
+  }
+
   resetForm() {
     this.isEditing = false;
     this.editingId = '';
@@ -97,7 +103,8 @@ export class ProjectsComponent implements OnInit {
       type: this.isSdeMode ? 'normal' : 'cyber',
       liveLink: '',
       githubLink: '',
-      description: ''
+      description: '',
+      pinned: false
     };
   }
 }

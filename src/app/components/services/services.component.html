@@ -1,0 +1,35 @@
+<div class="page-content services-page">
+  <div class="container">
+    <h1 class="section-title">💼 Services</h1>
+    <p class="services-intro">
+      Professional services tailored to your needs in cybersecurity, software development, and technology consulting.
+    </p>
+
+    <div class="services-grid">
+      <div class="service-card" *ngFor="let service of filteredServices(currentMode)">
+        <div class="service-icon">
+          <i [class]="service.icon"></i>
+        </div>
+        <div class="service-content">
+          <h3>{{ service.title }}</h3>
+          <p class="service-description">{{ service.description }}</p>
+          <ul class="service-features">
+            <li *ngFor="let feature of service.features">
+              <i class="fas fa-check-circle"></i> {{ feature }}
+            </li>
+          </ul>
+          <a routerLink="/contact" class="service-cta">
+            <i class="fas fa-envelope"></i> Get In Touch
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="services-footer">
+      <div class="footer-note">
+        <i class="fas fa-info-circle"></i>
+        <p>Services can be customized based on your specific requirements. Contact me for a free consultation.</p>
+      </div>
+    </div>
+  </div>
+</div>

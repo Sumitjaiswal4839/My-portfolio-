@@ -14,6 +14,7 @@ import { CommitButtonComponent } from '../commit-button/commit-button.component'
 })
 export class NavbarComponent {
   mobileMenuOpen = signal(false);
+  currentYear = new Date().getFullYear();
 
   constructor(
     public themeService: ThemeService,
