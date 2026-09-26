@@ -53,6 +53,13 @@
           <textarea id="description" name="description" [(ngModel)]="newProject.description" required rows="4" placeholder="Describe the system architecture, stack, and features..."></textarea>
         </div>
 
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" name="pinned" [(ngModel)]="newProject.pinned">
+            Pin this project to the top
+          </label>
+        </div>
+
         <div class="form-actions">
           <button type="button" class="btn btn-secondary" (click)="toggleAddForm()">Cancel</button>
           <button type="submit" class="btn btn-primary" [disabled]="!projectForm.form.valid || isSaving">
@@ -70,10 +77,13 @@
       <p>{{ isSdeMode ? 'No software engineering projects added yet. Check back soon!' : 'No security projects or writeups added yet. Check back soon!' }}</p>
     </div>
     
-    <div class="project-card" *ngFor="let project of filteredProjects$ | async">
+    <div class="project-card" *ngFor="let project of filteredProjects$ | async" [class.pinned]="project.pinned">
       <div class="card-glow"></div>
       <div class="card-content">
         <div class="project-badges-container" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px;">
+          <div *ngIf="project.pinned" class="project-type-badge badge-pinned">
+            <i class="fas fa-thumbtack"></i> Pinned
+          </div>
           <div class="project-type-badge" [ngClass]="project.type === 'cyber' ? 'badge-cyber' : 'badge-normal'" style="margin-bottom: 0;">
             {{ project.type === 'cyber' ? 'Security' : 'Software Engineering' }}
           </div>
@@ -95,6 +105,14 @@
           </a>
         </div>
         <div class="project-admin-actions" *adminOnly>
+          <button
+            class="btn-icon pin-btn"
+            [class.active]="project.pinned"
+            (click)="togglePin(project)"
+            [title]="project.pinned ? 'Unpin project' : 'Pin project'"
+            [attr.aria-label]="project.pinned ? 'Unpin project' : 'Pin project'">
+            <i class="fas fa-thumbtack"></i>
+          </button>
           <button class="btn-icon edit-btn" (click)="editProject(project)" title="Edit project" aria-label="Edit project">
             <i class="fas fa-edit"></i>
           </button>

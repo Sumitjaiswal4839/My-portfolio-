@@ -86,29 +86,6 @@ interface EngineeringHighlight {
           </div>
         </div>
 
-        <div class="hero-interactive">
-          <div class="ide-window">
-            <div class="ide-header">
-              <div class="window-dots">
-                <span class="dot dot-red"></span>
-                <span class="dot dot-yellow"></span>
-                <span class="dot dot-green"></span>
-              </div>
-              <div class="ide-title">engineer_profile.ts</div>
-            </div>
-            <div class="ide-body">
-              <pre class="code-block"><code><span class="k">const</span> <span class="v">engineer</span> = &#123;
-  <span class="p">name:</span> <span class="s">'Sumit Jaiswal'</span>,
-  <span class="p">role:</span> <span class="s">'Software Development Engineer'</span>,
-  <span class="p">expertise:</span> [<span class="s">'Full-Stack Architecture'</span>, <span class="s">'Secure Backend &amp; DB'</span>, <span class="s">'Modern UI/UX'</span>],
-  <span class="p">mindset:</span> <span class="s">'Build robust, high-performance, maintainable systems'</span>,
-  <span class="p">status:</span> <span class="s">'Ready for high-impact engineering opportunities'</span>
-&#125;;
-
-<span class="k">export default</span> <span class="v">engineer</span>;</code></pre>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- Highlights Grid -->
@@ -134,6 +111,7 @@ interface EngineeringHighlight {
       padding: 1.5rem 1rem 4rem;
       color: #e2e8f0;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: radial-gradient(ellipse at top, rgba(14, 165, 233, 0.05) 0%, transparent 50%);
     }
     .hero-grid {
       display: grid;
@@ -141,6 +119,7 @@ interface EngineeringHighlight {
       gap: 2.5rem;
       align-items: center;
       margin-bottom: 3.5rem;
+      animation: fadeInUp 0.8s ease-out;
     }
     @media (max-width: 900px) {
       .hero-grid {
@@ -161,6 +140,7 @@ interface EngineeringHighlight {
       font-weight: 600;
       letter-spacing: 0.05em;
       margin-bottom: 1rem;
+      animation: glowPulse 3s ease-in-out infinite;
     }
     .hero-title {
       font-size: clamp(1.6rem, 5vw, 2.75rem);
@@ -169,11 +149,14 @@ interface EngineeringHighlight {
       color: #ffffff;
       margin-bottom: 1rem;
       word-break: break-word;
+      text-shadow: 0 0 40px rgba(56, 189, 248, 0.3);
     }
     .highlight {
-      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      background-size: 200% 200%;
+      animation: gradientShift 3s ease infinite;
     }
     .hero-description {
       font-size: 0.98rem;
@@ -201,26 +184,44 @@ interface EngineeringHighlight {
       font-weight: 600;
       cursor: pointer;
       text-decoration: none;
-      transition: all 0.2s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       border: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      transition: left 0.5s;
+    }
+    .btn:hover::before {
+      left: 100%;
     }
     .btn-sde-primary {
-      background: #0284c7;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
       color: #fff;
-      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35);
+      box-shadow: 0 4px 14px rgba(2, 132, 199, 0.35), 0 0 20px rgba(56, 189, 248, 0.2);
     }
     .btn-sde-primary:hover {
-      background: #0369a1;
+      background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
       transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.45), 0 0 30px rgba(56, 189, 248, 0.3);
     }
     .btn-sde-secondary {
-      background: #1e293b;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
       color: #e2e8f0;
       border: 1px solid #334155;
     }
     .btn-sde-secondary:hover {
-      background: #334155;
+      background: linear-gradient(135deg, #334155 0%, #475569 100%);
       color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(51, 65, 85, 0.4);
     }
     .btn-sde-outline {
       background: transparent;
@@ -228,7 +229,9 @@ interface EngineeringHighlight {
       border: 1px solid rgba(56, 189, 248, 0.4);
     }
     .btn-sde-outline:hover {
-      background: rgba(56, 189, 248, 0.1);
+      background: rgba(56, 189, 248, 0.15);
+      border-color: rgba(56, 189, 248, 0.6);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
     }
 
     /* Resume Split Button & Dropdown */
@@ -268,13 +271,15 @@ interface EngineeringHighlight {
       position: absolute;
       top: calc(100% + 8px);
       left: 0;
-      background: #0f172a;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(10px);
       border: 1px solid #334155;
       border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.1);
       z-index: 100;
       min-width: 150px;
       overflow: hidden;
+      animation: slideDown 0.2s ease-out;
     }
     .resume-dropdown button {
       width: 100%;
@@ -289,14 +294,16 @@ interface EngineeringHighlight {
       display: flex;
       align-items: center;
       gap: 0.6rem;
-      transition: background 0.2s;
+      transition: all 0.2s;
     }
     .resume-dropdown button:hover {
-      background: #1e293b;
+      background: rgba(56, 189, 248, 0.1);
       color: #38bdf8;
+      padding-left: 1.2rem;
     }
     .resume-dropdown button.delete-btn:hover {
       color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
     }
     .resume-dropdown button.disabled {
       opacity: 0.4;
@@ -315,17 +322,24 @@ interface EngineeringHighlight {
       font-weight: 600;
     }
     .ticker-tag {
-      background: #0f172a;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.8) 100%);
       border: 1px solid #1e293b;
       color: #cbd5e1;
       padding: 0.2rem 0.6rem;
       border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .ticker-tag:hover {
+      border-color: #38bdf8;
+      color: #38bdf8;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(56, 189, 248, 0.2);
     }
     .ide-window {
       background: #090d16;
       border: 1px solid #1e293b;
       border-radius: 12px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 40px rgba(56, 189, 248, 0.1);
       overflow: hidden;
     }
     .ide-header {
@@ -371,6 +385,7 @@ interface EngineeringHighlight {
       margin-top: 3rem;
       border-top: 1px solid #1e293b;
       padding-top: 3rem;
+      animation: fadeInUp 0.8s ease-out 0.2s backwards;
     }
     .section-heading {
       font-size: 1.6rem;
@@ -387,20 +402,38 @@ interface EngineeringHighlight {
       gap: 1.5rem;
     }
     .highlight-card {
-      background: #0f172a;
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%);
       border: 1px solid #1e293b;
       padding: 1.75rem;
       border-radius: 10px;
-      transition: transform 0.2s, border-color 0.2s;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .highlight-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #38bdf8, transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
     }
     .highlight-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-5px);
       border-color: #38bdf8;
+      box-shadow: 0 8px 25px rgba(56, 189, 248, 0.2), 0 0 30px rgba(56, 189, 248, 0.1);
+    }
+    .highlight-card:hover::before {
+      opacity: 1;
     }
     .card-icon {
       font-size: 1.8rem;
       color: #38bdf8;
       margin-bottom: 1rem;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
     }
     .highlight-card h3 {
       font-size: 1.2rem;
@@ -425,6 +458,52 @@ interface EngineeringHighlight {
       font-size: 0.75rem;
       padding: 0.2rem 0.5rem;
       border-radius: 4px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      transition: all 0.2s;
+    }
+    .tag:hover {
+      background: rgba(56, 189, 248, 0.2);
+      border-color: rgba(56, 189, 248, 0.4);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes gradientShift {
+      0%, 100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    @keyframes glowPulse {
+      0%, 100% {
+        box-shadow: 0 0 5px rgba(56, 189, 248, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   `]
 })

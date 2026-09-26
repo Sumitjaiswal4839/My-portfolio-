@@ -5,13 +5,16 @@
     <!-- Filter/Tabs -->
     <div class="about-filters">
       <button [class.active]="activeFilter === 'bio'" (click)="setFilter('bio')">
-        <i class="fas fa-user"></i> Bio & Skills
+        <i class="fas fa-user"></i> Bio
+      </button>
+      <button [class.active]="activeFilter === 'skills'" (click)="setFilter('skills')">
+        <i class="fas fa-code"></i> Skills
       </button>
       <button [class.active]="activeFilter === 'education'" (click)="setFilter('education')">
         <i class="fas fa-graduation-cap"></i> Education
       </button>
       <button [class.active]="activeFilter === 'experience'" (click)="setFilter('experience')">
-        <i class="fas fa-history"></i> Other Work History
+        <i class="fas fa-briefcase"></i> Other Work Experience
       </button>
     </div>
 
@@ -56,6 +59,60 @@
         </div>
       </div>
 
+      <!-- Skills View -->
+      <div *ngIf="activeFilter === 'skills'" class="skills-view animated-fade">
+        <div class="skills-grid">
+          <!-- Cybersecurity Skills -->
+          <div class="skill-category">
+            <h3><i class="fas fa-shield-alt"></i> Cybersecurity</h3>
+            <div class="skill-tags">
+              <span class="skill-tag" *ngFor="let skill of technicalSkills.cybersecurity">{{ skill }}</span>
+            </div>
+          </div>
+
+          <!-- Development Skills -->
+          <div class="skill-category">
+            <h3><i class="fas fa-code"></i> Development</h3>
+            <div class="skill-tags">
+              <span class="skill-tag" *ngFor="let skill of technicalSkills.development">{{ skill }}</span>
+            </div>
+          </div>
+
+          <!-- Database Skills -->
+          <div class="skill-category">
+            <h3><i class="fas fa-database"></i> Databases</h3>
+            <div class="skill-tags">
+              <span class="skill-tag" *ngFor="let skill of technicalSkills.databases">{{ skill }}</span>
+            </div>
+          </div>
+
+          <!-- Tools -->
+          <div class="skill-category">
+            <h3><i class="fas fa-tools"></i> Tools & DevOps</h3>
+            <div class="skill-tags">
+              <span class="skill-tag" *ngFor="let skill of technicalSkills.tools">{{ skill }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certifications -->
+        <div class="certifications-section">
+          <h3><i class="fas fa-certificate"></i> Certifications</h3>
+          <div class="cert-grid">
+            <div class="cert-card" *ngFor="let cert of certifications" [class.coming-soon]="cert.comingSoon">
+              <div class="cert-icon"><i [class]="cert.icon"></i></div>
+              <div class="cert-details">
+                <h4>{{ cert.name }}</h4>
+                <p>{{ cert.issuer }} | {{ cert.year }}</p>
+              </div>
+              <div class="coming-soon-badge" *ngIf="cert.comingSoon">
+                <i class="fas fa-clock"></i> Coming Soon
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Education View -->
       <div *ngIf="activeFilter === 'education'" class="education-view animated-fade">
         <div class="edu-grid">
@@ -71,6 +128,7 @@
 
       <!-- Other Experience View -->
       <div *ngIf="activeFilter === 'experience'" class="experience-view animated-fade">
+        <h3><i class="fas fa-briefcase"></i> Other Work Experience</h3>
         <div class="exp-grid">
           <div class="exp-card-item" *ngFor="let exp of otherExperiences">
             <div class="exp-icon"><i [class]="exp.icon"></i></div>

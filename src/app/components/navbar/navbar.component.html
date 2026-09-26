@@ -6,7 +6,7 @@
     </div>
     <div class="logo-text-wrap">
       <span class="logo-name">Sumit Jaiswal</span>
-      <span class="logo-sub">{{ modeService.currentMode() === 'sde' ? '// Software Development' : '// Cybersecurity'
+      <span class="logo-sub">{{ modeService.currentMode() === 'sde' ? '// Software Engineer' : '// Security Researcher'
         }}</span>
     </div>
   </div>
@@ -15,11 +15,11 @@
   <div class="mode-pill-container">
     <button class="mode-pill-btn" [class.active-pill]="modeService.currentMode() === 'security'"
       (click)="switchMode('security')" title="Switch to Cybersecurity Path">
-      <i class="fas fa-shield-alt"></i> Cyber
+      <i class="fas fa-shield-alt"></i> Security
     </button>
     <button class="mode-pill-btn" [class.active-pill]="modeService.currentMode() === 'sde'" (click)="switchMode('sde')"
       title="Switch to SDE Path">
-      <i class="fas fa-laptop-code"></i> SDE
+      <i class="fas fa-laptop-code"></i> Engineering
     </button>
   </div>
 
@@ -28,19 +28,20 @@
       <!-- SDE Mode Links -->
       <ng-container *ngIf="modeService.currentMode() === 'sde'">
         <li><a routerLink="/sde" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}"
-            (click)="closeMenu()">Home</a></li>
+            (click)="closeMenu()">Overview</a></li>
       </ng-container>
 
       <!-- Cybersecurity Mode Links -->
       <ng-container *ngIf="modeService.currentMode() !== 'sde'">
         <li><a routerLink="/security" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}"
-            (click)="closeMenu()">Home</a></li>
+            (click)="closeMenu()">Overview</a></li>
 
       </ng-container>
 
       <!-- Shared across both modes -->
+      <li><a routerLink="/services" routerLinkActive="active-link" (click)="closeMenu()">Services</a></li>
       <li><a routerLink="/contact" routerLinkActive="active-link" (click)="closeMenu()">Contact</a></li>
-      <li><a routerLink="/links" routerLinkActive="active-link" (click)="closeMenu()">Links</a></li>
+      <li><a routerLink="/links" routerLinkActive="active-link" (click)="closeMenu()">Resources</a></li>
     </ul>
 
     <app-commit-button></app-commit-button>
@@ -52,27 +53,30 @@
     <div class="menu-toggle" (click)="toggleMenu()" aria-label="Toggle mobile navigation menu">
       <i [class]="mobileMenuOpen() ? 'fas fa-times' : 'fas fa-bars'"></i>
     </div>
+
+    <!-- Copyright -->
+    <div class="copyright-text">
+      © {{ currentYear }} Sumit Jaiswal
+    </div>
   </div>
 </nav>
 
 <!-- Sub Navbar for specific secondary sections -->
 <div class="sub-navbar">
   <ng-container *ngIf="modeService.currentMode() === 'sde'">
-    <a routerLink="/sde/projects" routerLinkActive="active-sub"><i class="fas fa-layer-group"></i> All Projects</a>
-    <a routerLink="/sde/skills" routerLinkActive="active-sub"><i class="fas fa-code"></i> Tech Stack</a>
-    <a routerLink="/sde/experience" routerLinkActive="active-sub"><i class="fas fa-briefcase"></i> Experience</a>
-    <a routerLink="/sde/blog" routerLinkActive="active-sub"><i class="fas fa-blog"></i> Tech Blog</a>
-    <a routerLink="/sde/achievements" routerLinkActive="active-sub"><i class="fas fa-trophy"></i> Achievements</a>
+    <a routerLink="/sde/projects" routerLinkActive="active-sub"><i class="fas fa-project-diagram"></i> Projects</a>
+    <a routerLink="/sde/skills" routerLinkActive="active-sub"><i class="fas fa-microchip"></i> Tech Stack</a>
+    <a routerLink="/sde/blog" routerLinkActive="active-sub"><i class="fas fa-newspaper"></i> Blog</a>
+    <a routerLink="/sde/achievements" routerLinkActive="active-sub"><i class="fas fa-award"></i> Achievements</a>
   </ng-container>
 
   <ng-container *ngIf="modeService.currentMode() !== 'sde'">
     <a routerLink="/security/certifications" routerLinkActive="active-sub"><i class="fas fa-certificate"></i>
       Certifications</a>
-    <a routerLink="/security/projects" routerLinkActive="active-sub"><i class="fas fa-bug"></i> Writeups & Projects</a>
-    <a routerLink="/security/experience" routerLinkActive="active-sub"><i class="fas fa-briefcase"></i> Experience</a>
+    <a routerLink="/security/projects" routerLinkActive="active-sub"><i class="fas fa-bug"></i> Projects & Writeups</a>
     <a routerLink="/security/tools" routerLinkActive="active-sub"><i class="fas fa-tools"></i> Security Tools</a>
-    <a routerLink="/security/blog" routerLinkActive="active-sub"><i class="fas fa-blog"></i> Security Blog</a>
-    <a routerLink="/security/achievements" routerLinkActive="active-sub"><i class="fas fa-trophy"></i> Achievements</a>
+    <a routerLink="/security/blog" routerLinkActive="active-sub"><i class="fas fa-newspaper"></i> Blog</a>
+    <a routerLink="/security/achievements" routerLinkActive="active-sub"><i class="fas fa-award"></i> Achievements</a>
   </ng-container>
 </div>
 

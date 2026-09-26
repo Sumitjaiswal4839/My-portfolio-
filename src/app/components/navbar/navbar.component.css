@@ -15,6 +15,16 @@
   animation: slideDown 0.5s ease;
 }
 
+.copyright-text {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-left: 1rem;
+  font-weight: 500;
+  white-space: nowrap;
+  border-left: 1px solid rgba(100, 116, 139, 0.3);
+  padding-left: 1rem;
+}
+
 @keyframes slideDown {
   from { transform: translateY(-100%); }
   to { transform: translateY(0); }
@@ -298,6 +308,10 @@
     height: 60px;
   }
 
+  .copyright-text {
+    display: none;
+  }
+
   .logo {
     gap: 0.4rem;
   }
@@ -415,6 +429,33 @@
   }
 
   .threat-level {
+    display: none;
+  }
+
+  .nav-right {
+    gap: 0.4rem;
+  }
+
+  .theme-toggle {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .menu-toggle {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .navbar {
+    padding: 0 0.5rem;
+  }
+
+  .logo-name {
+    font-size: 0.85rem;
+  }
+
+  .mode-pill-container {
     display: none;
   }
 }

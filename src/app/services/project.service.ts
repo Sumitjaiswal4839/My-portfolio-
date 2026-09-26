@@ -64,10 +64,12 @@ export class ProjectService {
                 return !dbGithubLinks.has(githubUrl);
               });
 
-            return [
-              ...dbProjects,
-              ...uniqueGithubProjects
-            ];
+            return [...dbProjects, ...uniqueGithubProjects].sort((a, b) => {
+              if (!!a.pinned !== !!b.pinned) {
+                return a.pinned ? -1 : 1;
+              }
+              return 0;
+            });
           })
         )
       ),
@@ -288,5 +290,24 @@ export class ProjectService {
 
   deleteProject(id: string) {
     return this.dataService.deleteProject(id);
+  }
+
+  async togglePin(project: Project): Promise<void> {
+    const nextPinned = !project.pinned;
+    const isGithubOnly = !!project.isGitHubRepo || project.id.startsWith('github-');
+
+    if (isGithubOnly) {
+      await this.dataService.addProject({
+        title: project.title,
+        type: project.type,
+        liveLink: project.liveLink || '',
+        githubLink: project.githubLink || '',
+        description: project.description,
+        pinned: true
+      });
+      return;
+    }
+
+    await this.dataService.updateProject(project.id, { pinned: nextPinned });
   }
 }

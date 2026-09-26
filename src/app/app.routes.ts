@@ -28,6 +28,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/linktree/linktree.component').then(m => m.LinktreeComponent) 
   },
   { 
+    path: 'services', 
+    loadComponent: () => import('./components/services/services.component').then(m => m.ServicesComponent) 
+  },
+  { 
     path: 'landing', 
     loadComponent: () => import('./features/landing/landing.component').then(m => m.LandingComponent)
   },

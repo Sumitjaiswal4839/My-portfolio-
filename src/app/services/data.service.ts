@@ -52,6 +52,7 @@ export interface Project {
   githubLink: string;
   description: string;
   isGitHubRepo?: boolean;
+  pinned?: boolean;
 }
 
 @Injectable({
