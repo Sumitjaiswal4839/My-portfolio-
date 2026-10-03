@@ -53,6 +53,44 @@
           <textarea id="description" name="description" [(ngModel)]="newProject.description" required rows="4" placeholder="Describe the system architecture, stack, and features..."></textarea>
         </div>
 
+        <div class="form-group">
+          <label for="cardDescription">Card Description (Short)</label>
+          <textarea id="cardDescription" name="cardDescription" [(ngModel)]="newProject.cardDescription" rows="2" placeholder="Short description that will appear on the project card (max 150 characters)..."></textarea>
+          <small class="help-text">This will be displayed on the project card. Keep it brief and engaging.</small>
+        </div>
+
+        <div class="form-group">
+          <label>Project Details</label>
+          <div class="details-type-selector">
+            <label class="radio-option">
+              <input type="radio" name="detailsType" value="text" [(ngModel)]="newProject.detailsFileType" (change)="clearFileInput()">
+              <span>Write Details</span>
+            </label>
+            <label class="radio-option">
+              <input type="radio" name="detailsType" value="file" [(ngModel)]="newProject.detailsFileType" (change)="clearTextInput()">
+              <span>Upload File (PDF/DOCX)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" *ngIf="newProject.detailsFileType === 'text'">
+          <label for="fullDetails">Full Project Details</label>
+          <textarea id="fullDetails" name="fullDetails" [(ngModel)]="newProject.fullDetails" rows="8" placeholder="Enter complete project details, technical specifications, implementation details, and results..."></textarea>
+          <small class="help-text">This will be displayed on the project details page when users click on Details.</small>
+        </div>
+
+        <div class="form-group" *ngIf="newProject.detailsFileType === 'file'">
+          <label for="detailsFile">Upload Project File (PDF/DOCX)</label>
+          <input type="file" id="detailsFile" name="detailsFile" (change)="onFileSelected($event)" accept=".pdf,.docx,.doc" class="file-input">
+          <small class="help-text">Accepted formats: PDF, DOCX. Max size: 5MB. This file will open in a new tab when users click Details.</small>
+          <div *ngIf="selectedFileName" class="selected-file">
+            <i class="fas fa-file"></i> {{ selectedFileName }}
+            <button type="button" class="remove-file-btn" (click)="removeFile()">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+
         <div class="form-group checkbox-group">
           <label>
             <input type="checkbox" name="pinned" [(ngModel)]="newProject.pinned">
@@ -92,7 +130,7 @@
           </div>
         </div>
         <h3>{{ project.title }}</h3>
-        <p class="description">{{ project.description }}</p>
+        <p class="description">{{ project.cardDescription || project.description }}</p>
         <div class="project-links">
           <a [routerLink]="['/project', project.id]" class="link-icon" style="color: var(--primary-color);">
             <i class="fas fa-info-circle"></i> Details
