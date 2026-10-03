@@ -51,6 +51,10 @@ export interface Project {
   liveLink: string;
   githubLink: string;
   description: string;
+  cardDescription: string; // Short description for card display
+  fullDetails: string; // Full detailed description
+  detailsFileUrl: string; // URL for uploaded file (PDF/DOCX)
+  detailsFileType: string; // Type of file (pdf, docx, text)
   isGitHubRepo?: boolean;
   pinned?: boolean;
 }
@@ -234,6 +238,31 @@ export class DataService {
   async updateProject(id: string, project: Partial<Project>) {
     if (!this.db) return;
     await updateDoc(doc(this.db, "projects", id), project as any);
+  }
+
+  async uploadProjectFile(file: File): Promise<string> {
+    if (!file) {
+      throw new Error('No file provided');
+    }
+
+    const validTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'];
+    if (!validTypes.includes(file.type)) {
+      throw new Error('Invalid file type. Only PDF and DOCX files are allowed.');
+    }
+
+    const MAX_SIZE_BYTES = 5 * 1024 * 1024;
+    if (file.size > MAX_SIZE_BYTES) {
+      throw new Error('File size exceeds the 5MB limit.');
+    }
+
+    const fileExtension = file.type === 'application/pdf' ? 'pdf' : 'docx';
+    const filePath = `project-documents/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+    const storageRef = ref(this.storage, filePath);
+
+    const snapshot = await uploadBytes(storageRef, file);
+    const downloadUrl = await getDownloadURL(snapshot.ref);
+
+    return downloadUrl;
   }
 
   // Resume (Document path settings/resume matched with firestore.rules)

@@ -24,6 +24,18 @@
         <p class="description-text">{{ project.description }}</p>
       </div>
 
+      <div class="project-full-details-card" *ngIf="project.fullDetails || project.detailsFileUrl">
+        <h3>Project Details</h3>
+        <div *ngIf="project.detailsFileUrl && project.detailsFileType !== 'text'" class="file-viewer">
+          <a [href]="project.detailsFileUrl" target="_blank" rel="noopener noreferrer" class="btn btn-primary open-file-btn">
+            <i class="fas fa-external-link-alt"></i> Open {{ project.detailsFileType === 'pdf' ? 'PDF' : 'Document' }} in New Tab
+          </a>
+        </div>
+        <div *ngIf="project.fullDetails" class="full-details-content">
+          <div class="details-text" [innerHTML]="project.fullDetails"></div>
+        </div>
+      </div>
+
       <div class="project-links-card">
         <h3>Links & Resources</h3>
         <div class="links-container">

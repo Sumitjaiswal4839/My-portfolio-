@@ -17,7 +17,7 @@ interface Certification {
   styleUrls: ['./about.component.css']
 })
 export class AboutComponent {
-  activeFilter: 'bio' | 'education' | ' Other experience' | 'skills' = 'bio';
+  activeFilter: 'bio' | 'education' | 'experience' | 'skills' = 'bio';
 
   careerObjective = "My passion for cybersecurity started back in 10th grade. Every time I watched a hacking movie, I felt an intense curiosity and itch to figure out how it all actually worked behind the scenes. That curiosity drove me to start digging for details—researching where to study cybersecurity, how to learn the concepts, what skills to build, and mapping out the exact steps needed to get into this field. Since then, I've been constantly learning and building my path in securing digital systems.";
 

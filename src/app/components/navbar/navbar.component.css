@@ -13,6 +13,7 @@
   z-index: 1000;
   box-shadow: 0 2px 20px rgba(0, 255, 65, 0.1);
   animation: slideDown 0.5s ease;
+  gap: 1rem;
 }
 
 .copyright-text {
@@ -94,12 +95,14 @@
 
 /* Mode Switcher Pill */
 .mode-pill-container {
-  display: flex;
+  display: flex !important;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid var(--border-color, #27272a);
   border-radius: 9999px;
   padding: 3px;
   gap: 3px;
+  position: relative;
+  z-index: 10;
 }
 
 .mode-pill-btn {
@@ -336,6 +339,7 @@
   .mode-pill-container {
     padding: 2px;
     gap: 2px;
+    display: flex !important;
   }
 
   .mode-pill-btn {
@@ -426,6 +430,10 @@
 
   .mode-pill-btn span {
     display: none;
+  }
+
+  .mode-pill-container {
+    display: flex;
   }
 
   .threat-level {

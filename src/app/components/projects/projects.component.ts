@@ -6,6 +6,7 @@ import { ProjectService, Project } from '../../services/project.service';
 import { AdminOnlyDirective } from '../../directives/admin-only.directive';
 import { AdminService } from '../../services/admin.service';
 import { ModeService } from '../../core/services/mode.service';
+import { DataService } from '../../services/data.service';
 import { map } from 'rxjs';
 
 @Component({
@@ -20,8 +21,11 @@ export class ProjectsComponent implements OnInit {
   private modeService = inject(ModeService);
   private router = inject(Router);
   public adminService = inject(AdminService);
+  private dataService = inject(DataService);
 
   public isSdeMode = true;
+  selectedFileName: string = '';
+  selectedFile: File | null = null;
 
   // Filter projects strictly based on current mode [SDE vs Cybersecurity segregation]
   projects$ = this.projectService.projects$;
@@ -38,6 +42,10 @@ export class ProjectsComponent implements OnInit {
     liveLink: '',
     githubLink: '',
     description: '',
+    cardDescription: '',
+    fullDetails: '',
+    detailsFileUrl: '',
+    detailsFileType: 'text',
     pinned: false
   };
 
@@ -60,17 +68,35 @@ export class ProjectsComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  async onSubmit() {
     if (this.newProject.title && this.newProject.description) {
       this.isSaving = true;
       this.newProject.type = this.isSdeMode ? 'normal' : 'cyber';
-      
+
+      // Handle file upload if selected
+      if (this.selectedFile && this.newProject.detailsFileType === 'file') {
+        try {
+          const fileUrl = await this.uploadProjectFile(this.selectedFile);
+          this.newProject.detailsFileUrl = fileUrl;
+          this.newProject.detailsFileType = this.selectedFile.type === 'application/pdf' ? 'pdf' : 'docx';
+        } catch (error) {
+          alert('File upload failed. Please try again.');
+          this.isSaving = false;
+          return;
+        }
+      }
+
+      // If card description is empty, use first 150 chars of description
+      if (!this.newProject.cardDescription && this.newProject.description) {
+        this.newProject.cardDescription = this.newProject.description.substring(0, 150);
+      }
+
       if (this.isEditing) {
         this.projectService.updateProject(this.editingId, this.newProject);
       } else {
         this.projectService.addProject(this.newProject);
       }
-      
+
       setTimeout(() => {
         this.isSaving = false;
         this.toggleAddForm();
@@ -104,7 +130,59 @@ export class ProjectsComponent implements OnInit {
       liveLink: '',
       githubLink: '',
       description: '',
+      cardDescription: '',
+      fullDetails: '',
+      detailsFileUrl: '',
+      detailsFileType: 'text',
       pinned: false
     };
+    this.selectedFileName = '';
+    this.selectedFile = null;
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validate file type
+      const validTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'];
+      if (!validTypes.includes(file.type)) {
+        alert('Please upload only PDF or DOCX files.');
+        return;
+      }
+
+      // Validate file size (5MB max)
+      const maxSize = 5 * 1024 * 1024;
+      if (file.size > maxSize) {
+        alert('File size exceeds 5MB limit. Please upload a smaller file.');
+        return;
+      }
+
+      this.selectedFile = file;
+      this.selectedFileName = file.name;
+    }
+  }
+
+  removeFile() {
+    this.selectedFile = null;
+    this.selectedFileName = '';
+  }
+
+  clearFileInput() {
+    this.selectedFile = null;
+    this.selectedFileName = '';
+  }
+
+  clearTextInput() {
+    this.newProject.fullDetails = '';
+  }
+
+  async uploadProjectFile(file: File): Promise<string> {
+    try {
+      const fileUrl = await this.dataService.uploadProjectFile(file);
+      return fileUrl;
+    } catch (error) {
+      console.error('File upload failed:', error);
+      throw error;
+    }
   }
 }

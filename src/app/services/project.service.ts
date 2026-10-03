@@ -303,6 +303,10 @@ export class ProjectService {
         liveLink: project.liveLink || '',
         githubLink: project.githubLink || '',
         description: project.description,
+        cardDescription: project.cardDescription || '',
+        fullDetails: project.fullDetails || '',
+        detailsFileUrl: project.detailsFileUrl || '',
+        detailsFileType: project.detailsFileType || 'text',
         pinned: true
       });
       return;
