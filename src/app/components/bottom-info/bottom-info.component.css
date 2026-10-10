@@ -255,3 +255,115 @@
 
 
 
+/* Mobile Menu Overlay for Bottom Info */
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 7, 20, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 20000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.mobile-menu-content {
+  width: 90%;
+  max-width: 400px;
+  background: var(--card-bg, #0a1118);
+  border: 1px solid var(--primary, #00ff41);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin: auto;
+}
+
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+.mobile-menu-header h3 {
+  color: var(--primary, #00ff41);
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.close-mobile-menu {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.close-mobile-menu:hover {
+  color: #ff6b6b;
+}
+
+.mobile-menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.mobile-menu-items::-webkit-scrollbar {
+    width: 6px;
+}
+.mobile-menu-items::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+.mobile-menu-items::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+.mobile-menu-items a {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  text-decoration: none;
+  color: var(--text, #e2e8f0);
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.mobile-menu-items a:hover {
+  background: rgba(0, 255, 65, 0.1);
+  color: var(--primary, #00ff41);
+}
+
+.mobile-menu-items a i {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.mobile-menu-divider {
+  height: 1px;
+  background: rgba(0, 255, 65, 0.2);
+  margin: 0.5rem 0;
+}
+
+/* Hide dock on desktop (only show on mobile) */
+@media (min-width: 769px) {
+  .dock-wrapper {
+    display: none !important;
+  }
+}
+

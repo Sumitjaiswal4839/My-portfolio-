@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 import { modeGuard } from './core/services/mode.guard';
 
 export const routes: Routes = [
-  { 
-    path: '', 
+  {
+    path: '',
     loadComponent: () => import('./features/landing/landing.component').then(m => m.LandingComponent),
     canActivate: [modeGuard]
   },
@@ -15,25 +15,29 @@ export const routes: Routes = [
     path: 'security',
     loadChildren: () => import('./features/security/security.routes').then(m => m.SECURITY_ROUTES)
   },
-  { 
-    path: 'about', 
-    loadComponent: () => import('./components/about/about.component').then(m => m.AboutComponent) 
+  {
+    path: 'about',
+    loadComponent: () => import('./components/about/about.component').then(m => m.AboutComponent)
   },
-  { 
-    path: 'contact', 
-    loadComponent: () => import('./components/contact/contact.component').then(m => m.ContactComponent) 
+  {
+    path: 'contact',
+    loadComponent: () => import('./components/contact/contact.component').then(m => m.ContactComponent)
   },
-  { 
-    path: 'links', 
-    loadComponent: () => import('./components/linktree/linktree.component').then(m => m.LinktreeComponent) 
+  {
+    path: 'links',
+    loadComponent: () => import('./components/linktree/linktree.component').then(m => m.LinktreeComponent)
   },
-  { 
-    path: 'services', 
-    loadComponent: () => import('./components/services/services.component').then(m => m.ServicesComponent) 
+  {
+    path: 'services',
+    loadComponent: () => import('./components/services/services.component').then(m => m.ServicesComponent)
   },
-  { 
-    path: 'landing', 
+  {
+    path: 'landing',
     loadComponent: () => import('./features/landing/landing.component').then(m => m.LandingComponent)
+  },
+  {
+    path: 'project/:id',
+    loadComponent: () => import('./components/project-detail/project-detail.component').then(m => m.ProjectDetailComponent)
   },
   { path: '**', redirectTo: '' }
 ];

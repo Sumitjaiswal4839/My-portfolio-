@@ -53,6 +53,13 @@ import { DataService } from './services/data.service';
     .main-content {
       position: relative;
       z-index: 1;
+      min-height: 100vh;
+    }
+
+    @media (max-width: 768px) {
+      .main-content {
+        padding-bottom: 70px;
+      }
     }
   `]
 })

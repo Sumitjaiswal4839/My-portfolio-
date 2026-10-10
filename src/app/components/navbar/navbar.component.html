@@ -11,48 +11,42 @@
     </div>
   </div>
 
-  <!-- Mode Switcher Pill in Navbar -->
-  <div class="mode-pill-container">
-    <button class="mode-pill-btn" [class.active-pill]="modeService.currentMode() === 'security'"
-      (click)="switchMode('security')" title="Switch to Cybersecurity Path">
-      <i class="fas fa-shield-alt"></i> Security
-    </button>
-    <button class="mode-pill-btn" [class.active-pill]="modeService.currentMode() === 'sde'" (click)="switchMode('sde')"
-      title="Switch to SDE Path">
-      <i class="fas fa-laptop-code"></i> Engineering
-    </button>
-  </div>
+  <!-- Center Navigation Links -->
+  <ul class="nav-links" [class.mobile-active]="mobileMenuOpen()">
+    <!-- SDE Mode Links -->
+    <ng-container *ngIf="modeService.currentMode() === 'sde'">
+      <li><a routerLink="/sde" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">Overview</a></li>
+    </ng-container>
+
+    <!-- Cybersecurity Mode Links -->
+    <ng-container *ngIf="modeService.currentMode() !== 'sde'">
+      <li><a routerLink="/security" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">Overview</a></li>
+    </ng-container>
+
+    <!-- Shared across both modes -->
+    <li><a routerLink="/about" routerLinkActive="active-link" (click)="closeMenu()">About</a></li>
+    <li><a [routerLink]="modeService.currentMode() === 'sde' ? '/sde/experience' : '/security/experience'" routerLinkActive="active-link" (click)="closeMenu()">Experience</a></li>
+    <li><a routerLink="/services" routerLinkActive="active-link" (click)="closeMenu()">Services</a></li>
+    <li><a routerLink="/contact" routerLinkActive="active-link" (click)="closeMenu()">Contact</a></li>
+    <li><a routerLink="/links" routerLinkActive="active-link" (click)="closeMenu()">Resources</a></li>
+  </ul>
 
   <div class="nav-right">
-    <ul class="nav-links" [class.mobile-active]="mobileMenuOpen()">
-      <!-- SDE Mode Links -->
-      <ng-container *ngIf="modeService.currentMode() === 'sde'">
-        <li><a routerLink="/sde" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}"
-            (click)="closeMenu()">Overview</a></li>
-      </ng-container>
-
-      <!-- Cybersecurity Mode Links -->
-      <ng-container *ngIf="modeService.currentMode() !== 'sde'">
-        <li><a routerLink="/security" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}"
-            (click)="closeMenu()">Overview</a></li>
-
-      </ng-container>
-
-      <!-- Shared across both modes -->
-      <li><a routerLink="/services" routerLinkActive="active-link" (click)="closeMenu()">Services</a></li>
-      <li><a routerLink="/contact" routerLinkActive="active-link" (click)="closeMenu()">Contact</a></li>
-      <li><a routerLink="/links" routerLinkActive="active-link" (click)="closeMenu()">Resources</a></li>
-    </ul>
+    <!-- Mode Switcher Pill in Navbar -->
+    <div class="mode-pill-container">
+      <button class="mode-pill-btn" [class.active-pill]="modeService.currentMode() === 'security'" (click)="switchMode('security')" title="Switch to Cybersecurity Path">
+        <i class="fas fa-shield-alt"></i> Security
+      </button>
+      <button class="mode-pill-btn" [class.active-pill]="modeService.currentMode() === 'sde'" (click)="switchMode('sde')" title="Switch to SDE Path">
+        <i class="fas fa-laptop-code"></i> Engineering
+      </button>
+    </div>
 
     <app-commit-button></app-commit-button>
 
     <button class="theme-toggle" (click)="toggleTheme()" aria-label="Toggle dark/light theme" title="Toggle theme">
       <i [class]="themeService.isDark() ? 'fas fa-moon' : 'fas fa-sun'"></i>
     </button>
-
-    <div class="menu-toggle" (click)="toggleMenu()" aria-label="Toggle mobile navigation menu">
-      <i [class]="mobileMenuOpen() ? 'fas fa-times' : 'fas fa-bars'"></i>
-    </div>
 
     <!-- Copyright -->
     <div class="copyright-text">

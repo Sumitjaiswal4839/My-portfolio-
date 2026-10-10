@@ -73,13 +73,20 @@ export class ProjectsComponent implements OnInit {
       this.isSaving = true;
       this.newProject.type = this.isSdeMode ? 'normal' : 'cyber';
 
+      console.log('Submitting project:', this.newProject);
+      console.log('Selected file:', this.selectedFile);
+      console.log('Details file type:', this.newProject.detailsFileType);
+
       // Handle file upload if selected
       if (this.selectedFile && this.newProject.detailsFileType === 'file') {
         try {
+          console.log('Starting file upload...');
           const fileUrl = await this.uploadProjectFile(this.selectedFile);
           this.newProject.detailsFileUrl = fileUrl;
           this.newProject.detailsFileType = this.selectedFile.type === 'application/pdf' ? 'pdf' : 'docx';
+          console.log('File uploaded successfully, URL:', fileUrl);
         } catch (error) {
+          console.error('File upload error:', error);
           alert('File upload failed. Please try again.');
           this.isSaving = false;
           return;
@@ -90,6 +97,8 @@ export class ProjectsComponent implements OnInit {
       if (!this.newProject.cardDescription && this.newProject.description) {
         this.newProject.cardDescription = this.newProject.description.substring(0, 150);
       }
+
+      console.log('Final project data before save:', this.newProject);
 
       if (this.isEditing) {
         this.projectService.updateProject(this.editingId, this.newProject);
@@ -143,6 +152,8 @@ export class ProjectsComponent implements OnInit {
   onFileSelected(event: any) {
     const file = event.target.files?.[0];
     if (file) {
+      console.log('File selected:', file.name, file.type, file.size);
+
       // Validate file type
       const validTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'];
       if (!validTypes.includes(file.type)) {
@@ -159,6 +170,8 @@ export class ProjectsComponent implements OnInit {
 
       this.selectedFile = file;
       this.selectedFileName = file.name;
+      this.newProject.detailsFileType = 'file';
+      console.log('File stored, detailsFileType set to:', this.newProject.detailsFileType);
     }
   }
 

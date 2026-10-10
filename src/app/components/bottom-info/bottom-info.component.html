@@ -1,7 +1,7 @@
 <div class="dock-wrapper">
   <div class="dock-container">
     <!-- Home -->
-    <a [routerLink]="getHomeLink()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="dock-item">
+    <a [routerLink]="getHomeLink()" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="dock-item" (click)="closeMenu()">
       <div class="dock-icon-bg">
         <div class="dock-icon"><i class="fas fa-home"></i></div>
       </div>
@@ -9,23 +9,71 @@
     </a>
 
     <!-- About -->
-    <a routerLink="/about" routerLinkActive="active" class="dock-item">
+    <a routerLink="/about" routerLinkActive="active" class="dock-item" (click)="closeMenu()">
       <div class="dock-icon-bg">
         <div class="dock-icon"><i class="fas fa-user-astronaut"></i></div>
       </div>
       <span class="dock-label">About</span>
     </a>
 
-    <!-- Experience -->
-    <a [routerLink]="getExperienceLink()" routerLinkActive="active" class="dock-item">
+    <!-- Menu Toggle -->
+    <a class="dock-item" (click)="toggleMenu()" [class.active]="mobileMenuOpen()">
       <div class="dock-icon-bg">
-        <div class="dock-icon"><i class="fas fa-briefcase"></i></div>
+        <div class="dock-icon"><i [class]="mobileMenuOpen() ? 'fas fa-times' : 'fas fa-bars'"></i></div>
       </div>
-      <span class="dock-label">Experience</span>
+      <span class="dock-label">Menu</span>
     </a>
+
+    <!-- Theme Toggle -->
+    <a class="dock-item" (click)="toggleTheme()">
+      <div class="dock-icon-bg">
+        <div class="dock-icon"><i [class]="themeService.isDark() ? 'fas fa-moon' : 'fas fa-sun'"></i></div>
+      </div>
+      <span class="dock-label">Theme</span>
+    </a>
+
+
   </div>
 </div>
 
-
-
-
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" [class.active]="mobileMenuOpen()" (click)="closeMenu()">
+  <div class="mobile-menu-content" (click)="$event.stopPropagation()">
+    <div class="mobile-menu-header">
+      <h3>Navigation</h3>
+      <button class="close-mobile-menu" (click)="closeMenu()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="mobile-menu-items">
+      <a [routerLink]="getHomeLink()" (click)="closeMenu()">
+        <i class="fas fa-home"></i> Home
+      </a>
+      <a routerLink="/about" (click)="closeMenu()">
+        <i class="fas fa-user"></i> About
+      </a>
+      <a routerLink="/services" (click)="closeMenu()">
+        <i class="fas fa-cogs"></i> Services
+      </a>
+      <a routerLink="/contact" (click)="closeMenu()">
+        <i class="fas fa-envelope"></i> Contact
+      </a>
+      <a routerLink="/links" (click)="closeMenu()">
+        <i class="fas fa-link"></i> Resources
+      </a>
+      <div class="mobile-menu-divider"></div>
+      <a *ngIf="modeService.currentMode() === 'sde'" routerLink="/sde/projects" (click)="closeMenu()">
+        <i class="fas fa-project-diagram"></i> SDE Projects
+      </a>
+      <a *ngIf="modeService.currentMode() !== 'sde'" routerLink="/security/projects" (click)="closeMenu()">
+        <i class="fas fa-bug"></i> Security Projects
+      </a>
+      <a *ngIf="modeService.currentMode() === 'sde'" routerLink="/sde/skills" (click)="closeMenu()">
+        <i class="fas fa-microchip"></i> Tech Stack
+      </a>
+      <a *ngIf="modeService.currentMode() !== 'sde'" routerLink="/security/certifications" (click)="closeMenu()">
+        <i class="fas fa-certificate"></i> Certifications
+      </a>
+    </div>
+  </div>
+</div>

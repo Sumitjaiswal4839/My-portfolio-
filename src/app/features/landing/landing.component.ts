@@ -50,14 +50,76 @@ import { ModeService, PortfolioMode } from '../../core/services/mode.service';
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      width: 100vw;
+      width: 100%;
       background: linear-gradient(135deg, #050505 0%, #0a0e27 100%);
       color: #fff;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 1000;
+      position: relative;
+      z-index: 1;
+      padding-top: 70px;
+      padding-bottom: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .landing-container {
+        padding-top: 60px;
+        padding-bottom: 80px;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .choice-box {
+        padding: 2rem 1.5rem;
+        max-width: 100%;
+      }
+
+      .buttons {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .btn {
+        min-width: 100%;
+        padding: 1.25rem 1.5rem;
+      }
+
+      .name-title {
+        font-size: 2rem;
+      }
+
+      .selection-title {
+        font-size: 1.25rem;
+      }
+
+      .quick-links {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .landing-container {
+        padding-top: 60px;
+        padding-bottom: 80px;
+        padding-left: 15px;
+        padding-right: 15px;
+      }
+
+      .choice-box {
+        padding: 1.5rem 1rem;
+      }
+
+      .name-title {
+        font-size: 1.75rem;
+      }
+
+      .tagline {
+        font-size: 0.9rem;
+      }
+
+      .logo-icon {
+        font-size: 2.5rem;
+      }
     }
     .choice-box {
       text-align: center;
@@ -189,10 +251,15 @@ import { ModeService, PortfolioMode } from '../../core/services/mode.service';
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      pointer-events: auto;
+      cursor: pointer;
     }
     .quick-link:hover {
       color: #00ff41;
       background: rgba(0, 255, 65, 0.1);
+    }
+    .quick-link:active {
+      transform: scale(0.95);
     }
 
     @keyframes fadeInUp {

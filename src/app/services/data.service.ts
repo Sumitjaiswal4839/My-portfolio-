@@ -245,6 +245,8 @@ export class DataService {
       throw new Error('No file provided');
     }
 
+    console.log('Starting file upload:', file.name, file.type, file.size);
+
     const validTypes = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/msword'];
     if (!validTypes.includes(file.type)) {
       throw new Error('Invalid file type. Only PDF and DOCX files are allowed.');
@@ -255,14 +257,25 @@ export class DataService {
       throw new Error('File size exceeds the 5MB limit.');
     }
 
-    const fileExtension = file.type === 'application/pdf' ? 'pdf' : 'docx';
-    const filePath = `project-documents/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
-    const storageRef = ref(this.storage, filePath);
+    try {
+      const fileExtension = file.type === 'application/pdf' ? 'pdf' : 'docx';
+      const filePath = `project-documents/${Date.now()}_${file.name.replace(/\s+/g, '_')}`;
+      console.log('File path:', filePath);
 
-    const snapshot = await uploadBytes(storageRef, file);
-    const downloadUrl = await getDownloadURL(snapshot.ref);
+      const storageRef = ref(this.storage, filePath);
+      console.log('Storage ref created:', storageRef);
 
-    return downloadUrl;
+      const snapshot = await uploadBytes(storageRef, file);
+      console.log('Upload successful:', snapshot);
+
+      const downloadUrl = await getDownloadURL(snapshot.ref);
+      console.log('Download URL obtained:', downloadUrl);
+
+      return downloadUrl;
+    } catch (error) {
+      console.error('File upload error:', error);
+      throw new Error(`File upload failed: ${error}`);
+    }
   }
 
   // Resume (Document path settings/resume matched with firestore.rules)
