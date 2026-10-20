@@ -23,7 +23,12 @@
             "assets": [
               "src/favicon.png",
               "src/assets",
-              "src/_redirects"
+              "src/_redirects",
+              {
+                "glob": "**/*",
+                "input": "src/.well-known",
+                "output": "/.well-known"
+              }
             ],
             "styles": [
               "src/styles.css"
