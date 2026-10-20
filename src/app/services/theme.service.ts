@@ -8,10 +8,13 @@ export class ThemeService {
 
   toggleTheme(): void {
     this.isDark.update(v => !v);
-    document.body.setAttribute('data-theme', this.isDark() ? 'dark' : 'light');
+    const theme = this.isDark() ? 'dark' : 'light';
+    document.body.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
   }
 
   initTheme(): void {
     document.body.setAttribute('data-theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
   }
 }

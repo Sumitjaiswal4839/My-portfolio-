@@ -11,14 +11,12 @@ import {
 } from 'firebase/auth';
 import { FirebaseAppService } from '../core/services/firebase-app.service';
 
-export const ADMIN_EMAIL = 'sj0269950@gmail.com';
-
 /**
  * Admin authentication & session management [SECURITY 3.2]
  * - Real Firebase Auth integration
  * - browserSessionPersistence (session ends when tab closes)
- * - Admin verification via verified email / custom claim
- * - No hardcoded passwords
+ * - Admin verification via verified email / custom claim (admin: true)
+ * - No hardcoded admin email or passwords in bundle
  */
 @Injectable({
   providedIn: 'root'
@@ -37,39 +35,43 @@ export class AdminService {
       console.warn('Could not set browserSessionPersistence on auth:', err);
     });
 
-    // Listen to auth state changes
-    onAuthStateChanged(auth, (user: User | null) => {
-      this.updateAdminState(user);
-    });
-
-    // Built-in token refresh
+    // Listen to token changes (fires on sign-in, sign-out, and token refresh)
     onIdTokenChanged(auth, (user: User | null) => {
-      this.updateAdminState(user);
+      void this.updateAdminState(user, false);
     });
   }
 
-  private async updateAdminState(user: User | null): Promise<void> {
+  private withTimeout<T>(p: Promise<T>, ms = 15000): Promise<T> {
+    return Promise.race([
+      p,
+      new Promise<never>((_, rej) => setTimeout(() => rej(new Error('LOGIN_TIMEOUT')), ms)),
+    ]);
+  }
+
+  private async updateAdminState(user: User | null, forceRefresh = false): Promise<boolean> {
     this._currentUser.next(user);
     if (user) {
       if (!user.emailVerified) {
         console.warn('Admin login blocked: Email not verified.');
         this._isAdmin.next(false);
-        return;
+        return false;
       }
       try {
-        const tokenResult = await user.getIdTokenResult(true);
-        if (tokenResult.claims['admin'] === true) {
-          this._isAdmin.next(true);
-        } else {
+        const tokenResult = await user.getIdTokenResult(forceRefresh);
+        const isAdmin = tokenResult.claims['admin'] === true;
+        if (!isAdmin) {
           console.warn('User authenticated, but lacks admin custom claim.');
-          this._isAdmin.next(false);
         }
+        this._isAdmin.next(isAdmin);
+        return isAdmin;
       } catch (err) {
         console.error('Failed to fetch token claims:', err);
         this._isAdmin.next(false);
+        return false;
       }
     } else {
       this._isAdmin.next(false);
+      return false;
     }
   }
 
@@ -82,28 +84,56 @@ export class AdminService {
   }
 
   /**
-   * Real login with email and password via Firebase Auth.
+   * Real login with email and password via Firebase Auth with timeout protection.
    */
-  public async login(password: string, email: string = ADMIN_EMAIL): Promise<boolean> {
+  public async login(param1: string, param2?: string): Promise<boolean> {
+    let email = '';
+    let password = '';
+
+    if (param2 !== undefined) {
+      if (param1.includes('@')) {
+        email = param1;
+        password = param2;
+      } else {
+        password = param1;
+        email = param2;
+      }
+    } else if (param1.includes(':')) {
+      const parts = param1.split(':');
+      email = parts[0];
+      password = parts.slice(1).join(':');
+    } else if (param1.includes(' ')) {
+      const parts = param1.trim().split(/\s+/);
+      email = parts[0];
+      password = parts.slice(1).join(' ');
+    } else {
+      console.warn('Admin login requires email and password.');
+      return false;
+    }
+
+    if (!email || !password) {
+      console.warn('Admin login requires valid non-empty email and password.');
+      return false;
+    }
+
     try {
-      const cred = await signInWithEmailAndPassword(this.firebaseApp.auth, email.trim(), password);
+      const cred = await this.withTimeout(
+        signInWithEmailAndPassword(this.firebaseApp.auth, email.trim(), password)
+      );
       const user = cred.user;
 
       if (!user.emailVerified) {
-        // Sign out if email is not verified
         await signOut(this.firebaseApp.auth);
         throw new Error('Please verify your email address before logging into the admin panel.');
       }
 
-      // updateAdminState will handle the true logic asynchronously.
-      // But we can optimistically wait for token result here to return true/false correctly
-      const tokenResult = await user.getIdTokenResult(true);
-      const isAuthAdmin = tokenResult.claims['admin'] === true;
-      
-      this._isAdmin.next(isAuthAdmin);
-      return isAuthAdmin;
-    } catch (err) {
-      console.error('Admin login authentication error:', err);
+      return await this.updateAdminState(user, true);
+    } catch (err: any) {
+      if (err?.message === 'LOGIN_TIMEOUT') {
+        console.warn('Login timed out: Network or security check failed. Please try again.');
+      } else {
+        console.error('Admin login authentication error:', err);
+      }
       this._isAdmin.next(false);
       return false;
     }

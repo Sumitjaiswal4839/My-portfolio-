@@ -145,7 +145,7 @@ export class DataService {
       onSnapshot(doc(this.db, "settings", "resume"), 
         (d) => {
           if (d.exists()) {
-            this.resumeSubject.next(d.data()['fileUrl'] || null);
+            this.resumeSubject.next(d.data()['fileUrl'] || d.data()['url'] || null);
           } else {
             this.resumeSubject.next(null);
           }
@@ -279,10 +279,14 @@ export class DataService {
   }
 
   // Resume (Document path settings/resume matched with firestore.rules)
+  async uploadResume(file: File): Promise<string> {
+    return this.uploadAndSaveResume(file);
+  }
+
   async updateResume(fileUrl: string | null) {
     if (!this.db) return;
     if (fileUrl) {
-      await setDoc(doc(this.db, "settings", "resume"), { fileUrl });
+      await setDoc(doc(this.db, "settings", "resume"), { fileUrl, updatedAt: new Date().toISOString() }, { merge: true });
     } else {
       await deleteDoc(doc(this.db, "settings", "resume"));
     }

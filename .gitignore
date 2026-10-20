@@ -26,6 +26,8 @@ coverage/
 firebase-adminsdk*.json
 serviceAccount*.json
 service-account*.json
+firebase-admin-setup/
+set-admin*.js
 
 # Certificates / private keys
 *.pem
@@ -41,11 +43,6 @@ service-account*.json
 # ==============================
 # IDE
 # ==============================
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 
 .idea/
 *.iml
@@ -88,3 +85,7 @@ desktop.ini
 /playwright-report/
 /test-results/
 .net-port/
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
