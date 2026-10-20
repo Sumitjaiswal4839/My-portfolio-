@@ -1,0 +1,8 @@
+Contact: mailto:sj0269950@gmail.com
+Contact: https://github.com/Sumitjaiswal4839/My-portfolio-/security/advisories/new
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: en, hi
+Canonical: https://sumit-jaiswal-portfolio.netlify.app/.well-known/security.txt
+Policy: https://github.com/Sumitjaiswal4839/My-portfolio-/blob/main/SECURITY.md
+Acknowledgments: https://github.com/Sumitjaiswal4839/My-portfolio-/blob/main/README.md
+Hiring: https://sumit-jaiswal-portfolio.netlify.app/about

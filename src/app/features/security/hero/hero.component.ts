@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { DataService } from '../../../services/data.service';
 import { AdminService } from '../../../services/admin.service';
 import { openSafeExternalLink } from '../../../core/utils/safe-url';
+import { openFileSafely } from '../../../utils/safe-open';
+import { AnalyticsService } from '../../../core/services/analytics.service';
 
 interface SecurityCard {
   icon: string;
@@ -559,10 +561,12 @@ export class SecurityHeroComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private dataService: DataService,
-    public adminService: AdminService
+    public adminService: AdminService,
+    private analyticsService: AnalyticsService
   ) {}
 
   ngOnInit(): void {
+    this.analyticsService.trackModeView('security');
     this.dataService.resume$.subscribe(url => {
       this.resumeUrl = url;
     });
@@ -591,31 +595,31 @@ export class SecurityHeroComponent implements OnInit, AfterViewChecked {
     this.dropdownOpen = false;
   }
 
-  onFileSelected(event: any): void {
+  async onFileSelected(event: any): Promise<void> {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.size > 1000000) {
-        alert("File size exceeds 1MB limit for Firestore storage. Please upload a smaller compressed PDF.");
+      if (file.type !== 'application/pdf') {
+        alert('Only PDF documents are allowed.');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size exceeds 5MB limit.');
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = async (e: any) => {
-        try {
-          const base64Url = e.target.result;
-          await this.dataService.updateResume(base64Url);
-          alert("🚀 Resume uploaded successfully! Live across all pages.");
-        } catch (err) {
-          console.error("Resume upload failed", err);
-          alert("❌ Upload failed. Please verify admin authentication.");
-        }
-      };
-      reader.readAsDataURL(file);
+      try {
+        await this.dataService.uploadResume(file);
+        alert('🚀 Resume uploaded successfully to Storage! Live across all pages.');
+      } catch (err) {
+        console.error('Resume upload failed', err);
+        alert('❌ Upload failed. Please verify admin authentication.');
+      }
     }
   }
 
   downloadResume(): void {
     if (this.resumeUrl) {
+      this.analyticsService.trackResumeDownload('security');
       if (this.resumeUrl.startsWith('data:')) {
         const a = document.createElement('a');
         a.href = this.resumeUrl;
@@ -634,24 +638,8 @@ export class SecurityHeroComponent implements OnInit, AfterViewChecked {
   previewResume(): void {
     if (!this.resumeUrl) return;
     this.dropdownOpen = false;
-    if (this.resumeUrl.startsWith('data:')) {
-      try {
-        const arr = this.resumeUrl.split(',');
-        const mimeMatch = arr[0].match(/:(.*?);/);
-        const mime = mimeMatch ? mimeMatch[1] : 'application/pdf';
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n);
-        }
-        const blob = new Blob([u8arr], { type: mime });
-        const blobUrl = URL.createObjectURL(blob);
-        window.open(blobUrl, '_blank', 'noopener,noreferrer');
-      } catch (e) {
-        console.error('Could not preview data URL', e);
-      }
-    } else {
+    this.analyticsService.trackResumePreview('security');
+    if (!openFileSafely(this.resumeUrl)) {
       openSafeExternalLink(this.resumeUrl);
     }
   }

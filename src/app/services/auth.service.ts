@@ -20,8 +20,8 @@ export class AuthService {
     return this.adminService.isAdmin;
   }
 
-  async login(password: string): Promise<boolean> {
-    return this.adminService.login(password);
+  async login(password: string, email?: string): Promise<boolean> {
+    return this.adminService.login(password, email);
   }
 
   async logout(): Promise<void> {

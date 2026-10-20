@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { DataService } from '../../../services/data.service';
 import { AdminService } from '../../../services/admin.service';
 import { openSafeExternalLink } from '../../../core/utils/safe-url';
+import { openFileSafely } from '../../../utils/safe-open';
+import { AnalyticsService } from '../../../core/services/analytics.service';
 
 interface EngineeringHighlight {
   icon: string;
@@ -25,7 +27,7 @@ interface EngineeringHighlight {
             <i class="fas fa-terminal"></i> SOFTWARE DEVELOPMENT ENGINEER
           </div>
           <h1 class="hero-title">
-            Building <span class="highlight">Websites &amp; Apps</span> That People Can Use
+            Building <span class="highlight typing-highlight">{{ currentTypedText() }}</span><span class="typing-cursor" aria-hidden="true">|</span> That People Can Use
           </h1>
           <p class="hero-description">
             Hi, I'm <strong class="text-white">Sumit Jaiswal</strong>. A passionate Full-Stack Developer specializing in high-performance web applications, distributed systems, clean architectures, modern UI/UX engineering, and secure database &amp; backend systems.
@@ -157,6 +159,18 @@ interface EngineeringHighlight {
       -webkit-text-fill-color: transparent;
       background-size: 200% 200%;
       animation: gradientShift 3s ease infinite;
+    }
+    .typing-cursor {
+      display: inline-block;
+      color: #38bdf8;
+      font-weight: 300;
+      margin-left: 2px;
+      animation: cursorBlink 0.9s infinite;
+      vertical-align: baseline;
+    }
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
     }
     .hero-description {
       font-size: 0.98rem;
@@ -507,11 +521,24 @@ interface EngineeringHighlight {
     }
   `]
 })
-export class SdeHeroComponent implements OnInit {
+export class SdeHeroComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') fileInput!: ElementRef;
 
   resumeUrl: string | null = null;
   dropdownOpen = false;
+
+  // Typewriter effect phrases
+  words: string[] = [
+    'Web Apps',
+    'Progressive Web Apps (PWAs)',
+    'Modern Websites',
+    'Mobile Apps',
+    'Scalable Cloud APIs'
+  ];
+  currentWordIndex = 0;
+  currentTypedText = signal('Web Apps');
+  isDeleting = false;
+  private typingTimeout: any;
 
   highlights: EngineeringHighlight[] = [
     {
@@ -536,13 +563,45 @@ export class SdeHeroComponent implements OnInit {
 
   constructor(
     private dataService: DataService,
-    public adminService: AdminService
+    public adminService: AdminService,
+    private analyticsService: AnalyticsService
   ) {}
 
   ngOnInit(): void {
+    this.analyticsService.trackModeView('sde');
     this.dataService.resume$.subscribe(url => {
       this.resumeUrl = url;
     });
+    this.startTypewriter();
+  }
+
+  ngOnDestroy(): void {
+    if (this.typingTimeout) {
+      clearTimeout(this.typingTimeout);
+    }
+  }
+
+  private startTypewriter(): void {
+    const currentWord = this.words[this.currentWordIndex];
+    const text = this.currentTypedText();
+
+    let typingSpeed = this.isDeleting ? 40 : 85;
+
+    if (!this.isDeleting && text === currentWord) {
+      typingSpeed = 1800; // Pause after word completes
+      this.isDeleting = true;
+    } else if (this.isDeleting && text === '') {
+      this.isDeleting = false;
+      this.currentWordIndex = (this.currentWordIndex + 1) % this.words.length;
+      typingSpeed = 350; // Pause before starting next word
+    } else {
+      const nextText = this.isDeleting
+        ? currentWord.substring(0, text.length - 1)
+        : currentWord.substring(0, text.length + 1);
+      this.currentTypedText.set(nextText);
+    }
+
+    this.typingTimeout = setTimeout(() => this.startTypewriter(), typingSpeed);
   }
 
   toggleDropdown(): void {
@@ -556,31 +615,31 @@ export class SdeHeroComponent implements OnInit {
     this.dropdownOpen = false;
   }
 
-  onFileSelected(event: any): void {
+  async onFileSelected(event: any): Promise<void> {
     const file = event.target.files?.[0];
     if (file) {
-      if (file.size > 1000000) {
-        alert("File size exceeds 1MB limit for Firestore storage. Please upload a smaller compressed PDF.");
+      if (file.type !== 'application/pdf') {
+        alert('Only PDF documents are allowed.');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File size exceeds 5MB limit.');
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = async (e: any) => {
-        try {
-          const base64Url = e.target.result;
-          await this.dataService.updateResume(base64Url);
-          alert("🚀 Resume uploaded successfully! Live across all pages.");
-        } catch (err) {
-          console.error("Resume upload failed", err);
-          alert("❌ Upload failed. Please verify admin authentication and connection.");
-        }
-      };
-      reader.readAsDataURL(file);
+      try {
+        await this.dataService.uploadResume(file);
+        alert('🚀 Resume uploaded successfully to Storage! Live across all pages.');
+      } catch (err) {
+        console.error('Resume upload failed', err);
+        alert('❌ Upload failed. Please verify admin authentication and connection.');
+      }
     }
   }
 
   downloadResume(): void {
     if (this.resumeUrl) {
+      this.analyticsService.trackResumeDownload('sde');
       if (this.resumeUrl.startsWith('data:')) {
         const a = document.createElement('a');
         a.href = this.resumeUrl;
@@ -599,24 +658,8 @@ export class SdeHeroComponent implements OnInit {
   previewResume(): void {
     if (!this.resumeUrl) return;
     this.dropdownOpen = false;
-    if (this.resumeUrl.startsWith('data:')) {
-      try {
-        const arr = this.resumeUrl.split(',');
-        const mimeMatch = arr[0].match(/:(.*?);/);
-        const mime = mimeMatch ? mimeMatch[1] : 'application/pdf';
-        const bstr = atob(arr[1]);
-        let n = bstr.length;
-        const u8arr = new Uint8Array(n);
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n);
-        }
-        const blob = new Blob([u8arr], { type: mime });
-        const blobUrl = URL.createObjectURL(blob);
-        window.open(blobUrl, '_blank', 'noopener,noreferrer');
-      } catch (e) {
-        console.error('Could not preview data URL', e);
-      }
-    } else {
+    this.analyticsService.trackResumePreview('sde');
+    if (!openFileSafely(this.resumeUrl)) {
       openSafeExternalLink(this.resumeUrl);
     }
   }

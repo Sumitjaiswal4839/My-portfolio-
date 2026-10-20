@@ -1,5 +1,6 @@
 export const environment = {
   production: false,
+  recaptchaSiteKey: '', // Enter reCAPTCHA v3 / Enterprise site key here
   firebase: {
     apiKey: "AIzaSyCfBABweIW5xlT2DdosaK3Q7sRlLC6q1GA",
     authDomain: "sumit-jaiswal-portfolio.firebaseapp.com",

@@ -5,6 +5,7 @@ import { DataService, Certification } from '../../services/data.service';
 import { AdminService } from '../../services/admin.service';
 import { AdminOnlyDirective } from '../../directives/admin-only.directive';
 import { SafeUrlPipe } from '../../pipes/safe-url.pipe';
+import { openFileSafely } from '../../utils/safe-open';
 
 @Component({
   selector: 'app-certifications',
@@ -39,15 +40,26 @@ export class CertificationsComponent implements OnInit {
   }
 
   onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.newCert.fileType = file.type.includes('pdf') ? 'pdf' : 'image';
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.newCert.fileUrl = e.target.result;
-      };
-      reader.readAsDataURL(file);
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const MAX = 700 * 1024;
+    if (file.size > MAX) {
+      alert('File size exceeds 700 KB limit. Please upload a smaller compressed document.');
+      return;
     }
+    const allowed = ['application/pdf', 'image/png', 'image/jpeg', 'image/webp'];
+    if (!allowed.includes(file.type)) {
+      alert('Only PDF, PNG, JPEG, or WEBP files are allowed.');
+      return;
+    }
+
+    this.newCert.fileType = file.type.includes('pdf') ? 'pdf' : 'image';
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.newCert.fileUrl = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
 
   addCertification() {
@@ -93,21 +105,10 @@ export class CertificationsComponent implements OnInit {
     };
   }
 
-  viewFile(cert: Certification): void {
-    if (!cert?.fileUrl) return;
-    const safeUrl = this.validateUrl(cert.fileUrl);
-    if (!safeUrl) {
-      console.error('Invalid or unsafe URL scheme detected.');
-      return;
+  viewFile(target: Certification | string): void {
+    const url = typeof target === 'string' ? target : target?.fileUrl;
+    if (!openFileSafely(url)) {
+      console.warn('Blocked or invalid file URL');
     }
-    window.open(safeUrl, '_blank', 'noopener,noreferrer');
-  }
-
-  private validateUrl(url: string): string | null {
-    try {
-      const parsed = new URL(url, window.location.origin);
-      if (['https:', 'http:'].includes(parsed.protocol)) return url;
-    } catch {}
-    return null;
   }
 }

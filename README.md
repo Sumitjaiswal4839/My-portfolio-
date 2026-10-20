@@ -1,6 +1,12 @@
 # 🛡️ CyberSec Portfolio — Full-Stack Angular Application
 
-**Sumit Jaiswal | Cybersecurity  & Ethical Hacker | Software Engineer **
+[![CI](https://github.com/Sumitjaiswal4839/My-portfolio-/actions/workflows/ci.yml/badge.svg)](https://github.com/Sumitjaiswal4839/My-portfolio-/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/Sumitjaiswal4839/My-portfolio-/actions/workflows/codeql.yml/badge.svg)](https://github.com/Sumitjaiswal4839/My-portfolio-/actions/workflows/codeql.yml)
+[![Dependabot](https://img.shields.io/badge/Dependabot-Active-brightgreen?logo=dependabot)](https://github.com/Sumitjaiswal4839/My-portfolio-/security/dependabot)
+[![Security Policy](https://img.shields.io/badge/Security-Policy_RFC_9116-blue?logo=shield)](/.well-known/security.txt)
+[![Security Headers](https://img.shields.io/badge/Security_Headers-A+-brightgreen?logo=mozilla)](https://securityheaders.com)
+
+**Sumit Jaiswal | Cybersecurity Analyst & Ethical Hacker | Software Engineer**
 
 ---
 
@@ -97,7 +103,9 @@ This portfolio is engineered with a **Security-First** mindset, moving beyond st
 ## ⚠️ 5. Error Handling & 7. Tests
 
 - **Error Handling**: Implemented globally. Failed API calls (e.g., unauthorized Firestore writes) are caught and displayed via UI toast notifications/error states rather than console crashes.
-- **Tests**: The project structure is configured for Jasmine/Karma unit testing (Angular defaults). *Note: Comprehensive e2e testing (Cypress) and backend mocking are planned for the next iteration.*
+- **Tests**: 
+  - **E2E Automation (Playwright)**: Fully configured Playwright end-to-end testing suite (`/e2e` and `/tests`) to automatically verify dual-mode routing (Security vs SDE), XSS sanitization, authentication flow, and theme toggling across browsers. Run with `npx playwright test`.
+  - **Unit Testing**: The project structure is configured for Jasmine/Karma unit testing (Angular defaults).
 
 ---
 

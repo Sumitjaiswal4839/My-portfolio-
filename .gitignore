@@ -26,6 +26,8 @@ coverage/
 firebase-adminsdk*.json
 serviceAccount*.json
 service-account*.json
+firebase-admin-setup/
+set-admin*.js
 
 # Certificates / private keys
 *.pem
